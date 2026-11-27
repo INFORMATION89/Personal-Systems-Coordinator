@@ -60,18 +60,34 @@ These principles guide research. They do not select a provider or implementation
 - Do not assume that Drive, iCloud Drive, GitHub, WebDAV or a local folder expose equivalent semantics.
 - Do not assume a provider API offers a filesystem, transaction, change feed or background execution on every platform.
 
-## 8. No hidden operating cost
+## 8. Permanent decentralization; no PSC-operated backend
 
-- The baseline architecture must not require us to operate a paid synchronization backend.
-- API quotas, rate limits, OAuth verification, provider policy changes and operational costs still require research.
-- Do not introduce paid APIs, hosted services or recurring costs without explicit approval.
+- PSC will never operate a centralized backend, first-party cloud storage, content relay, hosted coordinator, managed storage service, or mandatory account system.
+- Coordination and synchronization logic runs on user devices inside consuming applications and/or user-controlled local components, according to the approved architecture.
+- Data is stored or transported through folders and providers selected by the user. A provider may be commercial or self-hosted, but it remains external to PSC and under the user's choice/control.
+- Do not add a server as a shortcut for synchronization, sharing, notifications, identity, or realtime collaboration.
+- Provider APIs may have quotas, rate limits, OAuth verification requirements, policy changes and costs; research and disclose these without turning them into a PSC-operated service.
+- A proposal to reverse this constraint is a product-direction change, not a routine technical optimization, and requires explicit owner approval.
 
-## 9. Platform-native behavior
+## 9. Host-platform integration
 
-- Shared data contracts and synchronization policy may be common.
-- File access, credential storage, background work, permissions and user experience must respect each platform's native capabilities.
+- PSC is shared infrastructure for consuming applications, not an end-user application or UI shell. Its scope does not prescribe or provide the consuming apps' screens, visual design system, navigation, or UI framework.
+- Each consuming application chooses its own interface and application architecture. Platform-native UI requirements, where applicable, belong to that application; they are not PSC constraints.
+- PSC contracts should remain platform-neutral where practical. File access, credential storage, background work, permissions, and other OS capabilities must be implemented through appropriate host-platform APIs or adapters.
 - Do not promise continuous background synchronization where the operating system does not allow it.
+- Provide documented integration surfaces and bindings appropriate to supported host platforms without requiring a particular UI toolkit.
 
 ## 10. Research before implementation
 
 No provider, cryptographic design, CRDT, database, transport or language is selected by this document. Verify current official provider documentation and run small interoperability experiments before making architectural commitments.
+
+
+## 11. Licensing and resource provenance
+
+- Evaluate whether and how PSC may be monetized, distributed, or supported commercially without violating its permanent decentralized/provider-based constraint. A paid license, SDK, support offering or other model may be researched, but none is selected by this principle.
+- Keep PSC's own software license distinct from licenses of dependencies, platform SDKs, sample code, documentation, test fixtures and other bundled materials.
+- Maintain a provenance and license inventory for code, APIs, services, datasets, models, fonts, icons, media and generated assets used by PSC or its integration examples.
+- Check commercial-use, redistribution, modification, attribution, copyleft/source-disclosure, patent, trademark, quota, fee and data-use conditions using current primary terms.
+- Classify resources as allowed, allowed with conditions, or prohibited/unresolved. Unknown or incompatible rights block inclusion or release until resolved.
+- Do not infer permission from public availability, no-cost access, open-source status, or AI generation. Retain required notices, attributions, source offers and an SBOM where practical.
+- No public license or monetization model is chosen by this principle. Record the decision separately after commercial and legal implications are evaluated.
