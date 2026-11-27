@@ -51,7 +51,7 @@ Do not select a CRDT or "last write wins" as a default without showing that the 
 ## C. Privacy and security
 
 Research:
-- OAuth for native applications and PKCE; secure token storage on each platform.
+- OAuth authorization flows for installed desktop/mobile clients, including PKCE where applicable; secure token storage through each host platform's supported facilities.
 - Permission minimization and whether each app needs separate provider authorization.
 - Shared provider folder access across applications owned by the same user.
 - Encryption at rest and end-to-end encryption options.
@@ -94,7 +94,20 @@ Do not assume that raw location history, exact coordinates, raw observations, fo
 
 Algorithm and application code versions are shipped through normal application releases; they are not synchronization data.
 
-## F. Prototype sequence
+## F. PSC integration architecture and host-platform adapters
+
+PSC is shared infrastructure consumed by applications; it is not itself a consumer application and does not define the UI of its clients. This repository must not impose a UI framework, design system, navigation model, or native-versus-web interface rule on applications that integrate PSC. Each consuming project defines those choices independently. Commonplace's own native-app requirements, for example, belong in the Commonplace repository.
+
+Research and prototype the PSC integration surface:
+- Platform-neutral, versioned contracts for synchronization, identity/namespaces, provider capabilities, metadata, events and error handling.
+- Runtime/library/SDK packaging options and stable bindings for the languages used by consuming apps.
+- Host-platform adapters only where OS-specific capabilities are required, including file/document access, secure credential storage, background execution, notifications and permission handling.
+- Clear separation between PSC's generic coordination responsibilities and each app's domain logic, UI, local database and user experience.
+- Supported host-platform matrix and the level of adapter support each platform needs. Do not assume every platform supports identical background execution or provider features.
+
+Compare implementation approaches such as Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific adapters around shared versioned contracts. Evaluate integration costs for representative client languages and runtimes (for example Swift, Kotlin, C# and others) without treating their UI frameworks as PSC implementation requirements. Consider debugging, packaging, ABI/API stability, testing, security boundaries and maintenance. Do not choose a technology based on language preference alone.
+
+## G. Prototype sequence
 
 1. Compare a user-selected folder with one managed cloud provider.
 2. Prove two devices can exchange a small versioned manifest and a sample document.
@@ -103,16 +116,27 @@ Algorithm and application code versions are shipped through normal application r
 5. Prototype one provider-specific adapter without leaking its API into app domain code.
 6. Add a second provider only after the interface proves it is genuinely provider-neutral.
 
-## G. Existing systems and reusable technology
+## H. Existing systems and reusable technology
 
 Compare existing products and infrastructure before designing a new engine. The initial comparative report is [Existing synchronization systems and reusable technologies](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md). It covers Joplin, Obsidian, Anytype/any-sync, Notesnook, Nextcloud, Automerge, Yjs, CouchDB/PouchDB, RxDB and PowerSync.
 
 The current product-owner preference is to investigate Google Drive first as the leading managed-provider candidate. This is a research priority only: it is not a launch-provider decision. The cross-application authorization behavior of a shared Drive workspace is a required proof of concept.
 
-## H. Opus review brief
+## I. Monetization, licensing, and resource due diligence
+
+Evaluate whether PSC should be monetized or commercially distributed, without assuming that it must be paid or free and without adding a centralized service. Compare suitable possibilities such as permissive or copyleft open-source release, paid/proprietary licensing, dual licensing, paid SDK/distribution, support, or other models only where they fit the product and contribution strategy. Record benefits, disadvantages, obligations, and conflicts with permanent decentralization.
+
+Estimate one-time and recurring costs: maintenance, security response, compatibility testing, documentation, distribution, legal/accounting work, support, provider/API dependencies, optional model usage, and third-party fees. Explicitly distinguish external provider costs from PSC-operated infrastructure; PSC must not acquire a first-party hosted backend or relay to create a revenue stream.
+
+Create a license and provenance review for PSC itself and for every shipped or recommended resource: runtime/build dependencies, platform SDKs, sample code, API integrations, test fixtures, documentation, datasets, models, fonts, icons, media and generated assets. Check exact versions and current primary-source terms. Record commercial-use rights, redistribution and modification rights, attribution, copyleft/source disclosure, patent and trademark clauses, data rights, quotas, and fees. Classify each resource as allowed, allowed with conditions, or prohibited/unresolved. Maintain license notices and an SBOM where practical. Do not select a license for PSC's own code or promise a distribution model until the implications are reviewed.
+
+## J. Opus review brief
 
 Ask Opus for an independent architecture and security review of:
 - the product boundary and local-first model;
+- whether and how PSC could be monetized without contradicting permanent decentralization;
+- the license for PSC's own code, separate from dependency and asset licenses;
+- dependency, API, dataset, model, font, icon, media and sample-code provenance, including commercial-use and redistribution obligations;
 - provider comparison, especially Google Drive versus iCloud Drive and local folders;
 - whether a single shared provider folder can safely serve multiple apps;
 - sync protocol and conflict semantics;
