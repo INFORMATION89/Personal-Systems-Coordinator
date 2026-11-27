@@ -94,7 +94,21 @@ Do not assume that raw location history, exact coordinates, raw observations, fo
 
 Algorithm and application code versions are shipped through normal application releases; they are not synchronization data.
 
-## F. Prototype sequence
+## F. Native application architecture and desktop-first sequence
+
+The application family will use native UI frameworks rather than Electron or web UI wrappers. Evaluate a shared, platform-neutral domain/core layer separately from platform UI and system adapters.
+
+- Windows UI target: WinUI 3.
+- macOS UI target: SwiftUI.
+- Android UI target: Jetpack Compose with Motion UI and Material You/Material 3.
+- iOS future target: SwiftUI is the candidate native direction.
+- Linux: native toolkit/framework remains open; evaluate GTK 4/libadwaita and alternatives if Linux remains in scope.
+
+Desktop is the first development target, but the first desktop OS is deliberately undecided. Compare Windows and macOS based on development environment, native API access, file-provider behavior, background execution, distribution, accessibility, testing, and the ability to validate the shared-core boundary. Do not select an OS by assumption.
+
+Prototype architecture options for shared domain logic and data contracts while preserving native UI. Candidate approaches may include Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific domain implementations around shared versioned contracts. Evaluate actual integration costs for SwiftUI, WinUI 3, Compose/Motion UI, debugging, packaging, testing, and maintenance. Do not choose a technology based on language preference alone, and do not attempt to share UI components across these native frameworks.
+
+## G. Prototype sequence
 
 1. Compare a user-selected folder with one managed cloud provider.
 2. Prove two devices can exchange a small versioned manifest and a sample document.
@@ -103,7 +117,7 @@ Algorithm and application code versions are shipped through normal application r
 5. Prototype one provider-specific adapter without leaking its API into app domain code.
 6. Add a second provider only after the interface proves it is genuinely provider-neutral.
 
-## G. Opus review brief
+## H. Opus review brief
 
 Ask Opus for an independent architecture and security review of:
 - the product boundary and local-first model;
