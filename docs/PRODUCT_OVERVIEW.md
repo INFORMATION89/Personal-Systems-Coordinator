@@ -10,7 +10,7 @@ The working vision is:
 
 > A coordination layer that helps a person's applications and devices stay consistent, while allowing the person to choose where their data lives.
 
-The foundation should make it possible for an application to keep its data locally, then synchronize selected data through an existing provider or a user-managed folder when the person chooses to enable it.
+The foundation should make it possible for an application to keep its data locally, then synchronize selected data through an existing provider or a user-managed folder when the person chooses to enable it. This decentralized provider-based model is a permanent constraint: PSC itself will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage service, or mandatory account system.
 
 ## The problem
 
@@ -36,7 +36,7 @@ The candidate model has three separate responsibilities:
 2. **PSC coordinates portable data exchange and synchronization.** It should provide shared contracts and provider integration boundaries without understanding every application's business logic.
 3. **External providers transport or store data.** The user may connect an existing cloud account or choose a local folder that is synchronized by software of their choice.
 
-This separation must survive platform differences and provider limitations.
+This separation must survive platform differences and provider limitations. PSC provides coordination contracts and integration boundaries, not a user interface or visual design system; each consuming application independently chooses its UI framework and application architecture.
 
 ## Candidate storage and sync destinations
 
@@ -60,7 +60,8 @@ Calendar-provider integration and synchronization of our own application data mu
 
 ## What PSC is not
 
-- It is not a mandatory centralized server.
+- PSC will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage service, or mandatory account system.
+- It is not a UI framework, design system, or application shell for consuming apps.
 - It is not a new identity provider that every user must register with.
 - It is not a replacement for the applications' local databases.
 - It is not a universal shared database that every application can freely mutate.
