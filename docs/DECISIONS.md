@@ -17,6 +17,10 @@ This register separates the direction already agreed in product discussions from
 | User consent | Sync is explicit and separate from telemetry or weather-data contribution | Agreed constraint |
 | Current phase | Documentation and research before implementation | Agreed |
 
+## Current research preference (not an approved technical decision)
+
+- Google Drive is currently the leading managed-provider candidate to investigate first. This reflects the project owner's present preference and comparative research, not a commitment to ship it as the first or only provider. A multi-app, least-privilege shared-folder proof of concept and independent Opus review are required before deciding.
+
 ## Not decided
 
 - Final public product/feature name. The repository is named Personal-Systems-Coordinator; treat that as the project identifier, not a settled consumer-facing brand.
