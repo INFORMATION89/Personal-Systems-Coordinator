@@ -34,7 +34,9 @@ This register separates the direction already agreed in product discussions from
 - First desktop operating system (Windows or macOS); choose only after native architecture and feasibility prototypes.
 - Linux native UI framework and final supported platform matrix.
 - Shared domain/core implementation technology and its native binding strategy.
-- Licensing and distribution model.
+- Whether and how PSC should be monetized or commercially distributed, including costs and compatibility with permanent decentralization.
+- The license for PSC's own code, distinct from dependency and asset licenses, and the resulting contribution, redistribution, copyleft, patent and commercial obligations.
+- The permitted-resource policy and inventory process for dependencies, APIs, datasets, models, fonts, icons, media, sample code and other third-party materials.
 
 ## Constraints on future decisions
 
