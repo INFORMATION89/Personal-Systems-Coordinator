@@ -16,6 +16,18 @@ The intended model is local-first and provider-neutral: applications own their d
 - [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — the first candidate use case.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
 
+## Research findings
+
+Initial provider and architecture research is documented:
+- [Provider comparison](docs/research/PROVIDER_COMPARISON.md)
+- [Platform constraints](docs/research/PLATFORM_CONSTRAINTS.md)
+- [Sync semantics and architecture options](docs/research/SYNC_SEMANTICS.md)
+- [Security, authorization and consent](docs/research/SECURITY_AND_CONSENT.md)
+- [Calendar integrations](docs/research/CALENDAR_INTEGRATIONS.md)
+- [Existing synchronization systems and reusable technologies](docs/research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)
+
+The research identifies a key unresolved issue: Google Drive's least-privilege file scope may require each separate application to authorize the shared folder/files independently. A multi-app proof of concept is required before committing to a shared provider workspace.
+
 ## Current status
 
 - The repository is a planning and research workspace.

@@ -1,6 +1,6 @@
 # Decision Register
 
-**Last updated:** 2026-11-26
+**Last updated:** 2026-11-27
 
 This register separates the direction already agreed in product discussions from technical questions that remain open. A research finding is not automatically a decision.
 
@@ -16,6 +16,10 @@ This register separates the direction already agreed in product discussions from
 | Application ownership | Each app retains its domain model and local functionality | Agreed constraint |
 | User consent | Sync is explicit and separate from telemetry or weather-data contribution | Agreed constraint |
 | Current phase | Documentation and research before implementation | Agreed |
+
+## Current research preference (not an approved technical decision)
+
+- Google Drive is currently the leading managed-provider candidate to investigate first. This reflects the project owner's present preference and comparative research, not a commitment to ship it as the first or only provider. A multi-app, least-privilege shared-folder proof of concept and independent Opus review are required before deciding.
 
 ## Not decided
 

@@ -103,7 +103,13 @@ Algorithm and application code versions are shipped through normal application r
 5. Prototype one provider-specific adapter without leaking its API into app domain code.
 6. Add a second provider only after the interface proves it is genuinely provider-neutral.
 
-## G. Opus review brief
+## G. Existing systems and reusable technology
+
+Compare existing products and infrastructure before designing a new engine. The initial comparative report is [Existing synchronization systems and reusable technologies](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md). It covers Joplin, Obsidian, Anytype/any-sync, Notesnook, Nextcloud, Automerge, Yjs, CouchDB/PouchDB, RxDB and PowerSync.
+
+The current product-owner preference is to investigate Google Drive first as the leading managed-provider candidate. This is a research priority only: it is not a launch-provider decision. The cross-application authorization behavior of a shared Drive workspace is a required proof of concept.
+
+## H. Opus review brief
 
 Ask Opus for an independent architecture and security review of:
 - the product boundary and local-first model;
@@ -117,3 +123,37 @@ Ask Opus for an independent architecture and security review of:
 - a minimal proof-of-concept plan.
 
 Request cited official documentation, separate facts from assumptions, identify design risks, and recommend experiments. Do not ask Opus to implement the system or silently turn its recommendations into decisions.
+
+## Initial findings (2026-11-27)
+
+The first provider/platform comparison is recorded in:
+- [Provider comparison](research/PROVIDER_COMPARISON.md)
+- [Platform constraints](research/PLATFORM_CONSTRAINTS.md)
+- [Sync semantics and architecture options](research/SYNC_SEMANTICS.md)
+- [Security, authorization and consent](research/SECURITY_AND_CONSENT.md)
+- [Calendar integrations](research/CALENDAR_INTEGRATIONS.md)
+
+### Findings that affect the architecture
+
+1. **A provider-neutral folder option is possible, but not equivalent across platforms.** Android SAF and iOS document pickers provide user-granted directory access; mobile background execution is opportunistic, not continuous.
+2. **Cloud APIs provide better incremental-change metadata than a plain folder**, but each has distinct cursors, revisions, limits and conflict semantics. The provider interface must expose capabilities rather than flatten these differences.
+3. **Google Drive is a promising single-app prototype, not yet proven as one shared multi-app workspace.** The recommended drive.file scope is least-privilege and per-file. Test parent-folder selection, descendants, new files and access from separate application OAuth clients before committing to the family-wide folder model.
+4. **iCloud Drive is not a universal Android-compatible API.** It can be used through native File Provider/document access where available, including Windows with iCloud for Windows. CloudKit is a separate Apple-specific structured-data service.
+5. **OneDrive delta and Dropbox cursors are suitable incremental-sync primitives.** They do not replace PSC conflict, deletion and recovery semantics.
+6. **WebDAV is valuable for self-hosted users**, but RFC 6578 sync-collection and conditional-write capabilities must be probed per server.
+7. **GitHub should remain an advanced version-control option**, not the default sync engine.
+8. **Calendar integrations are separate from app-data storage synchronization.** Use Google Calendar, EventKit, Microsoft Graph and CalDAV adapters for events; PSC synchronizes Clock/Notes-owned data that Calendar may display as overlays.
+9. **CRDTs are not a universal solution.** Evaluate Automerge for genuinely concurrent rich-text/structured editing, not simple preferences or append-only sessions.
+10. **Sync consent, Meridian data contribution and telemetry remain separate purposes.**
+
+### Recommended next research sequence
+
+1. Prototype directory access on Android and iOS, including persistent permissions and an external File Provider/DocumentsProvider.
+2. Prototype Google Drive for a single app with drive.file and a visible folder.
+3. Complete the separate-app shared-folder authorization experiment before assuming the application family can share one Drive folder transparently.
+4. Prototype one additional cloud API provider (OneDrive or Dropbox) to test the adapter boundary.
+5. Test WebDAV capability detection against at least two independent server implementations.
+6. Only then freeze portable contracts, manifest format, conflict policy and a first release scope.
+
+These are research recommendations, not approved implementation work. See the individual reports for official source links and test requirements.
+
