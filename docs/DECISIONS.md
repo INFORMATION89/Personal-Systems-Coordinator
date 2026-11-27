@@ -15,6 +15,7 @@ This register separates the direction already agreed in product discussions from
 | First-party cloud | PSC will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage or mandatory account | Permanent product constraint |
 | Consuming-app UI | Each application chooses its own UI framework and architecture; PSC does not prescribe or provide a UI | Outside PSC scope |
 | Host-platform integration | OS-specific APIs/adapters are used where necessary; background execution limits must be respected | Research requirement |
+| Linux synchronization | Linux is a conditional sync target. If reliable, maintainable sync proves disproportionately difficult or costly, drop Linux from the supported sync matrix rather than compromising other platforms. A local-only Linux app remains a separate product decision. | Agreed scope constraint |
 | Application ownership | Each app retains its domain model and local functionality | Agreed constraint |
 | User consent | Sync is explicit and separate from telemetry or weather-data contribution | Agreed constraint |
 | Current phase | Documentation and research before implementation | Agreed |
@@ -35,7 +36,7 @@ This register separates the direction already agreed in product discussions from
 - Data categories eligible for synchronization in each application.
 - Background-sync expectations on each platform.
 - Implementation language, libraries and minimum platform versions.
-- Supported host-platform matrix and required adapter coverage for each platform.
+- Final host-platform matrix, including whether any Linux-only local application remains worthwhile if Linux synchronization is dropped.
 - Shared domain/core implementation technology, SDK packaging, and its binding strategy for consuming applications.
 - Whether and how PSC should be monetized or commercially distributed, including cost, legal and operational implications while preserving permanent decentralization.
 - The license and distribution model for PSC's own code, separate from licenses governing dependencies and assets.
