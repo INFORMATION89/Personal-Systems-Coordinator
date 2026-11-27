@@ -6,7 +6,7 @@ A provider-neutral foundation for optional data synchronization and interoperabi
 
 The project explores how applications such as Solstice, Notes, Clock and Calendar can keep user-controlled data available across the user's devices without requiring us to operate a proprietary cloud or mandatory account system.
 
-The intended model is local-first and provider-neutral: applications own their domain data; users choose whether to synchronize it and which existing storage provider or folder to use.
+The intended model is permanently decentralized, local-first and provider-neutral: applications own their domain data; users choose whether to synchronize it and which existing storage provider or folder to use. PSC itself will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage, or mandatory account system.
 
 ## Start here
 
@@ -39,9 +39,11 @@ The research identifies a key unresolved issue: Google Drive's least-privilege f
 
 This project is not intended to become:
 - a mandatory account system for the application family;
+- a centralized backend, hosted coordinator, content relay, or managed storage service operated by PSC;
 - a first-party cloud storage business;
 - a replacement for Google Calendar, Apple Calendar or other external services;
 - an opaque database that traps the user's data;
-- a reason for each application to surrender ownership of its own domain model.
+- a reason for each application to surrender ownership of its own domain model;
+- a UI framework, design system, or application shell for consuming products. Each app defines its own user interface and architecture.
 
 See the documents above before proposing implementation work.
