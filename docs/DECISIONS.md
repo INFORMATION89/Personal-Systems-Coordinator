@@ -1,6 +1,6 @@
 # Decision Register
 
-**Last updated:** 2026-11-26
+**Last updated:** 2026-11-27
 
 This register separates the direction already agreed in product discussions from technical questions that remain open. A research finding is not automatically a decision.
 
