@@ -51,7 +51,7 @@ Do not select a CRDT or "last write wins" as a default without showing that the 
 ## C. Privacy and security
 
 Research:
-- OAuth for native applications and PKCE; secure token storage on each platform.
+- OAuth authorization flows for installed desktop/mobile clients, including PKCE where applicable; secure token storage through each host platform's supported facilities.
 - Permission minimization and whether each app needs separate provider authorization.
 - Shared provider folder access across applications owned by the same user.
 - Encryption at rest and end-to-end encryption options.
@@ -94,19 +94,18 @@ Do not assume that raw location history, exact coordinates, raw observations, fo
 
 Algorithm and application code versions are shipped through normal application releases; they are not synchronization data.
 
-## F. Native application architecture and desktop-first sequence
+## F. PSC integration architecture and host-platform adapters
 
-The application family will use native UI frameworks rather than Electron or web UI wrappers. Evaluate a shared, platform-neutral domain/core layer separately from platform UI and system adapters.
+PSC is shared infrastructure consumed by applications; it is not itself a consumer application and does not define the UI of its clients. This repository must not impose a UI framework, design system, navigation model, or native-versus-web interface rule on applications that integrate PSC. Each consuming project defines those choices independently. (For example, Commonplace has its own native-app requirements in its own repository.)
 
-- Windows UI target: WinUI 3.
-- macOS UI target: SwiftUI.
-- Android UI target: Jetpack Compose with Motion UI and Material You/Material 3.
-- iOS future target: SwiftUI is the candidate native direction.
-- Linux: native toolkit/framework remains open; evaluate GTK 4/libadwaita and alternatives if Linux remains in scope.
+Research and prototype the PSC integration surface:
+- Platform-neutral, versioned contracts for synchronization, identity/namespaces, provider capabilities, metadata, events and error handling.
+- Runtime/library/SDK packaging options and stable bindings for the languages used by consuming apps.
+- Host-platform adapters only where OS-specific capabilities are required, including file/document access, secure credential storage, background execution, notifications and permission handling.
+- Clear separation between PSC's generic coordination responsibilities and each app's domain logic, UI, local database and user experience.
+- Supported host-platform matrix and the level of adapter support each platform needs. Do not assume every platform supports identical background execution or provider features.
 
-Desktop is the first development target, but the first desktop OS is deliberately undecided. Compare Windows and macOS based on development environment, native API access, file-provider behavior, background execution, distribution, accessibility, testing, and the ability to validate the shared-core boundary. Do not select an OS by assumption.
-
-Prototype architecture options for shared domain logic and data contracts while preserving native UI. Candidate approaches may include Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific domain implementations around shared versioned contracts. Evaluate actual integration costs for SwiftUI, WinUI 3, Compose/Motion UI, debugging, packaging, testing, and maintenance. Do not choose a technology based on language preference alone, and do not attempt to share UI components across these native frameworks.
+Compare implementation approaches such as Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific adapters around shared versioned contracts. Evaluate integration costs for representative client stacks (for example Swift, Kotlin, C# and other target languages) without treating their UI frameworks as PSC implementation requirements. Consider debugging, packaging, ABI/API stability, testing, security boundaries and maintenance. Do not choose a technology based on language preference alone.
 
 ## G. Prototype sequence
 
