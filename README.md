@@ -24,6 +24,7 @@ Initial provider and architecture research is documented:
 - [Sync semantics and architecture options](docs/research/SYNC_SEMANTICS.md)
 - [Security, authorization and consent](docs/research/SECURITY_AND_CONSENT.md)
 - [Calendar integrations](docs/research/CALENDAR_INTEGRATIONS.md)
+- [Existing synchronization systems and reusable technologies](docs/research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)
 
 The research identifies a key unresolved issue: Google Drive's least-privilege file scope may require each separate application to authorize the shared folder/files independently. A multi-app proof of concept is required before committing to a shared provider workspace.
 
