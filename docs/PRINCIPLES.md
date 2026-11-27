@@ -78,3 +78,14 @@ These principles guide research. They do not select a provider or implementation
 ## 10. Research before implementation
 
 No provider, cryptographic design, CRDT, database, transport or language is selected by this document. Verify current official provider documentation and run small interoperability experiments before making architectural commitments.
+
+
+## 11. Licensing and resource provenance
+
+- Evaluate whether and how PSC may be monetized, distributed, or supported commercially without violating its permanent decentralized/provider-based constraint. A paid license, SDK, support offering or other model may be researched, but none is selected by this principle.
+- Keep PSC's own software license distinct from licenses of dependencies, platform SDKs, sample code, documentation, test fixtures and other bundled materials.
+- Maintain a provenance and license inventory for code, APIs, services, datasets, models, fonts, icons, media and generated assets used by PSC or its integration examples.
+- Check commercial-use, redistribution, modification, attribution, copyleft/source-disclosure, patent, trademark, quota, fee and data-use conditions using current primary terms.
+- Classify resources as allowed, allowed with conditions, or prohibited/unresolved. Unknown or incompatible rights block inclusion or release until resolved.
+- Do not infer permission from public availability, no-cost access, open-source status, or AI generation. Retain required notices, attributions, source offers and an SBOM where practical.
+- No public license or monetization model is chosen by this principle. Record the decision separately after commercial and legal implications are evaluated.
