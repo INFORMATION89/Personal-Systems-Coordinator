@@ -103,7 +103,13 @@ Algorithm and application code versions are shipped through normal application r
 5. Prototype one provider-specific adapter without leaking its API into app domain code.
 6. Add a second provider only after the interface proves it is genuinely provider-neutral.
 
-## G. Opus review brief
+## G. Existing systems and reusable technology
+
+Compare existing products and infrastructure before designing a new engine. The initial comparative report is [Existing synchronization systems and reusable technologies](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md). It covers Joplin, Obsidian, Anytype/any-sync, Notesnook, Nextcloud, Automerge, Yjs, CouchDB/PouchDB, RxDB and PowerSync.
+
+The current product-owner preference is to investigate Google Drive first as the leading managed-provider candidate. This is a research priority only: it is not a launch-provider decision. The cross-application authorization behavior of a shared Drive workspace is a required proof of concept.
+
+## H. Opus review brief
 
 Ask Opus for an independent architecture and security review of:
 - the product boundary and local-first model;
