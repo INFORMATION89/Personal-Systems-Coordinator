@@ -1,6 +1,6 @@
 # Decision Register
 
-**Last updated:** 2026-11-26
+**Last updated:** 2026-11-27
 
 This register separates the direction already agreed in product discussions from technical questions that remain open. A research finding is not automatically a decision.
 
@@ -12,7 +12,9 @@ This register separates the direction already agreed in product discussions from
 | First candidate client | Solstice | Agreed |
 | Primary purpose | Optional cross-device synchronization and cross-app interoperability | Agreed direction |
 | Storage model | User chooses an existing provider or a folder they control | Agreed direction |
-| First-party cloud | Must not be required for baseline functionality | Agreed constraint |
+| First-party cloud | PSC will never operate a first-party cloud, centralized backend, hosted relay or mandatory account | Permanent product constraint |
+| Native application UI | Platform-native UI; no Electron or web-wrapper desktop apps | Agreed constraint |
+| Development order | Desktop first; first desktop OS remains undecided | Agreed direction |
 | Application ownership | Each app retains its domain model and local functionality | Agreed constraint |
 | User consent | Sync is explicit and separate from telemetry or weather-data contribution | Agreed constraint |
 | Current phase | Documentation and research before implementation | Agreed |
@@ -29,6 +31,9 @@ This register separates the direction already agreed in product discussions from
 - Data categories eligible for synchronization in each application.
 - Background-sync expectations on each platform.
 - Implementation language, libraries and minimum platform versions.
+- First desktop operating system (Windows or macOS); choose only after native architecture and feasibility prototypes.
+- Linux native UI framework and final supported platform matrix.
+- Shared domain/core implementation technology and its native binding strategy.
 - Licensing and distribution model.
 
 ## Constraints on future decisions
