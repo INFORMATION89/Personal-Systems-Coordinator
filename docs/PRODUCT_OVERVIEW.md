@@ -10,7 +10,7 @@ The working vision is:
 
 > A coordination layer that helps a person's applications and devices stay consistent, while allowing the person to choose where their data lives.
 
-The foundation should make it possible for an application to keep its data locally, then synchronize selected data through an existing provider or a user-managed folder when the person chooses to enable it.
+The foundation should make it possible for an application to keep its data locally, then synchronize selected data through an existing provider or a user-managed folder when the person chooses to enable it. This decentralized provider-based model is a permanent product constraint: PSC itself will never operate a centralized backend, first-party cloud storage, content relay, or mandatory account system.
 
 ## The problem
 
