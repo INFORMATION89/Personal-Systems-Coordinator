@@ -69,11 +69,13 @@ These principles guide research. They do not select a provider or implementation
 - Provider APIs may have quotas, rate limits, OAuth verification requirements, policy changes and costs; research and disclose these without turning them into a PSC-operated service.
 - A proposal to reverse this constraint is a product-direction change, not a routine technical optimization, and requires explicit owner approval.
 
-## 9. Platform-native behavior
+## 9. Host-platform integration
 
-- Shared data contracts and synchronization policy may be common.
-- File access, credential storage, background work, permissions and user experience must respect each platform's native capabilities.
+- PSC is shared infrastructure for consuming applications, not an end-user application or UI shell. Its scope does not prescribe or provide the consuming apps' screens, visual design system, navigation, or UI framework.
+- Each consuming application chooses its own interface and application architecture. Platform-native UI requirements, where applicable, belong to that application; they are not PSC constraints.
+- PSC contracts should remain platform-neutral where practical. File access, credential storage, background work, permissions, and other OS capabilities must be implemented through appropriate host-platform APIs or adapters.
 - Do not promise continuous background synchronization where the operating system does not allow it.
+- Provide documented integration surfaces and bindings appropriate to supported host platforms without requiring a particular UI toolkit.
 
 ## 10. Research before implementation
 
