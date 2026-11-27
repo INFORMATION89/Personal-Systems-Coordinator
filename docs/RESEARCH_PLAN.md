@@ -10,7 +10,7 @@ Evaluate at least:
 
 | Candidate | Questions |
 |---|---|
-| User-selected local folder | Folder access on Android, iOS, Windows, macOS and Linux; security-scoped access; bookmarks/permissions; file watching; background restrictions |
+| User-selected local folder | Folder access on Android, iOS, Windows, macOS and Linux; security-scoped access; bookmarks/permissions; file watching; background restrictions. Linux sync is conditional and must pass a feasibility review. |
 | Google Drive | OAuth scopes, shared folder ownership, file IDs, change tracking, upload semantics, conflict behavior, quotas and verification requirements |
 | iCloud Drive | iCloud Drive file-provider behavior versus CloudKit; platform support; Windows access; app-container limitations; cross-app sharing model |
 | OneDrive | Graph API permissions, delta/change tracking, upload sessions, throttling and platform support |
@@ -104,6 +104,8 @@ Research and prototype the PSC integration surface:
 - Host-platform adapters only where OS-specific capabilities are required, including file/document access, secure credential storage, background execution, notifications and permission handling.
 - Clear separation between PSC's generic coordination responsibilities and each app's domain logic, UI, local database and user experience.
 - Supported host-platform matrix and the level of adapter support each platform needs. Do not assume every platform supports identical background execution or provider features.
+
+**Linux synchronization is a conditional target, not a must-have at any cost.** Evaluate practical directory/provider access, stable change detection, background execution, security, distribution variance, testability, maintenance burden and parity with the other target platforms. Build a small representative proof of concept before promising support. If reliable Linux synchronization requires disproportionate engineering or ongoing maintenance, creates fragile behavior across distributions/providers, or would compromise synchronization quality elsewhere, remove Linux from the supported sync matrix. Do not weaken the portable protocol or degrade other platforms to retain Linux sync. Whether a Linux app can still provide useful local-only functionality is a separate product decision.
 
 Compare implementation approaches such as Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific adapters around shared versioned contracts. Evaluate integration costs for representative client languages and runtimes (for example Swift, Kotlin, C# and others) without treating their UI frameworks as PSC implementation requirements. Consider debugging, packaging, ABI/API stability, testing, security boundaries and maintenance. Do not choose a technology based on language preference alone.
 
