@@ -60,11 +60,14 @@ These principles guide research. They do not select a provider or implementation
 - Do not assume that Drive, iCloud Drive, GitHub, WebDAV or a local folder expose equivalent semantics.
 - Do not assume a provider API offers a filesystem, transaction, change feed or background execution on every platform.
 
-## 8. No hidden operating cost
+## 8. Permanent decentralization; no PSC-operated backend
 
-- The baseline architecture must not require us to operate a paid synchronization backend.
-- API quotas, rate limits, OAuth verification, provider policy changes and operational costs still require research.
-- Do not introduce paid APIs, hosted services or recurring costs without explicit approval.
+- PSC will never operate a centralized backend, first-party cloud storage, content relay, hosted coordinator, or mandatory account system.
+- Coordination and synchronization logic runs on user devices inside the applications and/or user-controlled local components, according to the approved architecture.
+- Data is stored or transported through folders and providers selected by the user. A provider may be commercial or self-hosted, but it remains external to PSC and under the user's choice/control.
+- Do not add a server as a shortcut for synchronization, sharing, notifications, identity, or realtime collaboration.
+- Provider APIs may have quotas, rate limits, OAuth verification requirements, policy changes and costs; research and disclose these without turning them into a PSC-operated service.
+- A proposal to reverse this constraint is a product-direction change, not a routine technical optimization, and requires explicit owner approval.
 
 ## 9. Platform-native behavior
 
