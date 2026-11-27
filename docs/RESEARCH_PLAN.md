@@ -117,7 +117,15 @@ Prototype architecture options for shared domain logic and data contracts while 
 5. Prototype one provider-specific adapter without leaking its API into app domain code.
 6. Add a second provider only after the interface proves it is genuinely provider-neutral.
 
-## H. Opus review brief
+## H. Monetization, licensing, and resource due diligence
+
+Evaluate whether PSC should be monetized or commercially distributed, without assuming that it must be paid or free and without adding a centralized service. Compare suitable possibilities such as permissive or copyleft open-source release, paid/proprietary licensing, dual licensing, paid SDK/distribution, support, or other models only where they fit the product and contribution strategy. Record benefits, disadvantages, obligations, and conflicts with permanent decentralization.
+
+Estimate one-time and recurring costs: maintenance, security response, compatibility testing, documentation, distribution, legal/accounting work, support, provider/API dependencies, optional model usage, and third-party fees. Explicitly distinguish external provider costs from PSC-operated infrastructure; PSC must not acquire a first-party hosted backend or relay to create a revenue stream.
+
+Create a license and provenance review for PSC itself and for every shipped or recommended resource: runtime/build dependencies, platform SDKs, sample code, API integrations, test fixtures, documentation, datasets, models, fonts, icons, media, and generated assets. Check exact versions and current primary-source terms. Record commercial-use rights, redistribution and modification rights, attribution, copyleft/source disclosure, patent and trademark clauses, data rights, quotas, and fees. Classify each resource as allowed, allowed with conditions, or prohibited/unresolved. Maintain license notices and an SBOM where practical. Do not select a license for PSC's own code or promise a distribution model until the implications are reviewed.
+
+## I. Opus review brief
 
 Ask Opus for an independent architecture and security review of:
 - the product boundary and local-first model;
