@@ -14,6 +14,7 @@ This register separates the direction already agreed in product discussions from
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
 | Provider registrations | One family-level registration per provider (Google Cloud project, Apple team, Entra app, Dropbox app, GitHub App), owned by the owner and registered as **Personal Systems Coordinator**. Google's shared workspace still depends on experiments E1/E2. | Agreed (2026-11-28) |
+| Minimum providers | Google Drive and GitHub are the accepted minimum, alongside the always-available user-selected folder. Further providers are ordered in research/PROVIDER_CANDIDATES.md for owner review. | Agreed minimum (2026-11-28) |
 | Self-hosting | Self-hosted storage (user-selected folder, WebDAV, later self-hosted Git) always remains available; no managed provider is ever the only option. | Agreed (2026-11-28) |
 | GitHub | Considered as an optional provider for Commonplace, following Konode's single-private-repository model; a PSC GitHub App is the preferred route to evaluate. | Research direction (2026-11-28) |
 | Model attribution | AI-assisted commits, PRs and reports name the tool and model tier (AI_POLICY.md §5). | Agreed (2026-11-28) |
@@ -39,7 +40,7 @@ This register separates the direction already agreed in product discussions from
 ## Not decided
 
 - Final public product/feature name. Provider registrations and consent screens use "Personal Systems Coordinator"; whether that is also the consumer-facing brand is open.
-- Provider order or launch provider.
+- Provider order beyond the agreed minimum (Google Drive, GitHub, user-selected folder).
 - Whether Google Drive, iCloud Drive, OneDrive, Dropbox, WebDAV, GitHub or local folders can share one abstraction without unacceptable limitations.
 - For Google Drive: whether one family project can share a workspace across apps and platforms (experiments E1/E2).
 - Shared folder layout, file formats and manifest format.

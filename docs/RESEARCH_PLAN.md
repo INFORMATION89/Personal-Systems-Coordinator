@@ -115,6 +115,8 @@ For every provider, record: supported platforms; required account and consent; l
 
 Done when: every provider candidate has a complete record, and the second-provider spike confirms or revises the contract.
 
+**Progress (2026-11-28):** first-pass sufficiency assessment of every service Konode supports or plans, in [Provider candidates](research/PROVIDER_CANDIDATES.md). Google Drive and GitHub are the agreed minimum; Dropbox and OneDrive are the suggested next providers; a WebDAV capability probe is the next research step.
+
 ### WP6 — Security, encryption and consent
 
 **Goals:** G4 · **Deliverable:** update `research/SECURITY_AND_CONSENT.md`

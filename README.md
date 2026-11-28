@@ -29,6 +29,7 @@ The intended model is permanently decentralized, local-first and provider-neutra
 
 Initial provider and architecture research is documented:
 - [Provider comparison](docs/research/PROVIDER_COMPARISON.md)
+- [Provider candidates](docs/research/PROVIDER_CANDIDATES.md) — every service Konode supports, checked against PSC's needs
 - [Provider authorization](docs/research/PROVIDER_AUTHORIZATION.md) — Google Drive, Apple, Microsoft, Dropbox; registration recommendation
 - [Platform constraints](docs/research/PLATFORM_CONSTRAINTS.md)
 - [Sync semantics and architecture options](docs/research/SYNC_SEMANTICS.md)
