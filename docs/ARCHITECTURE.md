@@ -283,6 +283,16 @@ A Cargo workspace:
 | WebDAV | Server address, user name and an app password (never the main password where the server offers app passwords). HTTPS only, except `localhost` | Same |
 | Local folder | No sign-in. Folder access through the operating system's picker | Platform bookmark or permission, stored device-locally |
 
+**GitHub route details** (first online route; lessons from Obsidian plugins and Konode in `research/GITHUB_SYNC_PATTERNS.md`):
+- **REST API only, no Git engine on the device.** Real Git on phones is fragile (Obsidian Git's own docs call mobile "very unstable").
+- **Connection checks:** the repository is private, the token can write, and the chosen branch exists. An empty repository is bootstrapped with a verified first commit on that branch.
+- **One commit per sync cycle,** and only when something changed: blobs, a tree on top of the base tree, a commit, then a branch update that fails if the branch moved (the conditional write).
+- **Reads that feed a write bypass caches,** so stale responses can't cause false conflicts. A 409 or a moved branch means "re-read and re-classify", never "overwrite".
+- **Change detection:** compare the base commit with the branch tip; use a tree comparison when the comparison is too large.
+- **First sync with files on both sides works:** identical files match, different ones become conflict copies. Nothing is refused or lost.
+- **Commits made outside PSC are ordinary remote changes.** PSC has no hidden metadata file that must stay in step.
+- **Disclosed limitation:** deleted notes remain in the repository's history.
+
 - **Client IDs are configuration** supplied by the host app, never hard-coded in PSC.
 - **No client secrets** are shipped as if they were secret. Native apps are public clients.
 - **Tokens are never logged.** Logs pass through a redaction layer, and a test checks it.
