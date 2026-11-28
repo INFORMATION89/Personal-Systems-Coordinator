@@ -82,7 +82,7 @@ These rules govern research, design, prototyping and (later) implementation of P
 
 ## 9. Clean-room development and licensing
 
-Whether PSC adopts a formal clean-room process is undecided; until then follow the interim rules in `CLEAN_ROOM.md`. Commonplace may be a paid app, so nothing that could ship may carry copyleft or unclear licensing without owner review. Review every dependency's license, maintenance, platform support and size before adding it, and record it. PSC's own license is not yet chosen (`docs/RESEARCH_PLAN.md` WP11); do not add a LICENSE file or license headers without owner approval.
+PSC is Apache-2.0. Follow `CLEAN_ROOM.md`, including its dependency-license list. Commonplace may be a paid app, so nothing that ships may carry copyleft or unclear licensing. Review every dependency's license, maintenance, platform support and size before adding it, and record it. 
 
 ## 10. Testing and verification
 

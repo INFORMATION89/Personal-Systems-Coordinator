@@ -2,7 +2,9 @@
 
 A provider-neutral foundation for optional data synchronization and interoperability across a family of personal applications.
 
-**Status: design drafted; waiting for the owner's decisions and the Phase A experiments. Coding starts at Design Freeze.**
+**Status: design drafted and the owner's key decisions made (Rust, macOS first, Android, GitHub first, plain files). Phase A experiments are next; coding starts at Design Freeze.**
+
+Licensed under the [Apache License 2.0](LICENSE). PSC is open source so that anyone can see exactly how their data is handled.
 
 The project explores how applications such as Solstice, Commonplace (notes), Clock and Calendar can keep user-controlled data available across the user's devices without requiring us to operate a proprietary cloud or mandatory account system.
 

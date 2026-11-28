@@ -38,7 +38,7 @@ Coding starts only after Design Freeze, when everything needed for the first via
 
 | Step | What | Who | Result |
 |---|---|---|---|
-| **A0** | Owner answers D1–D7 in `ARCHITECTURE.md` §1 | Owner | Answers recorded in `DECISIONS.md` |
+| **A0** | ~~Owner answers D1–D7~~ **Done 2026-11-28:** Rust, macOS, Android, plain files, GitHub first, Apache-2.0, public repository | Owner | Recorded in `DECISIONS.md` |
 | **A0b** | Owner creates test resources: Google Cloud project "PSC Test" with the Drive API enabled, consent screen in testing mode and **two desktop OAuth clients**; two Google test accounts; GitHub App "Personal Systems Coordinator (test)" with device flow and Contents read/write; a GitHub test account with one private repository. Client IDs stored outside the repository | Owner (Sonnet writes a step-by-step guide first, as A0a) | Resources ready |
 | **A1** | **Drive experiment E1:** client A creates a folder and a file; client B (same project, different client) lists and reads it. Also E3 (a client from a second project). Throwaway script in `prototypes/a1-drive/` | Sonnet | Per-client or per-project answer. With D5, decides Drive's place in v1 |
 | **A2** | **Binding experiment:** a tiny Rust library with one async function, one callback interface and one error type, called from Swift, Kotlin and C# (`uniffi-bindgen-cs`). In `prototypes/a2-bindings/` | Sonnet | Confirms the C# path, or switches to the `csbindgen` fallback |
@@ -57,13 +57,13 @@ A1–A5 are throwaway experiments that settle decisions. They are not product co
 
 ## 3. Phase B — Build (Sonnet)
 
-Each step lists what it depends on and when it is done. The order follows D2 and D3: "desktop #1" and "phone" below mean the owner's choices.
+Each step lists what it depends on and when it is done. Per the owner's decisions: **desktop #1 = macOS (Swift)**, **phone = Android (Kotlin)**, **desktop #2 = Windows (C#)**. GitHub is the first online route (D5).
 
 ### B.1 Foundation
 
 | Step | What | Depends | Done when |
 |---|---|---|---|
-| **B0** | Cargo workspace with the crates from `ARCHITECTURE.md` §6 (empty but compiling); `rust-toolchain.toml`; lint configuration; `cargo-deny` configuration per D6; LICENSE; CI on Linux and desktop #1 running fmt, clippy, tests, deny and PR hygiene; an `AGENTS.md` note for crate boundaries | Design Freeze | CI green with empty crates |
+| **B0** | Cargo workspace with the crates from `ARCHITECTURE.md` §6 (empty but compiling); `rust-toolchain.toml`; lint configuration; `cargo-deny` configuration with an Apache-2.0-compatible license allowlist; CI on Linux and macOS running fmt, clippy, tests, deny and PR hygiene; an `AGENTS.md` note for crate boundaries | Design Freeze | CI green with empty crates |
 | **B1** | `psc-testkit`: scenario runner reading `fixtures/`, fake clock, in-memory fault-injecting adapter (`psc-adapter`) | B0 | The runner loads every scenario and reports "not implemented" cleanly |
 | **B2** | `psc-core` domain types and configuration module (from `spec/CONFIG.md`); JSON models for every file in architecture §3 with round-trip tests against `spec/schemas/`; error codes from `spec/ERRORS.md` | B0 | Schema round-trip tests pass |
 | **B3** | `psc-state`: SQLite device-local state (index, bases, checkpoints, lock, route, device ID) with migrations and crash-safety tests | B2 | Crash-at-every-step tests pass |
@@ -84,7 +84,7 @@ Each step lists what it depends on and when it is done. The order follows D2 and
 | Step | What | Depends | Done when |
 |---|---|---|---|
 | **B10** | `psc-folder` adapter: temporary file plus atomic rename, placeholder (online-only) files handled, platform file coordination where required | B9 | Full scenario suite passes against a real temporary folder |
-| **B11** | `psc-cli`: init, connect folder, sync, status, conflicts. A standalone sample with no Commonplace code | B10 | A scripted two-folder sync demo works on desktop #1 |
+| **B11** | `psc-cli`: init, connect folder, sync, status, conflicts. A standalone sample with no Commonplace code | B10 | A scripted two-folder sync demo works on macOS |
 
 **Checkpoint 1 (owner):** the owner runs the CLI demo by following a written guide. Sync works between two folders on the computer.
 
@@ -94,21 +94,21 @@ Each step lists what it depends on and when it is done. The order follows D2 and
 |---|---|---|---|
 | **B12** | `psc-transport`: HTTP client, retries and backoff with Retry-After, timeouts, offline detection, log redaction test | B9 | Transport tests pass; the redaction test proves no token is logged |
 | **B13** | OAuth flows in `psc-transport`: PKCE with loopback for desktop, external browser hand-off for phones, GitHub device flow; credential store interface | B12 | Flows tested against recorded responses |
-| **B14** | `psc-webdav` adapter (from A3 results) | B12 | Full scenario suite passes against Nextcloud in Docker in CI |
-| **B15** | `psc-github` adapter: one commit per cycle, private-repository check, change detection by commit comparison | B13 | Scenario suite passes on recorded responses; a manual live test passes on the test repository |
+| **B14** | `psc-github` adapter (first online route, D5): one commit per cycle, private-repository check, change detection by commit comparison | B13 | Scenario suite passes on recorded responses; a manual live test passes on the test repository |
+| **B15** | `psc-webdav` adapter (from A3 results) | B12 | Full scenario suite passes against Nextcloud in Docker in CI |
 | **B16** | `psc-gdrive` adapter (only if Drive is in v1 after A1 and D5) | B13 | Same as B15, on the test project |
 | **B17** | Route binding and mismatch guard (architecture §5.6); connect and disconnect for every route in the CLI | B14–B16 | Route-mismatch scenarios pass; the CLI connects to every route |
 
-**Checkpoint 2 (owner):** following a guide, the owner syncs two folders through GitHub, WebDAV and (if included) Google Drive with the CLI.
+**Checkpoint 2 (owner):** following a guide, the owner syncs two folders on the Mac through GitHub first, then WebDAV and (if included) Google Drive, with the CLI.
 
 ### B.5 Apps and platforms
 
 | Step | What | Depends | Done when |
 |---|---|---|---|
 | **B18** | `psc-ffi`: the public API from architecture §8.1, exported through UniFFI; async and callbacks; error codes | B17 | API tests pass through the Rust API |
-| **B19** | Desktop #1 binding and package (C#/NuGet for Windows or Swift/XCFramework for macOS), with the default credential store and browser hand-off; a minimal sample app | B18 | The sample app syncs through every route on desktop #1 |
-| **B20** | Phone binding and package (Android AAR with `cargo-ndk`, Keystore-backed credentials, Custom Tabs hand-off, WorkManager example), and a sample app; emulator tests in CI | B18 | The sample syncs on the emulator; the owner confirms on a real phone |
-| **B21** | Desktop #2 binding and package | B19 | Same as B19 |
+| **B19** | macOS binding and package (Swift package with an XCFramework), Keychain credential store, `ASWebAuthenticationSession` hand-off, a minimal SwiftUI sample app | B18 | The sample app syncs through every route on macOS |
+| **B20** | Android binding and package (AAR with `cargo-ndk`, Keystore-backed credentials, Custom Tabs hand-off, WorkManager example), and a sample app; emulator tests in CI | B18 | The sample syncs on the emulator; the owner confirms on a real phone |
+| **B21** | Windows binding and package (C# with `uniffi-bindgen-cs`, or `csbindgen` per A2), Credential Manager store, a minimal sample app | B19 | Same as B19, on Windows |
 | **B22** | Integration guide for app developers (setup, routes, status, conflicts, errors, what the host must provide), and version and compatibility policy | B19 | Guide reviewed against the API |
 
 **Checkpoint 3 (owner):** phone-to-PC sync with the sample apps through each route.

@@ -1,6 +1,6 @@
 # PSC Architecture and Design Decisions
 
-**Status:** design draft for owner review · 2026-11-28 · becomes binding at **Design Freeze** (see `IMPLEMENTATION_PLAN.md`)
+**Status:** design draft · owner decisions D1–D7 answered 2026-11-28 · becomes binding at **Design Freeze** (see `IMPLEMENTATION_PLAN.md`)
 **Prepared with:** Claude Code, tier O (design only; no code). Owner review pending.
 **Scope:** the first viable product: PSC syncing **Commonplace** between one person's devices.
 
@@ -12,7 +12,19 @@ This document decides how PSC is built. Technical choices are made here, with re
 
 ## 1. Decisions for the owner
 
-Each of these affects the whole project. The recommendation is what this design assumes. If the owner chooses differently, the affected sections are listed.
+Each of these affects the whole project. **All seven were answered on 2026-11-28:**
+
+| Decision | Owner's answer |
+|---|---|
+| D1 Core language | **Rust** |
+| D2 First desktop OS | **macOS** (also Commonplace's first desktop OS) |
+| D3 First phone | **Android** |
+| D4 Encryption in v1 | **Plain files** |
+| D5 If Drive fails E1 | **GitHub first**: GitHub is the first online route; Drive follows if E1 passes |
+| D6 License | **Apache-2.0**; interim clean-room rules become the permanent policy |
+| D7 Repository | **Open source (public)**, so users can see how their data is processed |
+
+The options and their trade-offs are kept below as the record of why.
 
 ### D1. Core language: Rust
 
@@ -152,7 +164,7 @@ All PSC JSON files carry `"format": <integer>` and `"min_reader_format": <intege
 
 `PSC/devices/<device-id>/<app-id>.json`:
 ```json
-{ "format": 1, "min_reader_format": 1, "device_id": "<uuid>", "label": "Maria's PC", "platform": "windows",
+{ "format": 1, "min_reader_format": 1, "device_id": "<uuid>", "label": "My Mac", "platform": "macos",
   "app_version": "1.0.0", "psc_version": "1.0.0", "last_sync_at": "<rfc3339>" }
 ```
 
@@ -295,7 +307,7 @@ Exported through UniFFI as one object, `Psc`:
 
 | Language | Tool | Status |
 |---|---|---|
-| Swift (macOS, iOS later) | UniFFI (Mozilla, official) | Supported, including async and callbacks [Official] |
+| Swift (macOS first, iOS later) | UniFFI (Mozilla, official) | Supported, including async and callbacks [Official] |
 | Kotlin (Android) | UniFFI (official) | Supported, including async and callbacks [Official] |
 | C# (Windows) | `uniffi-bindgen-cs` (NordSecurity, third-party, version 0.x) | **Risk:** young, versions tied to UniFFI releases. Checked in step A2; fallback is a thin C ABI with `csbindgen` |
 

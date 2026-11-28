@@ -7,7 +7,7 @@ This repository contains Personal Systems Coordinator (PSC): shared, on-device s
 Before inspecting or changing anything:
 
 1. Read this file in full. Keep it concise; detailed procedures live in the documents below.
-2. Read the task-relevant sections of `RULES.md` and `CLEAN_ROOM.md` (interim rules; the formal policy is undecided).
+2. Read the task-relevant sections of `RULES.md` and `CLEAN_ROOM.md`.
 3. Read only the relevant sections of `docs/RESEARCH_PLAN.md` for the active work package, plus `docs/DECISIONS.md` for what is agreed. Do not load every research report for an ordinary task.
 4. Follow `AI_POLICY.md` and `AI_COST_POLICY.md`, especially context management, approval boundaries, data protection and cost-aware verification.
 5. If your tool has a guide under `docs/agent-guides/`, read it as supplementary advice. It never overrides the project documents.
@@ -34,15 +34,15 @@ Steps are in `docs/IMPLEMENTATION_PLAN.md` (Phase A: decide; Phase B: build). Us
 
 ## Current phase
 
-**Phase A: Decide. No product code until Design Freeze** (`docs/IMPLEMENTATION_PLAN.md` §2). The design is drafted in `docs/ARCHITECTURE.md`; the owner's decisions D1–D7 and the Phase A experiments are pending.
+**Phase A: Decide. No product code until Design Freeze** (`docs/IMPLEMENTATION_PLAN.md` §2). The design is in `docs/ARCHITECTURE.md`. The owner's decisions D1–D7 are answered (Rust, macOS first, Android, plain files, GitHub first, Apache-2.0, public repository). The Phase A experiments and spec files are pending.
 
 Allowed now:
 - research reports, specifications and decision memos under `docs/`;
 - throwaway prototypes and experiments that a work package explicitly calls for (for example the Drive experiments E1–E9 in `docs/research/PROVIDER_AUTHORIZATION.md`), kept under `prototypes/<work-package>/` and labelled as non-production.
 
 Not allowed without owner approval:
-- production code, published packages or public API commitments;
-- choosing a provider, file format, implementation language or license;
+- production code (before Design Freeze), published packages or public API commitments;
+- changing a decision recorded in `docs/DECISIONS.md`;
 - creating cloud projects, OAuth clients, paid services or anything with recurring cost;
 - broad provider scopes (for example full Google Drive access).
 

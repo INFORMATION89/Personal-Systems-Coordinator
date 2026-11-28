@@ -14,7 +14,13 @@ This register separates the direction already agreed in product discussions from
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
 | Workspace layout | A root folder holding PSC's own folder plus one folder per app; each app owns its folder; PSC gives apps shared information (apps, devices, status). Details in ARCHITECTURE.md §3–§4. | Owner direction (2026-11-28) |
-| Core language | Owner leaning to Rust; confirm as D1 in ARCHITECTURE.md §1. | Pending owner confirmation |
+| Core language (D1) | Rust | Agreed (2026-11-28) |
+| First desktop OS (D2) | macOS, for PSC and for Commonplace; Windows follows | Agreed (2026-11-28) |
+| First phone (D3) | Android; iOS after the first release | Agreed (2026-11-28) |
+| Encryption (D4) | None in v1: plain files, stated clearly in onboarding | Agreed (2026-11-28) |
+| First online route (D5) | GitHub first; Google Drive follows if experiment E1 passes | Agreed (2026-11-28) |
+| License (D6) | Apache-2.0 for PSC; the no-copying and provenance rules in CLEAN_ROOM.md are the permanent policy (no formal two-step clean-room process) | Agreed (2026-11-28) |
+| Repository (D7) | Public, open source, so users can see how their data is processed | Agreed (2026-11-28); the owner changes the visibility on GitHub |
 | Design Freeze | No product code until all decisions for the first viable product are made (IMPLEMENTATION_PLAN.md Phase A). | Agreed (2026-11-28) |
 | AI usage | Sonnet codes; Opus only for the named reviews or on request; owner on Claude Pro; no AI-generated art (icons, mockups and suggestions allowed); owner is non-technical, so structural choices come with pros and cons. | Agreed (2026-11-28) |
 | Provider registrations | One family-level registration per provider (Google Cloud project, Apple team, Entra app, Dropbox app, GitHub App), owned by the owner and registered as **Personal Systems Coordinator**. Google's shared workspace still depends on experiments E1/E2. | Agreed (2026-11-28) |
@@ -23,7 +29,6 @@ This register separates the direction already agreed in product discussions from
 | Self-hosting | Self-hosted storage (user-selected folder, WebDAV, later self-hosted Git) always remains available; no managed provider is ever the only option. | Agreed (2026-11-28) |
 | GitHub | Considered as an optional provider for Commonplace, following Konode's single-private-repository model; a PSC GitHub App is the preferred route to evaluate. | Research direction (2026-11-28) |
 | Model attribution | AI-assisted commits, PRs and reports name the tool and model tier (AI_POLICY.md §5). | Agreed (2026-11-28) |
-| Clean-room process | Undecided; interim no-copying and provenance rules apply until WP11 decides PSC's license, with Commonplace possibly being paid. | Undecided (2026-11-28) |
 | Working rules | Agent instructions, rules, interim clean-room rules, AI and AI-cost policies, agent guides, PR template and PR hygiene check adopted from Meridian-Engine and adapted to PSC. | Adopted at owner request (2026-11-28) |
 | Far-future integrations | Clock Pomodoro sync, a Solstice menubar app reading Solstice personalization data, and Calendar ↔ Commonplace mentions are recorded as context in FUTURE_INTEGRATIONS.md. Today's design must not rule them out, but none is scheduled. | Context only (2026-11-28) |
 | Quality bar | The apps are expected to be distributed to other people (for example friends), so PSC must meet a public-release standard for data safety and must cope with apps and devices being updated at different times. | Agreed (2026-11-28) |
@@ -50,14 +55,14 @@ This register separates the direction already agreed in product discussions from
 - For Google Drive: whether one family project can share a workspace across apps and platforms (experiments E1/E2).
 - Shared folder layout, file formats and manifest format.
 - Sync transport, change journal and conflict resolution algorithms.
-- Whether any data needs end-to-end encryption and how keys are recovered.
+- Whether a later version adds optional end-to-end encryption (none in v1).
 - Data categories eligible for synchronization in each application (within the Markdown/image/JSON limit).
 - Background-sync expectations on each platform.
-- Implementation language, libraries and minimum platform versions.
+- Minimum platform versions (language and libraries: see ARCHITECTURE.md).
 - Final host-platform matrix, including whether any Linux-only local application remains worthwhile if Linux synchronization is dropped.
 - Shared domain/core implementation technology, SDK packaging, and its binding strategy for consuming applications.
 - Whether and how PSC should be monetized or commercially distributed, including cost, legal and operational implications while preserving permanent decentralization.
-- The license and distribution model for PSC's own code, separate from licenses governing dependencies and assets.
+- Distribution and packaging details beyond ARCHITECTURE.md §8.4 (license decided: Apache-2.0).
 - The permitted-resource policy and inventory process for dependencies, SDKs, APIs, datasets, models, fonts, icons, media, sample code and other third-party materials.
 
 ## Constraints on future decisions
