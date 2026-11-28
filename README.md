@@ -4,7 +4,7 @@ A provider-neutral foundation for optional data synchronization and interoperabi
 
 **Status: research and architecture planning. Not implementation-ready.**
 
-The project explores how applications such as Solstice, Notes, Clock and Calendar can keep user-controlled data available across the user's devices without requiring us to operate a proprietary cloud or mandatory account system.
+The project explores how applications such as Solstice, Commonplace (notes), Clock and Calendar can keep user-controlled data available across the user's devices without requiring us to operate a proprietary cloud or mandatory account system.
 
 The intended model is permanently decentralized, local-first and provider-neutral: applications own their domain data; users choose whether to synchronize it and which existing storage provider or folder to use. PSC itself will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage, or mandatory account system.
 
@@ -13,7 +13,8 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Product overview](docs/PRODUCT_OVERVIEW.md) — purpose, scope and boundaries.
 - [Principles](docs/PRINCIPLES.md) — product and privacy constraints.
 - [Research plan](docs/RESEARCH_PLAN.md) — goals, research work packages and sequencing before selecting an architecture.
-- [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — the first candidate use case.
+- [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — the first candidate use case (small preference records).
+- [Commonplace integration](docs/INTEGRATION_COMMONPLACE.md) — the notes app; the most demanding sync requirements (plain Markdown files, attachments, conflicts).
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 

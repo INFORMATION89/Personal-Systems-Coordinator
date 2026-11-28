@@ -5,7 +5,7 @@
 | Term | Meaning in this repository |
 |---|---|
 | **PSC** | Personal Systems Coordinator: shared, provider-neutral infrastructure that consuming apps embed for optional sync and interoperability. Project identifier, not a final consumer brand. |
-| **Consuming app** | An application that integrates PSC (currently Solstice, Notes, Clock, Calendar). It owns its domain model, UI and local storage. |
+| **Consuming app** | An application that integrates PSC (currently Solstice, Commonplace, Clock, Calendar). It owns its domain model, UI and local storage. |
 | **Meridian** | Solstice's weather engine, including its local forecast-learning behavior and its separate, opt-in weather-data contribution. Not part of PSC. |
 | **Provider** | External storage or transport the user chooses: a local folder, Google Drive, iCloud Drive, OneDrive, Dropbox, WebDAV, etc. Always external to PSC. |
 | **Adapter** | PSC component that translates PSC operations to one provider and declares that provider's capabilities. |

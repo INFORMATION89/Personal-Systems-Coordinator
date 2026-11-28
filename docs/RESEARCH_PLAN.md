@@ -10,8 +10,8 @@ Derived from the [Product overview](PRODUCT_OVERVIEW.md), [Principles](PRINCIPLE
 
 | Goal | Meaning | Hard constraint attached |
 |---|---|---|
-| **G1 Cross-device continuity** | A person's user-approved app data (starting with Solstice preferences) follows them between their devices. | Through storage the user already controls; PSC never operates a backend, relay, managed storage or account system. |
-| **G2 Cross-app interoperability** | Independent apps (Solstice, Notes, Clock, Calendar) can reference and display each other's data through explicit contracts. | Each app keeps ownership of its domain model; no app silently rewrites another's records. |
+| **G1 Cross-device continuity** | A person's user-approved app data follows them between their devices: first Solstice preferences, then Commonplace notes, attachments and workspace metadata. | Through storage the user already controls; PSC never operates a backend, relay, managed storage or account system. |
+| **G2 Cross-app interoperability** | Independent apps (Solstice, Commonplace, Clock, Calendar) can reference and display each other's data through explicit contracts. | Each app keeps ownership of its domain model; no app silently rewrites another's records. |
 | **G3 Local-first** | Every app is fully useful offline, without a connected provider and during provider failures. | Sync is eventual and opportunistic; status must be honest. |
 | **G4 Trust and control** | The person can see, choose, pause, export and disconnect what syncs, where and why. | Per-purpose consent; least privilege; no silent sync of location, raw weather data or credentials. |
 | **G5 Provider neutrality** | Apps depend on PSC contracts, not on Drive/iCloud/OneDrive APIs; a plain folder is first-class. | Capability differences are declared and disclosed, not hidden. |
@@ -79,7 +79,9 @@ Questions:
 5. Read and write permissions between apps: which app may read which namespace. In a plaintext shared folder ownership cannot be enforced by the storage itself. Evaluate convention plus validation, per-app signing of records, per-namespace encryption or other models, and say honestly what each can and cannot guarantee.
 6. Human inspectability: which records stay readable (Markdown, JSON) and which may be opaque.
 
-Done when: a draft contract exists with worked examples for one Solstice preference record, one Clock session and one Calendar → Notes reference, and the ownership-enforcement options are compared.
+7. User-visible plain files: how PSC tracks identity, revisions and tombstones for Commonplace Markdown notes and attachments that external editors may change, without cluttering the folder or breaking those editors.
+
+Done when: a draft contract exists with worked examples for one Solstice preference record, one Commonplace note with an attachment, and one Commonplace workspace-metadata record, and the ownership-enforcement options are compared.
 
 ### WP4 — Synchronization protocol semantics and test fixtures
 
@@ -121,7 +123,7 @@ Done when: the threat model covers these cases and the encryption options are wr
 
 The contract is defined language-neutrally first. Only then are implementation options compared, with no option preferred in advance. Candidates include, but are not limited to: a Rust core with generated bindings; Kotlin Multiplatform; a C or C++ core with a stable C ABI; per-platform native implementations validated against the shared fixtures from WP4; and a hybrid with a shared core for the protocol and native adapters for OS capabilities.
 
-Criteria: binding quality and cost for representative consumers (Swift, Kotlin/Java, C#/.NET, TypeScript/JavaScript and others the app family uses); ABI/API stability; binary size; debugging and crash diagnostics; secure-storage and file-coordination interop; testability against the WP4 fixtures; build and distribution; maintenance and contributor pool; license of the toolchain and runtime.
+Criteria: binding quality and cost for the app family's planned host languages, namely Swift (SwiftUI on macOS and iOS), C#/.NET (WinUI 3 on Windows) and Kotlin/JVM (Jetpack Compose on Android), plus any others the family adopts; ABI/API stability; binary size; debugging and crash diagnostics; secure-storage and file-coordination interop; testability against the WP4 fixtures; build and distribution; maintenance and contributor pool; license of the toolchain and runtime.
 
 Done when: a short spike implements the same small slice (read workspace marker, apply one fixture) in two or three candidates, is called from at least two host languages, and the comparison is written up. No technology is selected without owner approval.
 
@@ -135,11 +137,15 @@ Linux synchronization is a conditional target. Before the Linux spike, write mea
 
 Connecting Google Calendar, Apple EventKit, Microsoft Graph or CalDAV is the responsibility of the future Calendar app, not PSC. PSC does no calendar-service research now. The only PSC concern is the boundary: PSC synchronizes app-owned records (for example Clock sessions or Notes tasks) that Calendar may later read, and PSC storage authorization stays separate from any calendar-service authorization. The earlier boundary notes remain in [Calendar integrations](research/CALENDAR_INTEGRATIONS.md) for the Calendar app to pick up.
 
-### WP10 — Solstice first-integration data inventory
+### WP10 — Sync inventories for the first consuming apps
 
-**Goals:** G1, G4 · **Depends on:** WP3 draft · **Deliverable:** update `INTEGRATION_SOLSTICE.md`
+**Goals:** G1, G4 · **Start in phase 1, alongside WP3** · **Deliverables:** updates to `INTEGRATION_SOLSTICE.md` and `INTEGRATION_COMMONPLACE.md`
 
-List candidate Solstice records with units, ranges, schema versions, conflict policy and privacy classification; separate explicit preferences from derived personalization and Meridian learning state; state what stays local and why. Algorithm and app code versions ship through app releases and are never sync data.
+What PSC synchronizes is not yet defined. Every other work package depends on this, so it starts early. For each candidate category in [Solstice](INTEGRATION_SOLSTICE.md) and [Commonplace](INTEGRATION_COMMONPLACE.md), record: owner; file-based or record-based; typical size and change frequency; whether external tools edit it; conflict policy; deletion semantics; privacy classification; whether it is eligible, needs a separate opt-in, or stays local. Each app decides its own eligibility; PSC records the requirements this places on the contract.
+
+- **Solstice:** explicit preferences separated from derived personalization and Meridian learning state. Algorithm and app code versions ship through app releases and are never sync data.
+- **Commonplace:** notes, attachments, workspace metadata, tasks and reminders, shopping lists, origin metadata. Location is opt-in only.
+- **Open scope question:** whether Commonplace's planned small-group sharing with other people is in PSC scope at all.
 
 ### WP11 — Licensing, provenance and monetization
 
@@ -157,8 +163,8 @@ See §6.
 
 | Phase | Work | Why this order |
 |---|---|---|
-| **1. Unblock** | WP1 desk research, WP2 prototype, WP3 draft | WP1 can invalidate the shared-workspace model; WP3 defines what everything else moves; WP2 establishes the universal baseline. |
-| **2. Prove** | WP1 multi-app experiment, WP4 fixtures, WP5 second provider, WP6, WP10 | Test the contract against real providers and failure cases. |
+| **1. Unblock** | WP10 inventories, WP1 desk research, WP2 prototype, WP3 draft | WP10 defines what syncs; WP1 can invalidate the shared-workspace model; WP3 defines how it moves; WP2 establishes the universal baseline. |
+| **2. Prove** | WP1 multi-app experiment, WP4 fixtures, WP5 second provider, WP6 | Test the contract against real providers and failure cases. |
 | **3. Choose how to build** | WP7, WP8, WP11 | Technology, platform matrix and license are chosen for a contract that already exists, not the other way round. |
 | **4. Review and decide** | WP12, then owner decisions recorded in [DECISIONS.md](DECISIONS.md) | Findings become decisions only through explicit owner approval. |
 

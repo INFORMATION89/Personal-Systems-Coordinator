@@ -17,7 +17,7 @@ The foundation should make it possible for an application to keep its data local
 The application family is expected to include products with different responsibilities:
 
 - **Solstice:** weather, recommendations and locally derived personalization.
-- **Notes:** Markdown documents, notes, tasks and structured personal information.
+- **Commonplace (notes):** Markdown notes, moodboards, tasks, reminders, shopping lists and a spatial canvas. See [Commonplace integration](INTEGRATION_COMMONPLACE.md).
 - **Clock:** timers, focus sessions and activity history.
 - **Calendar:** external calendar events plus first-party activity layers and references.
 
@@ -25,14 +25,14 @@ Users may want these applications to share selected information across phones an
 
 - Solstice recommendation preferences remaining consistent across devices.
 - Clock sessions appearing as a distinct activity layer in Calendar.
-- Calendar showing links to Notes tasks or documents and opening the owning application.
+- Calendar showing links to Commonplace tasks or documents and opening the owning application.
 - Each application remaining useful when another device or provider is unavailable.
 
 ## Product model
 
 The candidate model has three separate responsibilities:
 
-1. **Applications own domain data.** Solstice owns weather preferences and weather-derived personalization; Clock owns timer sessions; Notes owns notes and tasks; Calendar owns its calendar-specific data and views.
+1. **Applications own domain data.** Solstice owns weather preferences and weather-derived personalization; Clock owns timer sessions; Commonplace owns notes and tasks; Calendar owns its calendar-specific data and views.
 2. **PSC coordinates portable data exchange and synchronization.** It should provide shared contracts and provider integration boundaries without understanding every application's business logic.
 3. **External providers transport or store data.** The user may connect an existing cloud account or choose a local folder that is synchronized by software of their choice.
 
