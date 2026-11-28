@@ -9,8 +9,12 @@ This register separates the direction already agreed in product discussions from
 | Topic | Current position | Status |
 |---|---|---|
 | Project | Independent shared foundation for the application family | Agreed direction |
-| First candidate client | Solstice | Agreed |
-| Primary purpose | Optional cross-device synchronization and cross-app interoperability | Agreed direction |
+| Lead client | Commonplace is the app that needs PSC most; first research and development are oriented towards it. Solstice follows as a simpler second client. | Agreed (2026-11-28) |
+| Sync scope | One person's own devices only (for example phone → user's cloud provider → PC). Multi-person sharing and collaboration are not PSC features. | Agreed (2026-11-28) |
+| Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
+| Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
+| Quality bar | The apps are expected to be distributed to other people (for example friends), so PSC must meet a public-release standard for data safety and must cope with apps and devices being updated at different times. | Agreed (2026-11-28) |
+| Primary purpose | Optional cross-device synchronization of one person's app data; cross-app interoperability is secondary | Agreed direction |
 | Storage model | User chooses an existing provider or a folder they control | Agreed direction |
 | First-party cloud | PSC will never operate a centralized backend, first-party cloud storage, hosted coordinator, content relay, managed storage or mandatory account | Permanent product constraint |
 | Consuming-app UI | Each application chooses its own UI framework and architecture; PSC does not prescribe or provide a UI | Outside PSC scope |
@@ -34,7 +38,7 @@ This register separates the direction already agreed in product discussions from
 - Shared folder layout, file formats and manifest format.
 - Sync transport, change journal and conflict resolution algorithms.
 - Whether any data needs end-to-end encryption and how keys are recovered.
-- Data categories eligible for synchronization in each application.
+- Data categories eligible for synchronization in each application (within the Markdown/image/JSON limit).
 - Background-sync expectations on each platform.
 - Implementation language, libraries and minimum platform versions.
 - Final host-platform matrix, including whether any Linux-only local application remains worthwhile if Linux synchronization is dropped.

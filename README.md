@@ -13,8 +13,8 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Product overview](docs/PRODUCT_OVERVIEW.md) — purpose, scope and boundaries.
 - [Principles](docs/PRINCIPLES.md) — product and privacy constraints.
 - [Research plan](docs/RESEARCH_PLAN.md) — goals, research work packages and sequencing before selecting an architecture.
-- [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — the first candidate use case (small preference records).
-- [Commonplace integration](docs/INTEGRATION_COMMONPLACE.md) — the notes app; the most demanding sync requirements (plain Markdown files, attachments, conflicts).
+- [Commonplace integration](docs/INTEGRATION_COMMONPLACE.md) — the notes app and lead client: Markdown notes, images and workspace JSON.
+- [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — second client: small preference JSON.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 
@@ -35,7 +35,8 @@ Key unresolved issues, tracked as work packages in the research plan:
 ## Current status
 
 - The repository is a planning and research workspace.
-- Solstice is the first candidate application because its recommendation preferences and personalization data could benefit from cross-device continuity.
+- Commonplace is the lead client and drives the first research and development; Solstice follows.
+- Sync covers one person's own devices only, and the synced content is simple files: Markdown, images and JSON.
 - Provider APIs, synchronization semantics, data schemas, encryption design and implementation technology have **not** been selected.
 - An independent review with Claude Opus is planned before the architecture is treated as ready for implementation.
 

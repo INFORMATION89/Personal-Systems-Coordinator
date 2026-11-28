@@ -3,6 +3,8 @@
 **Research date:** 2026-11-27  
 **Status:** architecture analysis; no wire protocol or implementation chosen.
 
+> **Scope update (2026-11-28):** PSC syncs one person's own devices and only simple files (Markdown, images, JSON); Commonplace is the lead client. Rows below about calendar events, CRDTs and multi-user editing are background, not current scope. See [DECISIONS.md](../DECISIONS.md).
+
 ## 1. Separate the layers
 
 PSC should not be a single "sync everything" database. Separate four responsibilities:

@@ -68,8 +68,13 @@ Calendar-provider integration and synchronization of our own application data mu
 - It is not a promise that every provider supports seamless, real-time, bidirectional synchronization.
 - It does not make telemetry, collaborative data contribution or analytics necessary.
 
-## First candidate use case
+## Sync scope
 
-Solstice is the first integration candidate. Its recommendation preferences and potentially portable personalization state could follow the user between devices. This is a research target, not a decision to synchronize every weather record or learning artifact.
+- Sync is for **one person's own devices**: for example, the phone syncs to the user's cloud provider and the PC syncs from it. Sharing content with other people is not a PSC feature.
+- PSC syncs **simple files**: Markdown, images and JSON. It is not a database.
+- The apps are expected to be used by other people too (for example friends), each syncing their own devices. That sets a public-release quality bar for data safety and for coping with apps updated at different times.
 
-See [Solstice Integration](INTEGRATION_SOLSTICE.md).
+## First clients
+
+- **Commonplace** is the lead client and needs PSC the most: Markdown notes, images and workspace JSON. See [Commonplace integration](INTEGRATION_COMMONPLACE.md).
+- **Solstice** follows with a few preference JSON files. See [Solstice integration](INTEGRATION_SOLSTICE.md).

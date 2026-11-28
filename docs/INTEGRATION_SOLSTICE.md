@@ -2,7 +2,7 @@
 
 **Status:** candidate use case · research required · no implementation approved
 
-Solstice is the first candidate application for Personal Systems Coordinator because the user wants weather recommendation preferences and eligible personalization data to remain consistent across devices.
+Solstice is the second candidate application for Personal Systems Coordinator, after [Commonplace](INTEGRATION_COMMONPLACE.md). It is a candidate because the user wants weather recommendation preferences and eligible personalization data to remain consistent across devices.
 
 Reference repository: [INFORMATION89/Solstice](https://github.com/INFORMATION89/Solstice).
 

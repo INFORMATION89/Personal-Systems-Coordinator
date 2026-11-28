@@ -10,14 +10,19 @@ Derived from the [Product overview](PRODUCT_OVERVIEW.md), [Principles](PRINCIPLE
 
 | Goal | Meaning | Hard constraint attached |
 |---|---|---|
-| **G1 Cross-device continuity** | A person's user-approved app data follows them between their devices: first Solstice preferences, then Commonplace notes, attachments and workspace metadata. | Through storage the user already controls; PSC never operates a backend, relay, managed storage or account system. |
-| **G2 Cross-app interoperability** | Independent apps (Solstice, Commonplace, Clock, Calendar) can reference and display each other's data through explicit contracts. | Each app keeps ownership of its domain model; no app silently rewrites another's records. |
+| **G1 Cross-device continuity** | One person's user-approved app data follows them between their own devices (for example phone → their cloud provider → PC). Commonplace first (notes, images, workspace JSON), then Solstice (preference JSON). Synced content is limited to Markdown, images and JSON. | Through storage the user already controls; PSC never operates a backend, relay, managed storage or account system. |
+| **G2 Cross-app interoperability** *(secondary)* | Independent apps (Solstice, Commonplace, Clock, Calendar) can reference and display each other's data through explicit contracts. | Each app keeps ownership of its domain model; no app silently rewrites another's records. |
 | **G3 Local-first** | Every app is fully useful offline, without a connected provider and during provider failures. | Sync is eventual and opportunistic; status must be honest. |
 | **G4 Trust and control** | The person can see, choose, pause, export and disconnect what syncs, where and why. | Per-purpose consent; least privilege; no silent sync of location, raw weather data or credentials. |
 | **G5 Provider neutrality** | Apps depend on PSC contracts, not on Drive/iCloud/OneDrive APIs; a plain folder is first-class. | Capability differences are declared and disclosed, not hidden. |
-| **G6 Sustainable shared infrastructure** | PSC can be consumed by apps written in different languages on different platforms, maintained over time and distributed lawfully. | PSC prescribes no UI or app architecture; no implementation language is preferred in advance. |
+| **G6 Sustainable shared infrastructure** | Every app the owner builds can plug into PSC. PSC is maintained over time, distributed lawfully, and good enough for apps that other people (for example friends) will use, including devices and apps updated at different times. | PSC prescribes no UI or app architecture; no implementation language is preferred in advance. |
 
 A research question belongs in this plan only if answering it advances one of these goals or tests one of these constraints.
+
+**Scope limits (agreed 2026-11-28):**
+- Sync is for one person's own devices. Sharing with other people or collaboration is not a PSC feature.
+- PSC syncs simple files: Markdown, images and JSON. It is not a database, and no CRDT or general merge engine is needed for this content unless a later decision says otherwise.
+- Commonplace leads; research questions are answered first for Commonplace's needs.
 
 ## 2. Where the current research stands
 
@@ -65,29 +70,32 @@ Questions:
 
 Done when: the "Required prototype checks" in [Platform constraints](research/PLATFORM_CONSTRAINTS.md#required-prototype-checks) have been run on Android and iOS with at least one cloud-backed provider, and the results are recorded as a capability table.
 
-### WP3 — Portable data contract, workspace format and cross-app interoperability
+### WP3 — Workspace format and file contract
 
-**Goals:** G2, G4, G5 · **Deliverable:** `research/DATA_CONTRACTS_AND_INTEROP.md`
+**Goals:** G1, G4, G5 (and G2) · **Deliverable:** `research/DATA_CONTRACTS_AND_INTEROP.md`
 
-This is the core of G2 and has no research yet.
+PSC syncs Markdown, image and JSON files. The contract therefore describes files plus the minimum metadata PSC needs about them, not a general record database.
 
 Questions:
-1. Record envelope: stable record ID, owning app/namespace, schema ID and version, revision context, timestamps, tombstone form.
+1. Per-file metadata: stable file identity independent of path, owning app/namespace, revision or content hash, tombstone form. Where this lives (Markdown frontmatter, JSON fields, a sidecar or a PSC journal) so that the files stay clean for external editors.
 2. Schema description language and compatibility rules (additive changes, unknown-field preservation, migrations, forward/backward reading).
 3. Workspace layout and identity: workspace marker, format version, per-app namespaces, file granularity (avoid hot monolithic manifests).
 4. Cross-app references: a stable reference format (for example a URI form `psc://<app>/<type>/<id>`), how a reference resolves, what happens when the target is missing or deleted, and how a reference opens the owning app on each platform (deep links, intents, URL schemes).
 5. Read and write permissions between apps: which app may read which namespace. In a plaintext shared folder ownership cannot be enforced by the storage itself. Evaluate convention plus validation, per-app signing of records, per-namespace encryption or other models, and say honestly what each can and cannot guarantee.
 6. Human inspectability: which records stay readable (Markdown, JSON) and which may be opaque.
 
-7. User-visible plain files: how PSC tracks identity, revisions and tombstones for Commonplace Markdown notes and attachments that external editors may change, without cluttering the folder or breaking those editors.
+7. External edits: how PSC detects and handles changes made to Markdown and image files by other editors or tools.
+8. Mixed versions: how a device running an older app or PSC version reads, preserves and never corrupts files written by a newer one.
 
-Done when: a draft contract exists with worked examples for one Solstice preference record, one Commonplace note with an attachment, and one Commonplace workspace-metadata record, and the ownership-enforcement options are compared.
+Questions 4–5 (cross-app references and permissions) are secondary and may be deferred.
+
+Done when: a draft contract exists with worked examples for one Commonplace note with an image, one Commonplace workspace-metadata JSON file and one Solstice preference JSON file.
 
 ### WP4 — Synchronization protocol semantics and test fixtures
 
 **Goals:** G1, G3 · **Depends on:** WP3 draft · **Deliverable:** update `research/SYNC_SEMANTICS.md` plus a fixture set
 
-Questions: change journal versus state scanning; per-adapter cursors and safe rescans; conditional writes; tombstone retention; per-data-class conflict policy (append-only, field-level, conflict copies, CRDT only where justified); restartable lifecycle; device identity.
+Questions: change journal versus state scanning; per-adapter cursors and safe rescans; conditional writes; tombstone retention; conflict policy per content type (Markdown: keep both versions as a conflict copy; images: keep both; JSON: app-defined field rules or conflict copy); restartable lifecycle; device identity.
 
 Done when: the [proof-of-concept test matrix](research/SYNC_SEMANTICS.md#11-proof-of-concept-test-matrix) is expressed as repeatable, language-neutral fixtures (input workspace states, operations, expected outcomes) that any implementation can be tested against.
 
@@ -139,13 +147,13 @@ Connecting Google Calendar, Apple EventKit, Microsoft Graph or CalDAV is the res
 
 ### WP10 — Sync inventories for the first consuming apps
 
-**Goals:** G1, G4 · **Start in phase 1, alongside WP3** · **Deliverables:** updates to `INTEGRATION_SOLSTICE.md` and `INTEGRATION_COMMONPLACE.md`
+**Goals:** G1, G4 · **Start in phase 1, alongside WP3; Commonplace first** · **Deliverables:** updates to `INTEGRATION_COMMONPLACE.md`, then `INTEGRATION_SOLSTICE.md`
 
-What PSC synchronizes is not yet defined. Every other work package depends on this, so it starts early. For each candidate category in [Solstice](INTEGRATION_SOLSTICE.md) and [Commonplace](INTEGRATION_COMMONPLACE.md), record: owner; file-based or record-based; typical size and change frequency; whether external tools edit it; conflict policy; deletion semantics; privacy classification; whether it is eligible, needs a separate opt-in, or stays local. Each app decides its own eligibility; PSC records the requirements this places on the contract.
+What PSC synchronizes is not yet defined. Every other work package depends on this, so it starts early. For each candidate category in [Commonplace](INTEGRATION_COMMONPLACE.md) and [Solstice](INTEGRATION_SOLSTICE.md), record: owner; file type (Markdown, image or JSON); typical size and change frequency; whether external tools edit it; conflict policy; deletion semantics; privacy classification; whether it is eligible, needs a separate opt-in, or stays local. Each app decides its own eligibility; PSC records the requirements this places on the contract.
 
 - **Solstice:** explicit preferences separated from derived personalization and Meridian learning state. Algorithm and app code versions ship through app releases and are never sync data.
-- **Commonplace:** notes, attachments, workspace metadata, tasks and reminders, shopping lists, origin metadata. Location is opt-in only.
-- **Open scope question:** whether Commonplace's planned small-group sharing with other people is in PSC scope at all.
+- **Commonplace (first):** Markdown notes, images and attachments, workspace metadata as JSON, tasks and reminders, shopping lists, origin metadata. Location is opt-in only.
+- Every category must map to a Markdown, image or JSON file; anything that does not is flagged for an explicit decision.
 
 ### WP11 — Licensing, provenance and monetization
 

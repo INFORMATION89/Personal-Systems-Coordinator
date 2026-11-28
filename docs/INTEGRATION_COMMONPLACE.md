@@ -1,18 +1,27 @@
 # Commonplace Integration
 
-**Status:** candidate use case · research required · no implementation approved · summarized from the Commonplace repository on 2026-11-28
+**Status:** lead client · research required · no implementation approved · summarized from the Commonplace repository on 2026-11-28, with owner clarifications
 
-Commonplace is the application family's Markdown-first notes app: notes, moodboards, tasks, reminders and shopping lists, with a spatial desktop canvas and a list view. It plans to use PSC for cross-device synchronization and family interoperability.
+Commonplace is the application family's Markdown-first notes app: notes, moodboards, tasks, reminders and shopping lists, with a spatial desktop canvas and a list view. It is the app that needs PSC the most, so PSC's first research and development are oriented towards it (see [DECISIONS.md](DECISIONS.md)).
 
 Reference repository: [INFORMATION89/Commonplace](https://github.com/INFORMATION89/Commonplace), especially `PREPLAN.md` §4 (data model), §6 (storage and sync, including §6.4 on PSC) and `rules.md` §5.
 
-## Why Commonplace matters for PSC research
+## Owner clarifications (2026-11-28)
 
-Solstice needs to sync a few small preference records. Commonplace needs much more, and it sets the hardest requirements:
+Where Commonplace's planning documents are ambiguous, these take precedence:
+
+- **"Sharing" means the app will be distributed to other people** (for example friends), not that content is shared between people. Each person syncs only their own devices. The consequence for PSC is a higher bar for quality, data safety and easy updates, not a collaboration feature.
+- **Sync is one person's own devices:** for example phone → the user's cloud provider → PC.
+- **PSC as "backend"** means the shared foundation that all of the owner's apps plug into. It runs on the user's devices; it is never a hosted service.
+- **Synced content is simple files:** Markdown, images and maybe JSON.
+
+## Why Commonplace leads
+
+Solstice needs to sync a few small preference files. Commonplace needs much more, so it sets the requirements:
 
 - **Plain files are the source of truth.** Notes are ordinary Markdown files with optional YAML frontmatter that external editors can change. So PSC cannot assume every synced item is a PSC-formatted record. It must handle user-visible files that other tools edit, and keep record identity (a stable note ID in the frontmatter) separate from the file path.
-- **Frequent human edits and real conflicts.** Concurrent edits must be detected and both versions kept. Overwriting by wall-clock timestamp is forbidden.
-- **Attachments and assets** of arbitrary size, linked by relative paths.
+- **Frequent edits on two or more devices.** Edits made offline on the phone and the PC must both survive; on conflict, keep both versions. Overwriting by wall-clock timestamp is forbidden.
+- **Images and attachments** linked by relative paths.
 - **Deletion and mass-deletion protection.** Tombstones, recoverable versions and conflict copies.
 - **Native host languages.** The planned native UIs are SwiftUI (macOS, later iOS), WinUI 3 (Windows) and Jetpack Compose (Android). Linux is open and its sync is conditional. Any PSC core must therefore bind cleanly to Swift, C#/.NET and Kotlin/JVM, which is why Kotlin appeared in earlier drafts. It is one binding target, not a chosen PSC implementation language.
 
@@ -20,14 +29,14 @@ Solstice needs to sync a few small preference records. Commonplace needs much mo
 
 Commonplace decides which of these are eligible. None is approved yet.
 
-| Category | Contents | Notes for PSC |
+| Category | Contents | File type and notes for PSC |
 |---|---|---|
-| Notes | Markdown body plus frontmatter (stable ID, title, tags, aliases, timestamps); unknown keys preserved | File-based; external edits; conflict copies; IDs survive renames and moves |
-| Attachments / assets | Images and files referenced by relative path | Large binaries; resumable upload; file identity |
-| Workspace metadata | Canvas coordinates, zoom, viewport, groups, stacks, pins, saved list views, sort orders and filters, workspace preferences | Kept separate from note prose; sidecar files versus local index is still undecided in Commonplace |
-| Tasks and reminders | Tasks readable in Markdown; date/time reminder state attached to a note or task | Reminder scheduling stays local and native; only the state may sync |
-| Shopping lists | Structured items, checked state, quantity, store, cost; a personal index of frequently bought items | Structured records with per-field merge candidates |
-| Origin metadata | Device/platform that created or last edited a note; human-readable device label | Device label kept separate from internal sync IDs; inspectable and removable |
+| Notes | **Markdown.** Body plus frontmatter (stable ID, title, tags, aliases, timestamps); unknown keys preserved | File-based; external edits; conflict copies; IDs survive renames and moves |
+| Images / attachments | **Images** referenced by relative path | Larger binaries; resumable upload; file identity. Non-image attachments would need an explicit decision |
+| Workspace metadata | **JSON.** Canvas coordinates, zoom, viewport, groups, stacks, pins, saved list views, sort orders and filters, workspace preferences | Kept separate from note prose; sidecar files versus local index is still undecided in Commonplace |
+| Tasks and reminders | **Markdown** (tasks) and possibly **JSON** (reminder state). Tasks readable in Markdown; date/time reminder state attached to a note or task | Reminder scheduling stays local and native; only the state may sync |
+| Shopping lists | **JSON** or Markdown. Structured items, checked state, quantity, store, cost; a personal index of frequently bought items | Structured records with per-field merge candidates |
+| Origin metadata | **Frontmatter or JSON.** Device/platform that created or last edited a note; human-readable device label | Device label kept separate from internal sync IDs; inspectable and removable |
 | Location | Only if the user explicitly enables location capture | Never synced silently; separate opt-in |
 
 Commonplace explicitly requires that no note, attachment, location, credential or private-space content is shared with another app merely because both apps use PSC.
@@ -45,8 +54,15 @@ From `PREPLAN.md` §6.4:
 
 ## Open questions this raises for PSC
 
-1. **Plain files plus PSC metadata.** How does PSC track revisions and tombstones for files it does not fully control, without cluttering the user's folder or breaking external editors?
-2. **Shared spaces.** Commonplace plans small-group sharing with other people. PSC so far covers one person's own devices. Is multi-person sharing in PSC scope, Commonplace's own concern, or provider-native sharing only? Undecided.
-3. **Per-workspace providers.** Commonplace notes that one provider per sync group may not suit users who want different storage for different workspaces.
+1. **Plain files plus PSC metadata.** How does PSC track identity, revisions and deletions for files that external editors may change, without cluttering the user's folder or breaking those editors?
+2. **Mixed versions.** People will update the app at different times on different devices. An older device must never corrupt files written by a newer version.
+3. **Per-workspace providers.** Commonplace notes that users may want different storage for different workspaces.
 4. **Encryption versus editability.** End-to-end encryption conflicts with plaintext Markdown that external editors can read.
-5. **Wording.** Commonplace's `PREPLAN.md` §6.4 calls PSC a "shared backend/coordination foundation". "Backend" should be read as coordination code running on the user's devices, never a hosted service.
+
+## Suggested corrections to Commonplace's own documents
+
+These are for the Commonplace repository; they are recorded here because this session cannot change it.
+
+- `PREPLAN.md` §5.6 and the README describe "small-group sharing" and "shared spaces". Per the owner, these should describe distribution to other users, each syncing only their own devices.
+- `PREPLAN.md` §6.4 calls PSC a "shared backend". Clarify that this means a shared on-device foundation all apps plug into, not a hosted service.
+- `PREPLAN.md` §6.4 lists "explicitly authorized cross-app references" as a PSC responsibility; with the current scope this is secondary.
