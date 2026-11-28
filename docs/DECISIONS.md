@@ -19,7 +19,7 @@ This register separates the direction already agreed in product discussions from
 | First phone (D3) | Android; iOS after the first release | Agreed (2026-11-28) |
 | Encryption (D4) | None in v1: plain files, stated clearly in onboarding | Agreed (2026-11-28) |
 | First online route (D5) | GitHub first; Google Drive follows if experiment E1 passes | Agreed (2026-11-28) |
-| License (D6) | Apache-2.0 for PSC; the no-copying and provenance rules in CLEAN_ROOM.md are the permanent policy (no formal two-step clean-room process) | Agreed (2026-11-28) |
+| License (D6) | Apache-2.0 for PSC. Clean-room policy option B: code may be copied from permissively licensed projects (MIT, Apache-2.0, BSD and similar) with notices kept in THIRD_PARTY_NOTICES.md; never from copyleft, MPL or unclear sources. No formal two-step clean-room process | Agreed (2026-11-28) |
 | Repository (D7) | Public, open source, so users can see how their data is processed | Agreed (2026-11-28); the owner changes the visibility on GitHub |
 | Design Freeze | No product code until all decisions for the first viable product are made (IMPLEMENTATION_PLAN.md Phase A). | Agreed (2026-11-28) |
 | AI usage | Sonnet codes; Opus only for the named reviews or on request; owner on Claude Pro; no AI-generated art (icons, mockups and suggestions allowed); owner is non-technical, so structural choices come with pros and cons. | Agreed (2026-11-28) |

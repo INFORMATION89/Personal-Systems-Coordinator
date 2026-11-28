@@ -1,6 +1,6 @@
 # PSC Clean-room Policy
 
-**Status:** decided 2026-11-28. PSC is licensed under Apache-2.0. The rules below are the permanent policy; a formal two-step clean-room process is not required.
+**Status:** decided 2026-11-28 (option B: permissive reuse allowed). PSC is licensed under Apache-2.0. The rules below are the permanent policy; a formal two-step clean-room process is not required.
 
 ## Why this matters: Commonplace may be paid
 
@@ -13,13 +13,19 @@ Commonplace, PSC's lead client, may be sold as a paid app (its own planning ment
 
 ## Rules
 
-1. **No copying.** Do not copy, translate or closely paraphrase source code from other projects into PSC, whatever their license.
+1. **Copying is allowed only from permissively licensed code** (the "Allowed without review" licenses below: MIT, Apache-2.0, BSD and similar). When code is copied or closely adapted:
+   - keep the original copyright and license notice, and add an entry to `THIRD_PARTY_NOTICES.md` (project, URL, license, version or commit, what was taken);
+   - name the source in the PR's "Sources consulted";
+   - mark the copied part with a short comment pointing to the notice entry;
+   - make sure it fits PSC's architecture and passes the same tests and lints as PSC's own code.
+   **Never copy, translate or closely paraphrase code** under GPL, LGPL, AGPL, SSPL, MPL, "non-commercial", source-available or unclear terms, or with no license at all. Public availability is not permission.
 2. **Learning from other projects is allowed** through user documentation, published protocol descriptions and design write-ups (Joplin, Obsidian, Syncthing, rclone, Konode, Anytype/any-sync, Nextcloud, Notesnook and similar). Record what was read.
 3. **Primary sources first:** official provider documentation and terms, standards (IETF RFCs), official platform documentation and dependency public API documentation.
 4. **Dependencies:** before adding one, even to a prototype, record its license, version, maintenance and platform support. Flag any copyleft, source-available, "non-commercial" or unclear license for owner review; do not add it to anything that could ship.
 5. **Prototypes are throwaway.** Prototype code is not carried into production without a provenance and license review.
 6. **Sources consulted:** every PR lists the sources and dependencies relied on (PR template). Never claim a source that was not used.
-7. **Similarity:** if code looks unusually close to another project's, stop, record the concern and rewrite from PSC's own specification and permitted sources.
+7. **Similarity:** if code looks unusually close to a project whose license is not permissive, stop, record the concern and rewrite from PSC's own specification and permitted sources.
+8. **AI-generated code** follows the same rule: if a tool reproduces recognizable code from a non-permissive project, discard it.
 
 ## Dependency licenses
 

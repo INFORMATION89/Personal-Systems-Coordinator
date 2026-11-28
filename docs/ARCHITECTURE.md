@@ -21,7 +21,7 @@ Each of these affects the whole project. **All seven were answered on 2026-11-28
 | D3 First phone | **Android** |
 | D4 Encryption in v1 | **Plain files** |
 | D5 If Drive fails E1 | **GitHub first**: GitHub is the first online route; Drive follows if E1 passes |
-| D6 License | **Apache-2.0**; interim clean-room rules become the permanent policy |
+| D6 License | **Apache-2.0**; clean-room option B: copying allowed from permissively licensed code with notices, never from copyleft or unclear sources (`CLEAN_ROOM.md`) |
 | D7 Repository | **Open source (public)**, so users can see how their data is processed |
 
 The options and their trade-offs are kept below as the record of why.
