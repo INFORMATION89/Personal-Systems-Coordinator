@@ -71,11 +71,28 @@ A first pass, for Commonplace to confirm (WP10 in the [Research plan](RESEARCH_P
 | AI tag suggestions | Local and optional, not approved content |
 | Local backups and undo history | Recovery belongs to each device; the provider's own version history may add a second layer |
 
-**Questions for Commonplace to settle**
-1. Is the canvas layout one shared arrangement, or can it differ per device (for example a phone layout)?
-2. Which devices fire a reminder?
-3. Sidecar JSON next to each note, or one workspace JSON per area? Many small files are easier to merge; a few larger ones are easier to keep consistent.
-4. Size limits for images and other attachments, and whether non-image attachments are in scope (today only Markdown, images and JSON are).
+**Answers and recommendations (2026-11-28)**
+
+1. **Canvas versus list.** The canvas and the list are two views of the same notes; neither is exclusive. Recommendation: the canvas arrangement is one shared layout that syncs, and saved list views sync too. Which view a device opens by default, plus viewport and zoom, stays per device. A phone can open the list while the PC opens the canvas, with nothing conflicting.
+
+2. **Which devices ring for a reminder.** Craft delivers reminders as operating-system notifications on each device where notifications are allowed for Craft, with optional email ([Craft: Reminders](https://support.craft.do/en/plan-and-do/reminders)). Its documentation does not say whether dismissing on one device clears the others. Email needs a server, so it is not an option here. Recommendation for Commonplace:
+   - Every device with notifications enabled schedules the reminder from the synced definition. Each device has its own on/off setting, kept on that device.
+   - Completed, dismissed or snoozed state syncs, so other devices drop the notification once they have synced.
+   - Sync is opportunistic, so two devices may sometimes both ring. That is acceptable, and the app should say so.
+
+3. **How workspace metadata is stored.** Chosen layout:
+   - **Per-note metadata** (ID, tags, reminders, origin label) goes in the note's own frontmatter. It travels with the note and needs no extra files.
+   - **Layout** goes in one JSON file per canvas or moodboard, keyed by note ID. Moving a card on the phone and a different card on the PC then merges item by item instead of conflicting.
+   - **Saved list views** go in one JSON file each.
+   - All of this lives under Commonplace's namespace, outside the note folders. External editors see only notes and images, and editing a note never touches layout files.
+   - This avoids both a sidecar file next to every note (clutter) and one large workspace file (constant conflicts).
+
+4. **Attachments, following Obsidian.** Obsidian keeps attachments as ordinary files in the vault. Their location is configurable: the vault root by default, a fixed folder, or a subfolder next to the note ([Obsidian: Attachments](https://help.obsidian.md/Editing+and+formatting/Attachments)). It recognizes images, audio, video and PDF ([Obsidian: Accepted file formats](https://obsidian.md/help/Files+and+folders/Accepted+file+formats)). Obsidian Sync always syncs notes; images, audio, video and PDF are per-type toggles (on by default); and other file types need an extra opt-in. Per-file limits are 5 MB on Standard and 200 MB on Plus ([Obsidian Sync: Settings](https://obsidian.md/help/sync/settings), [Plans and storage limits](https://obsidian.md/help/Obsidian+Sync/Plans+and+storage+limits)). Recommendation:
+   - Attachments are ordinary files in an attachments folder, linked by relative path.
+   - PSC v1 syncs images only, matching the Markdown/image/JSON scope. PDFs, then audio and video, can be added later as plain binary files with an explicit decision; they need nothing beyond resumable upload and a content hash.
+   - Use per-type sync toggles, like Obsidian.
+   - Set a per-file size cap, chosen after provider testing. Files over the cap stay local, and the app shows that clearly instead of failing silently. Obsidian users report confusion when files silently don't sync.
+
 5. Later: mentions of calendar events inside notes (see [Future integrations](FUTURE_INTEGRATIONS.md#3-calendar--commonplace-mentions-possibly-in-both-directions)).
 
 Commonplace explicitly requires that no note, attachment, location, credential or private-space content is shared with another app merely because both apps use PSC.
