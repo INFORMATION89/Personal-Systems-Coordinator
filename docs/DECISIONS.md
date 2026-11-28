@@ -13,6 +13,7 @@ This register separates the direction already agreed in product discussions from
 | Sync scope | One person's own devices only (for example phone → user's cloud provider → PC). Multi-person sharing and collaboration are not PSC features. | Agreed (2026-11-28) |
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
+| Far-future integrations | Clock Pomodoro sync, a Solstice menubar app reading Solstice personalization data, and Calendar ↔ Commonplace mentions are recorded as context in FUTURE_INTEGRATIONS.md. Today's design must not rule them out, but none is scheduled. | Context only (2026-11-28) |
 | Quality bar | The apps are expected to be distributed to other people (for example friends), so PSC must meet a public-release standard for data safety and must cope with apps and devices being updated at different times. | Agreed (2026-11-28) |
 | Primary purpose | Optional cross-device synchronization of one person's app data; cross-app interoperability is secondary | Agreed direction |
 | Storage model | User chooses an existing provider or a folder they control | Agreed direction |

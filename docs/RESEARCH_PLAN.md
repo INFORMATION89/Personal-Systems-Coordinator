@@ -87,7 +87,7 @@ Questions:
 7. External edits: how PSC detects and handles changes made to Markdown and image files by other editors or tools.
 8. Mixed versions: how a device running an older app or PSC version reads, preserves and never corrupts files written by a newer one.
 
-Questions 4–5 (cross-app references and permissions) are secondary and may be deferred.
+Questions 4–5 (cross-app references and permissions) are secondary and may be deferred, but the design must keep the far-future integrations in [Future integrations](FUTURE_INTEGRATIONS.md#what-todays-design-must-keep-possible) possible: the Solstice menubar app reading Solstice data, Calendar ↔ Commonplace mentions, and Clock's append-only sessions.
 
 Done when: a draft contract exists with worked examples for one Commonplace note with an image, one Commonplace workspace-metadata JSON file and one Solstice preference JSON file.
 

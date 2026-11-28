@@ -16,6 +16,7 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Commonplace integration](docs/INTEGRATION_COMMONPLACE.md) — the notes app and lead client: Markdown notes, images and workspace JSON.
 - [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — second client: small preference JSON.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
+- [Future integrations](docs/FUTURE_INTEGRATIONS.md) — far-future context: Clock Pomodoro sync, the Solstice menubar app, Calendar ↔ Commonplace mentions.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 
 ## Research findings

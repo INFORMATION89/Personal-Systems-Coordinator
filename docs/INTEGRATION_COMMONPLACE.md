@@ -39,6 +39,45 @@ Commonplace decides which of these are eligible. None is approved yet.
 | Origin metadata | **Frontmatter or JSON.** Device/platform that created or last edited a note; human-readable device label | Device label kept separate from internal sync IDs; inspectable and removable |
 | Location | Only if the user explicitly enables location capture | Never synced silently; separate opt-in |
 
+## Sync review: what should travel and what stays on the device
+
+A first pass, for Commonplace to confirm (WP10 in the [Research plan](RESEARCH_PLAN.md)). The rule of thumb: sync what the person created or deliberately arranged. Keep local what can be rebuilt, what is specific to one device, and anything secret.
+
+**Should sync (portable)**
+
+| Item | Format | Conflict handling | Notes |
+|---|---|---|---|
+| Note content | Markdown + frontmatter | Keep both versions as a conflict copy | The core of Commonplace; external edits must be detected |
+| Images and moodboard images | Image files | Keep both | Largest files; content hash for identity; resumable upload |
+| Moodboard and canvas arrangement (positions, groups, stacks, pins) | JSON | Per-item rules (a moved card, a new group); keep both if unsure | Shared across devices so the layout follows the person |
+| Saved list views, sorts, filters | JSON | Per-view; keep both if unsure | Small, rarely edited |
+| Tasks | Markdown (checkboxes in notes) | Same as note content | Stays readable in other editors |
+| Reminder definitions (what and when) | Frontmatter or JSON | Per-reminder | Only the definition syncs; see below |
+| Shopping lists and frequently-bought index | JSON (or Markdown) | Per-item merge; checked state needs care | An item checked on the phone in the store must not be undone by the PC |
+| Tags | Frontmatter | Union of tags, removals tracked | A tag hierarchy, if adopted, also travels |
+| Origin device label | Frontmatter | Last edit wins is acceptable here | Human-readable label only; internal sync IDs are separate |
+| Deletions | Tombstones | A deletion beats an older edit only if the edit was seen | Protects against notes coming back and against mass deletion |
+
+**Should stay on the device**
+
+| Item | Why |
+|---|---|
+| Search index and local database | Rebuilt from the synced files |
+| Thumbnails and render caches | Rebuilt; would waste storage and bandwidth |
+| Viewport, zoom, window size and position | A phone and a PC need different views; syncing them would fight |
+| Scheduled notifications for reminders | Each device schedules its own native notifications from the synced reminder definition. The open question is which devices should fire them, so a reminder doesn't ring on every device. |
+| Location data | Only with explicit opt-in, and then as its own category |
+| Provider credentials, folder permissions, sync cursors | Device-specific and secret |
+| AI tag suggestions | Local and optional, not approved content |
+| Local backups and undo history | Recovery belongs to each device; the provider's own version history may add a second layer |
+
+**Questions for Commonplace to settle**
+1. Is the canvas layout one shared arrangement, or can it differ per device (for example a phone layout)?
+2. Which devices fire a reminder?
+3. Sidecar JSON next to each note, or one workspace JSON per area? Many small files are easier to merge; a few larger ones are easier to keep consistent.
+4. Size limits for images and other attachments, and whether non-image attachments are in scope (today only Markdown, images and JSON are).
+5. Later: mentions of calendar events inside notes (see [Future integrations](FUTURE_INTEGRATIONS.md#3-calendar--commonplace-mentions-possibly-in-both-directions)).
+
 Commonplace explicitly requires that no note, attachment, location, credential or private-space content is shared with another app merely because both apps use PSC.
 
 ## What Commonplace expects from PSC
