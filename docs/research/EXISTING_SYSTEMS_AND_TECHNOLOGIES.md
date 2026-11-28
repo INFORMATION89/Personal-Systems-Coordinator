@@ -63,7 +63,7 @@ Anytype's any-sync project is a more infrastructure-oriented reference. It descr
 - End-to-end encryption and peer-oriented synchronization are possible design dimensions.
 
 **Limitations and questions:**
-- any-sync has its own architecture, node assumptions, data model and operational requirements.
+- any-sync has its own architecture, data model and operational requirements, including sync/file nodes. It is compatible with PSC's permanent constraint only if those nodes are user-chosen and user-operated (or otherwise external to PSC); PSC must never run them.
 - It is not equivalent to arbitrary BYOS storage over Google Drive, iCloud Drive, Dropbox or a local folder.
 - Maturity, licensing, platform support, operational complexity and compatibility with PSC's app-owned domain models require a dedicated technical review before adoption.
 
@@ -80,7 +80,7 @@ Notesnook is an example of an application using its own hosted synchronization s
 - A managed service can simplify device discovery and synchronization behavior.
 
 **Why it is not the target model by itself:**
-- A first-party hosted service would introduce ongoing infrastructure, operations and account dependencies that PSC is specifically trying not to require.
+- A first-party hosted service is excluded by PSC's permanent constraint: PSC will never operate a backend, relay or account system.
 
 References:
 - https://notesnook.com/
@@ -106,9 +106,9 @@ These technologies solve different layers and should not be treated as interchan
 |---|---|---|---|
 | Automerge | Concurrent changes to structured documents, history and merge behavior | Optional data-type-specific conflict engine | Not a storage provider or complete cross-app sync system |
 | Yjs | Shared data structures and collaborative editing | Rich-text or real-time collaboration component | Requires transport/persistence integration; not a generic BYOS layer |
-| CouchDB / PouchDB | Replication between databases, including offline clients | Candidate for database-oriented replication | Introduces database/document-model assumptions and server/replication topology |
+| CouchDB / PouchDB | Replication between databases, including offline clients | Pattern reference; possible only against a user-operated CouchDB | Introduces database/document-model assumptions; a replication server would have to be user-chosen and user-operated, never PSC-operated |
 | RxDB | Local database with replication plugins | Candidate for structured local-first app data | Not a universal provider abstraction; assess platform/runtime fit |
-| PowerSync | Local database synchronization with a backend | Relevant only if PSC accepts a backend-based architecture | Does not match a no-required-first-party-server objective by default |
+| PowerSync | Local database synchronization with a backend | Design reference only | Requires a backend service; incompatible with PSC's permanent no-backend constraint |
 | any-sync | Encrypted replicated data protocol and SDK | Potential candidate for deeper architecture evaluation | Distinct operational model; BYOS compatibility and maturity need proof |
 
 References:
@@ -167,15 +167,7 @@ Relevant official documentation:
 
 ## 6. Questions for independent Opus review
 
-1. Should PSC build a protocol/coordinator, adopt any-sync, or compose existing database and storage technologies?
-2. Is any-sync mature, licensed and architecturally compatible enough to justify a serious prototype?
-3. What can be learned or reused from Joplin's provider-adapter architecture without inheriting a notes-specific model?
-4. Can Google Drive safely and practically serve as one shared workspace across separate native app identities under least-privilege authorization?
-5. Should folder-based synchronization be the universal baseline, with direct APIs as optional enhancements, or should PSC expose multiple distinct provider capabilities?
-6. Which data categories require a merge engine, and which should use simpler append-only, field-level or conflict-copy semantics?
-7. What is the smallest experiment that can falsify the proposed layered PSC architecture?
-
-Opus should cite current official documentation, distinguish facts from assumptions, review project licenses and maintenance activity, and recommend experiments. Its findings must not automatically become project decisions.
+The review questions from this report have been merged into the single review brief in [Research plan §6](../RESEARCH_PLAN.md#6-independent-review-brief-opus).
 
 ## 7. Recommended next experiments
 

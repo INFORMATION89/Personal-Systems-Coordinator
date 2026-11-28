@@ -161,4 +161,4 @@ Deletion propagation requires tombstones and stale-device behavior; see SYNC_SEM
 - Disconnect and revocation tested.
 - Lost-device and key-loss recovery tested.
 - Plaintext and encrypted export behaviors documented.
-- Applicable privacy law reviewed before any server or data collection is introduced.
+- Applicable privacy law reviewed for on-device processing, consent copy and data held at user-chosen providers. (PSC never introduces its own server or data collection; see PRINCIPLES.md §8.)

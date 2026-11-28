@@ -124,7 +124,7 @@ References:
 
 - Simple settings and immutable Pomodoro sessions do not need a general CRDT document engine.
 - A CRDT document may not remain an ordinary editable Markdown file.
-- The Kotlin Multiplatform integration, native storage, compaction, binary format, schema evolution and external editing behavior need an experiment.
+- Integration with whichever shared-core technology PSC eventually selects, native storage, compaction, binary format, schema evolution and external editing behavior need an experiment.
 - Conflict-free convergence does not decide product semantics for all fields. For example, two different values for one comfort preference still need a meaningful policy.
 
 Prototype Automerge only for a use case that actually needs concurrent rich-text or structured document editing.
@@ -163,7 +163,7 @@ A useful future SPI would describe capabilities rather than pretend all provider
 
 An adapter declares which capabilities it has. The coordinator selects a safe strategy based on them.
 
-No exact Kotlin interfaces should be committed until the provider experiments establish the minimum common contract.
+No concrete interfaces, in any language, should be committed until the provider experiments establish the minimum common contract. The contract should first be described language-neutrally (operations, capabilities, error classes, state machine) and only then bound to implementation languages.
 
 ## 11. Proof-of-concept test matrix
 

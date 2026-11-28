@@ -81,6 +81,8 @@ These principles guide research. They do not select a provider or implementation
 
 No provider, cryptographic design, CRDT, database, transport or language is selected by this document. Verify current official provider documentation and run small interoperability experiments before making architectural commitments.
 
+Define PSC contracts language-neutrally first (operations, capabilities, error classes, state machines, test fixtures). No implementation language or multiplatform toolkit is preferred in advance; it is chosen later against the contract and documented criteria.
+
 
 ## 11. Licensing and resource provenance
 

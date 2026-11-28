@@ -1,185 +1,209 @@
 # Research Plan
 
-**Status:** open research agenda · independent Opus review recommended
+**Status:** open research agenda · refreshed 2026-11-28 · independent Opus review planned before any architecture decision
 
-The goal is to establish a feasible, secure and maintainable architecture before implementation. Research must distinguish documented provider capabilities from assumptions and test results.
+This plan starts from what Personal Systems Coordinator (PSC) is trying to achieve, derives the questions that must be answered before implementation, and organizes them into work packages with deliverables, dependencies and exit criteria. Research must distinguish documented provider capabilities, test results and assumptions. Nothing in this plan selects a provider, protocol, language or license.
 
-## A. Provider and folder capabilities
+## 1. What PSC is trying to achieve
 
-Evaluate at least:
+Derived from the [Product overview](PRODUCT_OVERVIEW.md), [Principles](PRINCIPLES.md) and [Decision register](DECISIONS.md):
 
-| Candidate | Questions |
-|---|---|
-| User-selected local folder | Folder access on Android, iOS, Windows, macOS and Linux; security-scoped access; bookmarks/permissions; file watching; background restrictions. Linux sync is conditional and must pass a feasibility review. |
-| Google Drive | OAuth scopes, shared folder ownership, file IDs, change tracking, upload semantics, conflict behavior, quotas and verification requirements |
-| iCloud Drive | iCloud Drive file-provider behavior versus CloudKit; platform support; Windows access; app-container limitations; cross-app sharing model |
-| OneDrive | Graph API permissions, delta/change tracking, upload sessions, throttling and platform support |
-| Dropbox | OAuth scopes, file revisions, delta cursors, conflict and rate-limit behavior |
-| WebDAV | Interoperability across servers, locking/ETag support, partial failures, discovery and self-hosted options |
-| GitHub | Private repository access, API limits, Git semantics, merge conflicts, binary-file limitations and whether it is suitable only for advanced/version-oriented users |
-| Syncthing | Whether PSC should integrate with it directly, or simply respect a folder that Syncthing manages |
+| Goal | Meaning | Hard constraint attached |
+|---|---|---|
+| **G1 Cross-device continuity** | A person's user-approved app data (starting with Solstice preferences) follows them between their devices. | Through storage the user already controls; PSC never operates a backend, relay, managed storage or account system. |
+| **G2 Cross-app interoperability** | Independent apps (Solstice, Notes, Clock, Calendar) can reference and display each other's data through explicit contracts. | Each app keeps ownership of its domain model; no app silently rewrites another's records. |
+| **G3 Local-first** | Every app is fully useful offline, without a connected provider and during provider failures. | Sync is eventual and opportunistic; status must be honest. |
+| **G4 Trust and control** | The person can see, choose, pause, export and disconnect what syncs, where and why. | Per-purpose consent; least privilege; no silent sync of location, raw weather data or credentials. |
+| **G5 Provider neutrality** | Apps depend on PSC contracts, not on Drive/iCloud/OneDrive APIs; a plain folder is first-class. | Capability differences are declared and disclosed, not hidden. |
+| **G6 Sustainable shared infrastructure** | PSC can be consumed by apps written in different languages on different platforms, maintained over time and distributed lawfully. | PSC prescribes no UI or app architecture; no implementation language is preferred in advance. |
 
-For each provider, record:
-- supported platforms;
-- required account and consent;
-- least-privilege authorization scopes;
-- whether the user can see and edit the stored data;
-- change detection and incremental sync model;
-- concurrency and conflict behavior;
-- deletion semantics;
-- limits, quotas, pricing and policy constraints;
-- revocation and account migration behavior;
-- official documentation URLs and date checked.
+A research question belongs in this plan only if answering it advances one of these goals or tests one of these constraints.
 
-## B. Architecture and synchronization semantics
+## 2. Where the current research stands
 
-Investigate:
-- Provider-neutral interfaces and capability discovery.
-- Local-first data ownership and the boundary between app storage and shared portable data.
-- Change journals, manifests, revisions, file IDs and stable record IDs.
-- Incremental sync, checkpoints, retries, idempotency and duplicate suppression.
-- Concurrent edits and per-domain conflict strategies.
-- Tombstones and deletion propagation.
-- Multi-device first-run, re-linking and device revocation.
-- Partial synchronization and provider outages.
-- Large documents, attachments and binary files.
-- Schema versioning, migrations and forward/backward compatibility.
-- Export, import, restore and provider migration.
+| Report | Goals served | Covers well | Known gaps |
+|---|---|---|---|
+| [Provider comparison](research/PROVIDER_COMPARISON.md) | G1, G5 | Categories of storage, change feeds, OAuth flows, Drive multi-app risk | Per-provider quotas, pricing, deletion semantics, revocation, account migration; who owns the OAuth app registration; native `drive.file` folder selection; iCloud Drive container sharing |
+| [Platform constraints](research/PLATFORM_CONSTRAINTS.md) | G3, G5 | Folder access and background limits on Android/iOS/macOS/Windows | Whether cloud DocumentsProviders/File Providers support directory selection; dot-folder visibility; Linux feasibility criteria |
+| [Sync semantics](research/SYNC_SEMANTICS.md) | G1, G3 | Layering, conflict policy by data class, tombstones, lifecycle | No portable data contract or workspace format yet; no fixtures |
+| [Security and consent](research/SECURITY_AND_CONSENT.md) | G4 | OAuth for native apps, consent purposes, encryption trade-offs | Shared-folder files as untrusted input; record authenticity; cross-ecosystem key transfer |
+| [Calendar integrations](research/CALENDAR_INTEGRATIONS.md) | G2 | Boundary between calendar services and PSC sync | Current permission models and sync-token expiry details |
+| [Existing systems](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md) | G1, G6 | Patterns from Joplin, Obsidian, any-sync, CRDT libraries | Licenses and maintenance activity; evaluation against a concrete PSC data flow |
+| *(none yet)* | G2 | — | Cross-app references, namespaces, ownership enforcement |
+| *(none yet)* | G6 | — | Shared-core technology and bindings; licensing and monetization |
 
-Do not select a CRDT or "last write wins" as a default without showing that the data type needs it.
+## 3. Work packages
 
-## C. Privacy and security
+Each work package (WP) lists the question, the goals it serves, the deliverable and what "done" means. Proposed deliverable paths are under `docs/research/`.
 
-Research:
-- OAuth authorization flows for installed desktop/mobile clients, including PKCE where applicable; secure token storage through each host platform's supported facilities.
-- Permission minimization and whether each app needs separate provider authorization.
-- Shared provider folder access across applications owned by the same user.
-- Encryption at rest and end-to-end encryption options.
-- Key generation, backup, recovery and revocation.
-- Threat model for lost devices, compromised provider accounts and stale local copies.
-- External editing of plaintext Markdown versus encrypted application payloads.
-- Metadata leakage (file names, timestamps, sizes, folder structure, access patterns).
-- How to explain exactly what syncs and where it goes.
+### WP1 — Provider registration and authorization ownership *(blocking)*
 
-The privacy review must distinguish:
-1. user-controlled cross-device synchronization;
-2. optional contribution of weather data to improve Meridian;
-3. telemetry or analytics;
-4. external AI integrations.
+**Goals:** G1, G2, G5 · **Deliverable:** `research/PROVIDER_AUTHORIZATION.md` plus a proof-of-concept report
 
-These must not share consent or be implicitly enabled together.
+PSC is a library, not an app. Someone must own each provider registration (Google Cloud project and OAuth clients, Microsoft Entra app, Dropbox app). That choice decides verification burden, quota sharing, user caps for unverified apps, consent-screen branding and whether separate apps can share one workspace.
 
-## D. Calendar integrations are a separate track
+Questions:
+1. Who owns provider registrations: PSC's maintainers, each consuming app, or a family-level registration? What are the operational and legal implications of each, given that a registration is not a PSC-operated backend but does carry obligations?
+2. How does a native Android, iOS or desktop app obtain `drive.file` access to an existing folder? Which picker flows are officially supported outside the web?
+3. Under `drive.file`, does granting a parent folder grant access to its existing and future children? Does it work across separate OAuth clients in the same project, and across separate projects?
+4. Are Drive quotas per project, per user or both, and what do they mean for a family of apps sharing one registration?
+5. Apple: how do iCloud Drive ubiquity containers and CloudKit containers behave across apps from the same team? Can separate apps share one iCloud Drive folder?
+6. Microsoft Graph and Dropbox: what scopes give least-privilege access to one app folder or user-selected folder, and can several apps share it?
 
-Compare direct service integrations separately from storage providers:
-- Google Calendar API;
-- Apple EventKit and any relevant iCloud calendar behavior;
-- Microsoft Graph / Outlook;
-- CalDAV.
+Done when: the multi-app Drive experiment (steps in [Provider comparison §2](research/PROVIDER_COMPARISON.md#2-google-drive)) has run on at least Android plus one desktop OS, and the report recommends one or more registration models with their trade-offs for owner review.
 
-Assess read-only and read-write scopes, event ownership, recurring events, incremental updates, deletion, offline behavior and conflict semantics.
+### WP2 — User-selected folder baseline
 
-PSC's storage provider interface must not be assumed to replace these calendar APIs.
+**Goals:** G1, G3, G5 · **Deliverable:** prototype report appended to `research/PLATFORM_CONSTRAINTS.md`
 
-## E. First application integration: Solstice
+Questions:
+1. Do Google Drive, OneDrive, Dropbox and iCloud expose directory (tree) selection through Android's Storage Access Framework and iOS document pickers, or only single files?
+2. How do persisted permissions survive restart, reinstall, folder rename/move and revocation?
+3. How do placeholder/unhydrated files behave on Windows, macOS and iOS File Providers?
+4. Are dot-folders such as `.psc/` hidden, filtered or rejected by any picker or provider?
+5. Which atomic-replace, modification-time and file-identity guarantees does each platform/provider pair actually give?
 
-Evaluate what should travel between Solstice devices:
-- explicit recommendation preferences and user-tuned comfort settings;
-- recommendation configuration that the user expects to remain consistent;
-- derived personalization state that is portable and safe to synchronize;
-- weather-source preferences, if appropriate;
-- local forecast-error history and per-place corrections (Meridian learning), only if there is a demonstrated need and a clear privacy model.
+Done when: the "Required prototype checks" in [Platform constraints](research/PLATFORM_CONSTRAINTS.md#required-prototype-checks) have been run on Android and iOS with at least one cloud-backed provider, and the results are recorded as a capability table.
 
-Do not assume that raw location history, exact coordinates, raw observations, forecast archives or provider credentials should be synchronized.
+### WP3 — Portable data contract, workspace format and cross-app interoperability
 
-Algorithm and application code versions are shipped through normal application releases; they are not synchronization data.
+**Goals:** G2, G4, G5 · **Deliverable:** `research/DATA_CONTRACTS_AND_INTEROP.md`
 
-## F. PSC integration architecture and host-platform adapters
+This is the core of G2 and has no research yet.
 
-PSC is shared infrastructure consumed by applications; it is not itself a consumer application and does not define the UI of its clients. This repository must not impose a UI framework, design system, navigation model, or native-versus-web interface rule on applications that integrate PSC. Each consuming project defines those choices independently. Commonplace's own native-app requirements, for example, belong in the Commonplace repository.
+Questions:
+1. Record envelope: stable record ID, owning app/namespace, schema ID and version, revision context, timestamps, tombstone form.
+2. Schema description language and compatibility rules (additive changes, unknown-field preservation, migrations, forward/backward reading).
+3. Workspace layout and identity: workspace marker, format version, per-app namespaces, file granularity (avoid hot monolithic manifests).
+4. Cross-app references: a stable reference format (for example a URI form `psc://<app>/<type>/<id>`), how a reference resolves, what happens when the target is missing or deleted, and how a reference opens the owning app on each platform (deep links, intents, URL schemes).
+5. Read and write permissions between apps: which app may read which namespace. In a plaintext shared folder ownership cannot be enforced by the storage itself. Evaluate convention plus validation, per-app signing of records, per-namespace encryption or other models, and say honestly what each can and cannot guarantee.
+6. Human inspectability: which records stay readable (Markdown, JSON) and which may be opaque.
 
-Research and prototype the PSC integration surface:
-- Platform-neutral, versioned contracts for synchronization, identity/namespaces, provider capabilities, metadata, events and error handling.
-- Runtime/library/SDK packaging options and stable bindings for the languages used by consuming apps.
-- Host-platform adapters only where OS-specific capabilities are required, including file/document access, secure credential storage, background execution, notifications and permission handling.
-- Clear separation between PSC's generic coordination responsibilities and each app's domain logic, UI, local database and user experience.
-- Supported host-platform matrix and the level of adapter support each platform needs. Do not assume every platform supports identical background execution or provider features.
+Done when: a draft contract exists with worked examples for one Solstice preference record, one Clock session and one Calendar → Notes reference, and the ownership-enforcement options are compared.
 
-**Linux synchronization is a conditional target, not a must-have at any cost.** Evaluate practical directory/provider access, stable change detection, background execution, security, distribution variance, testability, maintenance burden and parity with the other target platforms. Build a small representative proof of concept before promising support. If reliable Linux synchronization requires disproportionate engineering or ongoing maintenance, creates fragile behavior across distributions/providers, or would compromise synchronization quality elsewhere, remove Linux from the supported sync matrix. Do not weaken the portable protocol or degrade other platforms to retain Linux sync. Whether a Linux app can still provide useful local-only functionality is a separate product decision.
+### WP4 — Synchronization protocol semantics and test fixtures
 
-Compare implementation approaches such as Kotlin Multiplatform, Rust with stable platform bindings, or platform-specific adapters around shared versioned contracts. Evaluate integration costs for representative client languages and runtimes (for example Swift, Kotlin, C# and others) without treating their UI frameworks as PSC implementation requirements. Consider debugging, packaging, ABI/API stability, testing, security boundaries and maintenance. Do not choose a technology based on language preference alone.
+**Goals:** G1, G3 · **Depends on:** WP3 draft · **Deliverable:** update `research/SYNC_SEMANTICS.md` plus a fixture set
 
-## G. Prototype sequence
+Questions: change journal versus state scanning; per-adapter cursors and safe rescans; conditional writes; tombstone retention; per-data-class conflict policy (append-only, field-level, conflict copies, CRDT only where justified); restartable lifecycle; device identity.
 
-1. Compare a user-selected folder with one managed cloud provider.
-2. Prove two devices can exchange a small versioned manifest and a sample document.
-3. Test interrupted writes, duplicate delivery, concurrent edits, deletion and provider outage.
-4. Verify local usability while offline and after authorization is revoked.
-5. Prototype one provider-specific adapter without leaking its API into app domain code.
-6. Add a second provider only after the interface proves it is genuinely provider-neutral.
+Done when: the [proof-of-concept test matrix](research/SYNC_SEMANTICS.md#11-proof-of-concept-test-matrix) is expressed as repeatable, language-neutral fixtures (input workspace states, operations, expected outcomes) that any implementation can be tested against.
 
-## H. Existing systems and reusable technology
+### WP5 — Provider capability model and second provider
 
-Compare existing products and infrastructure before designing a new engine. The initial comparative report is [Existing synchronization systems and reusable technologies](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md). It covers Joplin, Obsidian, Anytype/any-sync, Notesnook, Nextcloud, Automerge, Yjs, CouchDB/PouchDB, RxDB and PowerSync.
+**Goals:** G5 · **Depends on:** WP1, WP2 · **Deliverable:** capability matrix in `research/PROVIDER_COMPARISON.md`
 
-The current product-owner preference is to investigate Google Drive first as the leading managed-provider candidate. This is a research priority only: it is not a launch-provider decision. The cross-application authorization behavior of a shared Drive workspace is a required proof of concept.
+Questions:
+1. The minimum common adapter contract and a capability list (conditional write, change feed, resumable upload, deletion feed, file identity, version history).
+2. Whether one second API provider (OneDrive or Dropbox) fits the contract without leaking provider concepts.
+3. WebDAV capability probing (RFC 6578 sync-collection, ETags, locking) against at least two independent server implementations.
 
-## I. Monetization, licensing, and resource due diligence
+For every provider, record: supported platforms; required account and consent; least-privilege scopes; whether the user can see and edit stored data; change detection model; concurrency and conflict behavior; deletion semantics; limits, quotas, pricing and policy constraints; revocation and account migration behavior; official documentation URLs and date checked.
 
-Evaluate whether PSC should be monetized or commercially distributed, without assuming that it must be paid or free and without adding a centralized service. Compare suitable possibilities such as permissive or copyleft open-source release, paid/proprietary licensing, dual licensing, paid SDK/distribution, support, or other models only where they fit the product and contribution strategy. Record benefits, disadvantages, obligations, and conflicts with permanent decentralization.
+Done when: every provider candidate has a complete record, and the second-provider spike confirms or revises the contract.
 
-Estimate one-time and recurring costs: maintenance, security response, compatibility testing, documentation, distribution, legal/accounting work, support, provider/API dependencies, optional model usage, and third-party fees. Explicitly distinguish external provider costs from PSC-operated infrastructure; PSC must not acquire a first-party hosted backend or relay to create a revenue stream.
+### WP6 — Security, encryption and consent
 
-Create a license and provenance review for PSC itself and for every shipped or recommended resource: runtime/build dependencies, platform SDKs, sample code, API integrations, test fixtures, documentation, datasets, models, fonts, icons, media and generated assets. Check exact versions and current primary-source terms. Record commercial-use rights, redistribution and modification rights, attribution, copyleft/source disclosure, patent and trademark clauses, data rights, quotas, and fees. Classify each resource as allowed, allowed with conditions, or prohibited/unresolved. Maintain license notices and an SBOM where practical. Do not select a license for PSC's own code or promise a distribution model until the implications are reviewed.
+**Goals:** G4 · **Deliverable:** update `research/SECURITY_AND_CONSENT.md`
 
-## J. Opus review brief
+Questions:
+1. Shared-folder content as untrusted input: malformed or hostile files, path traversal, Unicode and case collisions, size limits, schema validation before parsing.
+2. Record authenticity: can an app or device tell that a record came from its claimed owner?
+3. Encryption decision inputs: plaintext versus end-to-end versus per-category; metadata leakage.
+4. Key enrollment and recovery across ecosystems (Apple, Google, Windows, Linux) without a PSC server; recovery-key UX; loss scenarios.
+5. Consent inventory and UX requirements per app, keeping these separate: (1) cross-device sync, (2) cross-app interoperability, (3) Meridian weather-data contribution, (4) telemetry/analytics, (5) external AI integrations.
 
-Ask Opus for an independent architecture and security review of:
+Done when: the threat model covers these cases and the encryption options are written up as a decision memo for the owner.
+
+### WP7 — Shared-core technology and host-language bindings
+
+**Goals:** G6 · **Depends on:** WP3 and WP4 drafts (the contract must exist before the technology is chosen) · **Deliverable:** `research/CORE_TECHNOLOGY.md`
+
+The contract is defined language-neutrally first. Only then are implementation options compared, with no option preferred in advance. Candidates include, but are not limited to: a Rust core with generated bindings; Kotlin Multiplatform; a C or C++ core with a stable C ABI; per-platform native implementations validated against the shared fixtures from WP4; and a hybrid with a shared core for the protocol and native adapters for OS capabilities.
+
+Criteria: binding quality and cost for representative consumers (Swift, Kotlin/Java, C#/.NET, TypeScript/JavaScript and others the app family uses); ABI/API stability; binary size; debugging and crash diagnostics; secure-storage and file-coordination interop; testability against the WP4 fixtures; build and distribution; maintenance and contributor pool; license of the toolchain and runtime.
+
+Done when: a short spike implements the same small slice (read workspace marker, apply one fixture) in two or three candidates, is called from at least two host languages, and the comparison is written up. No technology is selected without owner approval.
+
+### WP8 — Host-platform matrix and Linux feasibility
+
+**Goals:** G3, G6 · **Deliverable:** platform matrix in `research/PLATFORM_CONSTRAINTS.md`
+
+Linux synchronization is a conditional target. Before the Linux spike, write measurable go/no-go criteria for owner approval, for example: which WP2/WP4 fixtures must pass on which distributions and providers; an acceptable ongoing maintenance budget; and whether any Linux-only workaround would weaken the portable protocol (which disqualifies it). If Linux sync fails these criteria, drop it from the supported sync matrix; whether a local-only Linux app is still worthwhile is a separate product decision.
+
+### WP9 — Calendar service integrations (separate track)
+
+**Goals:** G2 · **Deliverable:** update `research/CALENDAR_INTEGRATIONS.md`
+
+Compare Google Calendar API, Apple EventKit (including its current permission levels), Microsoft Graph and CalDAV: read-only versus read-write scopes, event ownership, recurrence and exceptions, incremental sync and token expiry, deletion, offline behavior. Define how Calendar shows PSC-synced Clock and Notes records as overlays. Calendar service authorization stays separate from PSC storage authorization.
+
+### WP10 — Solstice first-integration data inventory
+
+**Goals:** G1, G4 · **Depends on:** WP3 draft · **Deliverable:** update `INTEGRATION_SOLSTICE.md`
+
+List candidate Solstice records with units, ranges, schema versions, conflict policy and privacy classification; separate explicit preferences from derived personalization and Meridian learning state; state what stays local and why. Algorithm and app code versions ship through app releases and are never sync data.
+
+### WP11 — Licensing, provenance and monetization
+
+**Goals:** G6 · **Deliverable:** `research/LICENSING_AND_DISTRIBUTION.md`
+
+Compare license options for PSC's own code (permissive, copyleft, dual, proprietary SDK) and distribution or support models, without adding any PSC-operated service. Estimate one-time and recurring costs. Start a provenance inventory and classify dependencies, SDKs, sample code, datasets, fonts, icons and media as allowed, allowed with conditions, or prohibited/unresolved, using current primary-source terms. Check the licenses of any project whose code or protocol PSC might reuse (see [Existing systems](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)) before borrowing anything.
+
+### WP12 — Independent review
+
+**Goals:** all · **Depends on:** WP1–WP6 at least in draft · **Deliverable:** review brief and recorded review outcome
+
+See §6.
+
+## 4. Sequencing
+
+| Phase | Work | Why this order |
+|---|---|---|
+| **1. Unblock** | WP1 desk research, WP2 prototype, WP3 draft | WP1 can invalidate the shared-workspace model; WP3 defines what everything else moves; WP2 establishes the universal baseline. |
+| **2. Prove** | WP1 multi-app experiment, WP4 fixtures, WP5 second provider, WP6, WP10 | Test the contract against real providers and failure cases. |
+| **3. Choose how to build** | WP7, WP8, WP11 | Technology, platform matrix and license are chosen for a contract that already exists, not the other way round. |
+| **4. Review and decide** | WP12, then owner decisions recorded in [DECISIONS.md](DECISIONS.md) | Findings become decisions only through explicit owner approval. |
+
+WP9 (Calendar) can run in parallel at any phase.
+
+## 5. Rules for all research
+
+- Cite current official documentation with the date checked; label forum posts and blog posts as such.
+- Separate facts, test results and assumptions.
+- Do not select a CRDT or "last write wins" as a default without showing that the data type needs it.
+- Do not request broad provider scopes to avoid an experiment.
+- Do not propose any PSC-operated server, relay or account as a shortcut (see [Principles §8](PRINCIPLES.md#8-permanent-decentralization-no-psc-operated-backend)).
+- Prototypes are throwaway research code, not approved implementation.
+
+## 6. Independent review brief (Opus)
+
+Ask for an independent architecture and security review of:
 - the product boundary and local-first model;
-- whether and how PSC could be monetized without contradicting permanent decentralization;
-- the license for PSC's own code, separate from dependency and asset licenses;
-- dependency, API, dataset, model, font, icon, media and sample-code provenance, including commercial-use and redistribution obligations;
-- provider comparison, especially Google Drive versus iCloud Drive and local folders;
-- whether a single shared provider folder can safely serve multiple apps;
-- sync protocol and conflict semantics;
-- data formats and metadata;
-- consent, encryption and token handling;
-- platform limitations;
+- whether PSC should build a thin coordinator, adopt something like any-sync (only with user-operated nodes), or compose existing storage and merge components;
+- the provider registration and authorization model from WP1, including whether Google Drive can serve one shared workspace across separate apps under least privilege;
+- whether the folder model should be the universal baseline with direct APIs as optional enhancements;
+- the data contract, cross-app references and ownership enforcement from WP3;
+- sync protocol and per-data-class conflict semantics, and which categories (if any) need a merge engine;
+- consent, encryption, key recovery and token handling;
+- platform limitations and the Linux criteria;
+- shared-core technology options from WP7;
+- licensing, provenance and monetization options that preserve permanent decentralization;
 - API quotas, costs and long-term maintenance;
-- a minimal proof-of-concept plan.
+- the smallest experiment that could falsify the proposed layered architecture.
 
-Request cited official documentation, separate facts from assumptions, identify design risks, and recommend experiments. Do not ask Opus to implement the system or silently turn its recommendations into decisions.
+Request cited official documentation, separation of facts from assumptions, identified risks and recommended experiments. Do not ask the reviewer to implement the system, and do not turn its recommendations into decisions without owner review.
 
-## Initial findings (2026-11-27)
-
-The first provider/platform comparison is recorded in:
-- [Provider comparison](research/PROVIDER_COMPARISON.md)
-- [Platform constraints](research/PLATFORM_CONSTRAINTS.md)
-- [Sync semantics and architecture options](research/SYNC_SEMANTICS.md)
-- [Security, authorization and consent](research/SECURITY_AND_CONSENT.md)
-- [Calendar integrations](research/CALENDAR_INTEGRATIONS.md)
-
-### Findings that affect the architecture
+## Appendix: initial findings (2026-11-27)
 
 1. **A provider-neutral folder option is possible, but not equivalent across platforms.** Android SAF and iOS document pickers provide user-granted directory access; mobile background execution is opportunistic, not continuous.
 2. **Cloud APIs provide better incremental-change metadata than a plain folder**, but each has distinct cursors, revisions, limits and conflict semantics. The provider interface must expose capabilities rather than flatten these differences.
-3. **Google Drive is a promising single-app prototype, not yet proven as one shared multi-app workspace.** The recommended drive.file scope is least-privilege and per-file. Test parent-folder selection, descendants, new files and access from separate application OAuth clients before committing to the family-wide folder model.
-4. **iCloud Drive is not a universal Android-compatible API.** It can be used through native File Provider/document access where available, including Windows with iCloud for Windows. CloudKit is a separate Apple-specific structured-data service.
-5. **OneDrive delta and Dropbox cursors are suitable incremental-sync primitives.** They do not replace PSC conflict, deletion and recovery semantics.
-6. **WebDAV is valuable for self-hosted users**, but RFC 6578 sync-collection and conditional-write capabilities must be probed per server.
+3. **Google Drive is a promising single-app prototype, not yet proven as one shared multi-app workspace.** The least-privilege `drive.file` scope is per-file and per-app.
+4. **iCloud Drive is not a universal Android-compatible API.** CloudKit is a separate Apple-specific structured-data service.
+5. **OneDrive delta and Dropbox cursors are suitable incremental-sync primitives**; they do not replace PSC conflict, deletion and recovery semantics.
+6. **WebDAV is valuable for self-hosted users**, but sync-collection and conditional-write support must be probed per server.
 7. **GitHub should remain an advanced version-control option**, not the default sync engine.
-8. **Calendar integrations are separate from app-data storage synchronization.** Use Google Calendar, EventKit, Microsoft Graph and CalDAV adapters for events; PSC synchronizes Clock/Notes-owned data that Calendar may display as overlays.
-9. **CRDTs are not a universal solution.** Evaluate Automerge for genuinely concurrent rich-text/structured editing, not simple preferences or append-only sessions.
+8. **Calendar integrations are separate from app-data storage synchronization.**
+9. **CRDTs are not a universal solution.** Evaluate Automerge only for genuinely concurrent rich-text or structured editing.
 10. **Sync consent, Meridian data contribution and telemetry remain separate purposes.**
 
-### Recommended next research sequence
-
-1. Prototype directory access on Android and iOS, including persistent permissions and an external File Provider/DocumentsProvider.
-2. Prototype Google Drive for a single app with drive.file and a visible folder.
-3. Complete the separate-app shared-folder authorization experiment before assuming the application family can share one Drive folder transparently.
-4. Prototype one additional cloud API provider (OneDrive or Dropbox) to test the adapter boundary.
-5. Test WebDAV capability detection against at least two independent server implementations.
-6. Only then freeze portable contracts, manifest format, conflict policy and a first release scope.
-
-These are research recommendations, not approved implementation work. See the individual reports for official source links and test requirements.
-
+The current owner preference is to investigate Google Drive first as the leading managed-provider candidate. This is a research priority only, not a launch-provider decision.

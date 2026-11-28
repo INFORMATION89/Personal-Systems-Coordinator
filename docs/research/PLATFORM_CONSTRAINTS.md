@@ -92,7 +92,7 @@ This requires a platform-specific implementation and test matrix; do not infer c
 5. Keep a visible last-sync state: last successful check, outstanding local changes, remote changes pending, provider unavailable, authorization expired, conflicts and errors.
 6. Do not claim real-time sync across mobile platforms. Use syncs when possible or a more precise status that reflects platform scheduling.
 7. Any provider that hydrates remote content on demand can incur latency and network use during file reads; do not perform this work on the UI thread.
-8. Use native OS coordination APIs where the platform requires them; do not assume Kotlin common code can replace them.
+8. Use native OS coordination APIs where the platform requires them; do not assume shared cross-platform code, in any language, can replace them.
 
 ## Required prototype checks
 

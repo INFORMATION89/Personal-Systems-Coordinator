@@ -12,9 +12,10 @@ The intended model is permanently decentralized, local-first and provider-neutra
 
 - [Product overview](docs/PRODUCT_OVERVIEW.md) — purpose, scope and boundaries.
 - [Principles](docs/PRINCIPLES.md) — product and privacy constraints.
-- [Research plan](docs/RESEARCH_PLAN.md) — questions to investigate before selecting an architecture.
+- [Research plan](docs/RESEARCH_PLAN.md) — goals, research work packages and sequencing before selecting an architecture.
 - [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — the first candidate use case.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
+- [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 
 ## Research findings
 
@@ -26,7 +27,9 @@ Initial provider and architecture research is documented:
 - [Calendar integrations](docs/research/CALENDAR_INTEGRATIONS.md)
 - [Existing synchronization systems and reusable technologies](docs/research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)
 
-The research identifies a key unresolved issue: Google Drive's least-privilege file scope may require each separate application to authorize the shared folder/files independently. A multi-app proof of concept is required before committing to a shared provider workspace.
+Key unresolved issues, tracked as work packages in the research plan:
+- **Provider authorization (WP1):** who owns each provider registration, and whether Google Drive's least-privilege `drive.file` scope lets separate applications share one workspace. A multi-app proof of concept is required before committing to a shared provider workspace.
+- **Data contracts and interoperability (WP3):** the portable record format, cross-app references and how app ownership is respected in a shared folder have not been researched yet.
 
 ## Current status
 
