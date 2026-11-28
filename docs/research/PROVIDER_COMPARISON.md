@@ -174,6 +174,8 @@ But it is not a general-purpose sync filesystem:
 
 Keep GitHub as an advanced option for users who deliberately want Git history and understand repositories. Do not use it as the default sync mechanism for Clock sessions, rapidly changing preferences, or ordinary multi-device Notes editing.
 
+**Update 2026-11-28:** GitHub is now a research direction for Commonplace, following Konode's single-private-repository model. See [Provider authorization §13](PROVIDER_AUTHORIZATION.md#13-github-as-konode-does-it) for the GitHub App route, and for caveats on deletion and repository growth.
+
 ## Calendar services are a separate category
 
 Connecting Google Calendar, Apple Calendar, Outlook or CalDAV is a service integration, not a PSC storage provider. These services own events, recurring-calendar semantics and invitations. See [CalDAV RFC 4791](https://www.rfc-editor.org/rfc/rfc4791.html). See CALENDAR_INTEGRATIONS.md for the separate scope.

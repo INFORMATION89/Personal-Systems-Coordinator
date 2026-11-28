@@ -56,6 +56,7 @@ Questions:
 4. Are Drive quotas per project, per user or both, and what do they mean for a family of apps sharing one registration?
 5. Apple: how do iCloud Drive ubiquity containers and CloudKit containers behave across apps from the same team? Can separate apps share one iCloud Drive folder?
 6. Microsoft Graph and Dropbox: what scopes give least-privilege access to one app folder or user-selected folder, and can several apps share it?
+7. GitHub: a PSC GitHub App on one private repository versus a fine-grained token (Konode's route); see §13 of the report.
 
 Done when: the multi-app Drive experiment (steps in [Provider comparison §2](research/PROVIDER_COMPARISON.md#2-google-drive)) has run on at least Android plus one desktop OS, and the report recommends one or more registration models with their trade-offs for owner review.
 

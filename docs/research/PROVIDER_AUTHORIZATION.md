@@ -3,7 +3,8 @@
 **Research date:** 2026-11-28
 **Status:** desk research complete for Google Drive, Apple, Microsoft and Dropbox (2026-11-28). No experiment has run yet. No registration model is approved.
 **Prepared with:** Claude Code, tier O (research only); not yet reviewed by the owner.
-**Scope:** §1–§8 Google Drive; §9 Apple; §10 Microsoft OneDrive; §11 Dropbox; §12 the cross-provider registration recommendation (WP1 questions 1–6).
+**Scope:** §1–§8 Google Drive; §9 Apple; §10 Microsoft OneDrive; §11 Dropbox; §12 the cross-provider registration recommendation (WP1 questions 1–6); §13 GitHub; §14 self-hosting.
+**Owner decision (2026-11-28):** one family-level registration per provider, registered under the name **Personal Systems Coordinator**. Self-hosted storage always stays available.
 
 ## How to read this report
 
@@ -161,7 +162,7 @@ Run these in order. Stop and report as soon as a step fails, because later steps
 
 **The pattern.** For every provider, the least-privilege option is an area tied to the registration: Google `drive.file` (files the app created), Microsoft's app folder, Dropbox's app folder, Apple's team container. **Whoever owns the registration decides which apps share data.** [Inference from §2–§11]
 
-**Recommendation for owner review:** one family-level registration per provider, owned by the owner (model A), with PSC accepting client configuration from each host app rather than embedding any.
+**Decided (2026-11-28):** one family-level registration per provider, owned by the owner and registered as **Personal Systems Coordinator** (model A). PSC accepts client configuration from each host app rather than embedding any. For Google, model A still depends on E1/E2; if they fail, Google falls back to model B.
 
 | Provider | Family-level registration | Sharing across the owner's apps | Main open risk |
 |---|---|---|---|
@@ -176,7 +177,7 @@ Run these in order. Stop and report as soon as a step fails, because later steps
 - The user connects their storage once per provider and app family, which suits "my phone syncs to my cloud, my PC syncs from it".
 
 **Costs and risks**
-- **Consent screens show the family name,** not "Commonplace". The family needs a brand name (still undecided).
+- **Consent screens show "Personal Systems Coordinator",** not "Commonplace". The apps' own onboarding should explain why that name appears.
 - **Revoking access** in the provider's account settings probably disconnects all of the owner's apps at once. Disconnecting inside one app should only remove that app's local token. [Inference]
 - **Shared quota** across all apps and users. Unlikely to bind at this scale, if sync avoids polling. [Inference]
 - **One misbehaving app affects the whole registration's standing** with the provider. [Inference]
@@ -186,8 +187,48 @@ Run these in order. Stop and report as soon as a step fails, because later steps
 
 **Next steps (owner decisions first)**
 1. Approve creating one Google test project and test accounts, so an S-tier session can run E1–E9. Tier O does no code for now.
-2. Decide the family brand name for consent screens (it can be provisional for testing).
+2. ~~Decide the name for consent screens~~ Decided: Personal Systems Coordinator.
 3. After E1/E2, choose model A or B for Google; then confirm the Microsoft and Dropbox inferences with small tests.
+
+## 13. GitHub (as Konode does it)
+
+**How Konode uses GitHub** (from its user documentation only, per `CLEAN_ROOM.md`; Konode is MPL-2.0):
+- The user creates a **fine-grained personal access token** scoped to a **single private repository**, with only **Contents: read and write**.
+- Konode **refuses public repositories**, writes into its own folder in the repository, on a branch the user can choose, and keeps the token only on the device.
+- No developer registration is needed for this route.
+- Like Drive and WebDAV, GitHub has no push channel, so devices **pull on a schedule**.
+
+**GitHub's own options for PSC**
+
+| Option | Least privilege | Registration | User effort | Assessment |
+|---|---|---|---|---|
+| **Fine-grained token** (Konode's route) | One repository, Contents only | None | High: the user creates a token on GitHub and pastes it; tokens have expiry dates | Works today with no registration; suits technical users |
+| **GitHub App "Personal Systems Coordinator"** | The user installs it on selected repositories only; the app requests only Contents | One family-level GitHub App | Low: sign in, choose the repository | Best fit with the family-registration decision. Native apps use the **device flow**; user tokens last 8 hours with a 6-month refresh token, and refreshing a device-flow token needs no client secret [Official, partly via GitHub Enterprise Server docs; confirm on github.com] |
+| OAuth App with `repo` scope | No: access to all the user's repositories | One OAuth App | Low | Rejected: too broad |
+
+**Fit for Commonplace's Markdown, images and JSON**
+- **Good:**
+  - Markdown diffs well, and the user gets full history.
+  - Updating a file through the contents API requires the file's current SHA, which gives conditional writes ("only if unchanged") for free. [Official]
+  - Up to 100 MB per file through the contents API (over 1 MB needs the raw media type), and 5,000 requests an hour per user. [Official]
+- **Watch:**
+  - **Deletion does not erase.** A deleted note stays in Git history unless history is rewritten. That conflicts with the user's expectation that deleting a note removes it, and matters for privacy. Disclose it, or offer a history-pruning step later. [Inference]
+  - **Images grow the repository permanently** for the same reason. GitHub recommends small repositories. [Official, from the provider comparison]
+  - **Directory listings stop at 1,000 files** in the contents API; use the Git Trees API beyond that. [Official]
+  - **Many small commits.** Batch changes into commits, possibly through the Git data API, instead of one commit per file write. [Inference]
+  - **Shared rate limit:** the user's other tools with GitHub tokens share the same quota. [Official]
+- **Assessment:** a viable optional provider for Commonplace, especially for users who want history and plain files. It is not a replacement for a simple cloud folder for non-technical friends. It also extends self-hosting through Gitea or Forgejo later, which Konode lists as a next step.
+
+**To verify:** the GitHub App flow on github.com (selected-repository install, device flow on Android, iOS and desktop, token refresh); terms for one GitHub App used by several separately distributed apps; batching commits efficiently.
+
+## 14. Self-hosting always stays available
+
+**Decided (2026-11-28):** the user can always keep their files on storage they host themselves. No managed provider is ever the only option.
+
+- **A user-selected folder** synced by any tool (Syncthing, a NAS client, Nextcloud's desktop client) needs no registration and no PSC involvement in transport. [`PRINCIPLES.md` §2]
+- **WebDAV** reaches Nextcloud, ownCloud, Synology and other self-hosted servers directly, with the user's own credentials and no registration. Konode shows the value of presets for common servers. [Konode docs]
+- **Self-hosted Git servers** (Gitea or Forgejo) could follow the GitHub adapter later. [Inference]
+- None of these need a provider registration, so they also work if a managed provider's registration is suspended or its terms change.
 
 ## Sources
 
@@ -219,3 +260,10 @@ Apple, Microsoft and Dropbox (via search extracts; official unless marked):
 - [Microsoft Entra: Publisher verification](https://learn.microsoft.com/en-ca/entra/identity-platform/publisher-verification-overview) and [Microsoft account identity provider](https://learn.microsoft.com/entra/external-id/microsoft-account)
 - [Dropbox: DBX Platform developer guide](https://www.dropbox.com/developers/reference/developer-guide) and [Dropbox developer support](https://www.dropbox.com/en_GB/developers/support)
 - [Dropbox forum: development user limit](https://www.dropboxforum.com/discussions/101000014/does-a-dropbox-app-have-a-limit-on-development-users/846671) (community)
+
+GitHub and Konode:
+- [Konode README](https://github.com/konabe-studio/konode/blob/main/README.md) and [Getting started](https://github.com/konabe-studio/konode/blob/main/GETTING_STARTED.md) (user documentation only; no source code read)
+- [GitHub: Refreshing user access tokens](https://docs.github.com/en/enterprise-server@3.18/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens) (Enterprise Server docs; confirm on github.com)
+- [GitHub: Identifying and authorizing users for GitHub Apps](https://docs.github.com/en/enterprise-server@3.2/developers/apps/building-github-apps/identifying-and-authorizing-users-for-github-apps) (older Enterprise Server docs)
+- [GitHub REST API: repository contents](https://docs.github.com/en/rest/repos/contents) and [changelog: 100 MB contents limit](https://github.blog/changelog/2022-05-03-increased-file-size-limit-when-retrieving-file-contents-via-rest-api)
+- [GitHub REST API rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api)

@@ -13,6 +13,9 @@ This register separates the direction already agreed in product discussions from
 | Sync scope | One person's own devices only (for example phone → user's cloud provider → PC). Multi-person sharing and collaboration are not PSC features. | Agreed (2026-11-28) |
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
+| Provider registrations | One family-level registration per provider (Google Cloud project, Apple team, Entra app, Dropbox app, GitHub App), owned by the owner and registered as **Personal Systems Coordinator**. Google's shared workspace still depends on experiments E1/E2. | Agreed (2026-11-28) |
+| Self-hosting | Self-hosted storage (user-selected folder, WebDAV, later self-hosted Git) always remains available; no managed provider is ever the only option. | Agreed (2026-11-28) |
+| GitHub | Considered as an optional provider for Commonplace, following Konode's single-private-repository model; a PSC GitHub App is the preferred route to evaluate. | Research direction (2026-11-28) |
 | Model attribution | AI-assisted commits, PRs and reports name the tool and model tier (AI_POLICY.md §5). | Agreed (2026-11-28) |
 | Clean-room process | Undecided; interim no-copying and provenance rules apply until WP11 decides PSC's license, with Commonplace possibly being paid. | Undecided (2026-11-28) |
 | Working rules | Agent instructions, rules, interim clean-room rules, AI and AI-cost policies, agent guides, PR template and PR hygiene check adopted from Meridian-Engine and adapted to PSC. | Adopted at owner request (2026-11-28) |
@@ -35,10 +38,10 @@ This register separates the direction already agreed in product discussions from
 
 ## Not decided
 
-- Final public product/feature name. The repository is named Personal-Systems-Coordinator; treat that as the project identifier, not a settled consumer-facing brand.
+- Final public product/feature name. Provider registrations and consent screens use "Personal Systems Coordinator"; whether that is also the consumer-facing brand is open.
 - Provider order or launch provider.
 - Whether Google Drive, iCloud Drive, OneDrive, Dropbox, WebDAV, GitHub or local folders can share one abstraction without unacceptable limitations.
-- Whether provider connections are authorized once per app, per platform, or through another safe model.
+- For Google Drive: whether one family project can share a workspace across apps and platforms (experiments E1/E2).
 - Shared folder layout, file formats and manifest format.
 - Sync transport, change journal and conflict resolution algorithms.
 - Whether any data needs end-to-end encryption and how keys are recovered.
