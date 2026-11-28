@@ -71,6 +71,8 @@ The desired user experience is one Personal Ecosystem folder with separate app-o
 
 A Google Developer forum discussion dated October 2026 describes per-user/per-file access and recommends experimentally testing whether selecting the parent folder grants access to its existing and future descendants. This is not a substitute for official documentation, but it reinforces that the behavior needs a proof of concept: [Google Developer Forum: drive.file scope on shared folders](https://discuss.google.dev/t/google-drive-sheets-api-with-drive-file-scope-on-shared-folder-files/402266).
 
+**Update 2026-11-28:** the experiment below is superseded by the ordered plan E1–E9 in [Provider authorization §6](PROVIDER_AUTHORIZATION.md#6-experiment-plan-replaces-the-earlier-draft-in-the-provider-comparison).
+
 **Required experiment before selecting Drive for the whole app family:**
 1. Register the actual PSC Google Cloud project and the native OAuth clients planned for Android, iOS and desktop.
 2. Have app A create a normal visible workspace folder and a file inside it.

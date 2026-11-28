@@ -45,6 +45,8 @@ Each work package (WP) lists the question, the goals it serves, the deliverable 
 
 **Goals:** G1, G2, G5 · **Deliverable:** `research/PROVIDER_AUTHORIZATION.md` plus a proof-of-concept report
 
+**Progress (2026-11-28):** Google Drive desk research done; see [Provider authorization](research/PROVIDER_AUTHORIZATION.md). The deciding question is whether `drive.file` access is per OAuth client or per Cloud project (experiments E1–E2). Questions 5–6 (Apple, Microsoft, Dropbox) are still open.
+
 PSC is a library, not an app. Someone must own each provider registration (Google Cloud project and OAuth clients, Microsoft Entra app, Dropbox app). That choice decides verification burden, quota sharing, user caps for unverified apps, consent-screen branding and whether separate apps can share one workspace.
 
 Questions:
