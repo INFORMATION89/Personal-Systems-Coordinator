@@ -1,254 +1,180 @@
 # PSC Implementation Plan: Start to First Release
 
-**Status:** draft for owner review · 2026-11-28 · no implementation approved until gate G0 is passed
-**Prepared with:** Claude Code, tier O (planning only; no code). Opus review of this plan: pending.
-**Builds on:** [Development plan](DEVELOPMENT_PLAN.md) (scope, certainty, milestones M0–M9), [Decisions](DECISIONS.md), [Research plan](RESEARCH_PLAN.md).
+**Status:** draft for owner review · 2026-11-28
+**Prepared with:** Claude Code, tier O (planning only; no code). Owner review pending.
+**Design:** [Architecture and design decisions](ARCHITECTURE.md). This plan builds exactly that design.
 
-This is the working plan for building PSC from today to its first release, with **Sonnet (tier S) doing the coding**, **Opus (tier O) writing specifications and reviews at checkpoints**, and **the owner approving at gates**. Every task is sized to one Sonnet session and one pull request, so work can continue task after task until the release.
+The plan has two phases:
+1. **Phase A, Decide:** owner decisions, a few small throwaway experiments, and the exact specification files. **No product code.** It ends at **Design Freeze.**
+2. **Phase B, Build:** product code, step by step, by **Sonnet in Claude Code**, until the first release.
 
-## 1. How the plan runs
+Coding starts only after Design Freeze, when everything needed for the first viable product is decided.
+
+## 1. Working agreement
 
 **Roles**
 
-| Role | Does | Does not |
-|---|---|---|
-| **Sonnet (S)** | All code, tests, fixtures, tooling, CI, docs for its own changes, prototype experiments | Change the contract, pick technology or license, create cloud resources, merge |
-| **Opus (O)** | Specifications, comparisons, security/licensing/architecture reviews, analysis of experiment results | Write code (current owner instruction) |
-| **Haiku/ChatGPT Free (H/F)** | Link fixes, formatting, PR descriptions, small doc tidy-ups | Anything in tiers S or O |
-| **Owner** | Gate approvals, creating accounts and registrations, running tests on personal devices, merging | — |
+| Who | Does |
+|---|---|
+| **Owner** | Answers the decisions in `ARCHITECTURE.md` §1, creates test accounts and registrations, tests on personal devices, reviews and merges PRs |
+| **Sonnet** (Claude Code) | Every coding step, experiment, test, spec file and doc update in this plan |
+| **Opus** | Two reviews only: R1 at Design Freeze (optional) and R2 before release (security). Nothing else, to save plan usage |
 
-**Rules for every task**
-- One task per session and one PR. The task ID goes in the PR's "Task" section.
-- Start only when every dependency is merged and any gate before it is passed.
-- If the spec is unclear, Sonnet stops and asks in the PR. It does not guess on contract questions.
-- After two failed CI fixes, Sonnet stops and reports.
-- Every PR follows the template, attributes tool and tier (`AI_POLICY.md` §5), and lists what was and was not verified.
-- "Opus review pending" items must be cleared before the next gate.
+**Efficiency on the Claude Pro plan**
+- One step = one Sonnet session = one PR. Steps are sized to fit one session.
+- Start each session with the prompt in §5. Sonnet reads `AGENTS.md`, the step and only the files it names.
+- Don't repeat research. If a question isn't answered by `ARCHITECTURE.md`, Sonnet stops and asks instead of exploring.
+- No parallel sessions unless two steps are independent and the plan allows it.
 
-**Task sizes:** **S** = small, a focused change; **M** = medium, one feature with tests; **L** = large, split into sub-PRs if the diff grows past roughly 600 lines of non-test code. Sizes are estimates of effort, not dates.
+**Quality rules** (from `RULES.md` and `ARCHITECTURE.md` §9)
+- Follow the architecture exactly. If it seems wrong or incomplete, stop and ask; never improvise a new system.
+- Use the libraries in `ARCHITECTURE.md` §9.1. New dependencies need a reason in the PR and must pass `cargo-deny`.
+- No hard-coded limits, names or user-facing text.
+- Every step leaves CI green, with tests for what it added.
 
-## 2. Owner gates
+**Explaining to the owner.** The owner doesn't read code. Every PR summary explains in plain words what changed, what it means for the product and what to test. Technical choices inside the architecture are made by the coding session and recorded in the PR. Structural choices go to the owner with pros, cons and a recommendation.
 
-Work stops at each gate until the owner approves. Opus prepares the evidence for each gate.
+## 2. Phase A — Decide (no product code)
 
-| Gate | When | Owner approves |
-|---|---|---|
-| **G0** | Before any code | This plan; creation of test resources (§3); starting implementation work |
-| **G1** | After M0 experiments | Go/no-go per route; Google model A (one shared project) or B (per app); first API provider |
-| **G2** | After the contract draft | Contract v0 (a public commitment) |
-| **G3** | After the technology spikes | Core technology and language; PSC's license; clean-room policy; first desktop OS |
-| **G4** | After the core is built | Core sync engine and folder adapter (fixture suite passing) |
-| **G5** | After the adapters are built | Providers for the first release; security review result |
-| **G6** | Before release | Release candidate, OAuth verification status, provider terms for a paid app, release itself |
+| Step | What | Who | Result |
+|---|---|---|---|
+| **A0** | Owner answers D1–D7 in `ARCHITECTURE.md` §1 | Owner | Answers recorded in `DECISIONS.md` |
+| **A0b** | Owner creates test resources: Google Cloud project "PSC Test" with the Drive API enabled, consent screen in testing mode and **two desktop OAuth clients**; two Google test accounts; GitHub App "Personal Systems Coordinator (test)" with device flow and Contents read/write; a GitHub test account with one private repository. Client IDs stored outside the repository | Owner (Sonnet writes a step-by-step guide first, as A0a) | Resources ready |
+| **A1** | **Drive experiment E1:** client A creates a folder and a file; client B (same project, different client) lists and reads it. Also E3 (a client from a second project). Throwaway script in `prototypes/a1-drive/` | Sonnet | Per-client or per-project answer. With D5, decides Drive's place in v1 |
+| **A2** | **Binding experiment:** a tiny Rust library with one async function, one callback interface and one error type, called from Swift, Kotlin and C# (`uniffi-bindgen-cs`). In `prototypes/a2-bindings/` | Sonnet | Confirms the C# path, or switches to the `csbindgen` fallback |
+| **A3** | **WebDAV probe** against Nextcloud in Docker: If-Match and 412, ETag behaviour, folder ETag changes when a child changes, `MOVE`, error codes. Reusable script `tools/webdav_probe.py` | Sonnet | Confirms the WebDAV design in §6 |
+| **A4** | **GitHub experiment:** device-flow sign-in with the test GitHub App; create a commit with the Git data API; check that updating the branch fails when its tip moved | Sonnet | Confirms the GitHub design |
+| **A5** | **Drive details** (only if A1 passes): does the file metadata include `sha256Checksum`; how to update only if unchanged; what files created in the Drive web UI look like to the app | Sonnet | Confirms the Drive design |
+| **A6** | Update `ARCHITECTURE.md` with A1–A5 results; list any changes | Sonnet | Design updated |
+| **A7** | **Specification files:** JSON Schemas for every file in §3 of the architecture (`spec/schemas/`); `spec/CONFIG.md` with every configuration value, default, unit and reason; `spec/ERRORS.md` with every error code; `spec/FIXTURES.md` describing the scenario format | Sonnet | Exact, checkable spec |
+| **A8** | **Scenario list:** the sync scenarios every implementation must pass, written as data files in `fixtures/` (two devices, operations, faults, expected results), covering every row of `ARCHITECTURE.md` §5 and `RULES.md` §5. Validated against the schema by a small checker | Sonnet | `fixtures/` ready for Phase B |
+| **R1** | **Optional Opus review** of the architecture, spec and scenarios together, in one session | Opus | Findings fixed in a Sonnet session or accepted by the owner |
+| **Design Freeze** | Owner confirms: decisions answered, experiments done, spec and scenarios approved | Owner | `DECISIONS.md` records Design Freeze; `AGENTS.md` "Current phase" changes to "Build" |
 
-## 3. Resources the owner provides at G0
+A1–A5 are throwaway experiments that settle decisions. They are not product code, and nothing in `prototypes/` is reused in Phase B.
 
-| Resource | Used by | Notes |
-|---|---|---|
-| Google Cloud test project "PSC Test", with Drive API enabled and the consent screen in testing mode | M0, M5 | Test users only. Create two OAuth clients for E1: a desktop client and a second desktop or "limited input device" client |
-| Two Google test accounts | M0, M5 | Never the owner's personal account |
-| GitHub App "Personal Systems Coordinator (test)", with device flow enabled and Contents read/write only | M0, M5 | A separate test GitHub account with one private repository |
-| Nextcloud test server | M0, M5 | A local Docker instance in CI is enough; optionally a hosted trial |
-| Device access | M0, M7 | One Android phone or emulator; one Mac for Apple builds; owner runs device checklists |
-| CI budget decision | M3 onward | macOS and Windows runners cost more on private repositories; the owner confirms the budget or makes the repository public |
-| Secrets storage | All | Client IDs in untracked local config and CI secrets; never committed |
+**If A1 fails:** apply the owner's D5 choice, then continue. **If A2's C# path fails:** use `csbindgen` and record it.
 
-## 4. Proposed repository layout (confirmed at G3)
+## 3. Phase B — Build (Sonnet)
 
-```
-spec/            contract specification and fixture format (from docs/specs once approved)
-fixtures/        language-neutral scenario files
-tools/           fixture validator, reference simulator, WebDAV probe (Python, like ci/pr_hygiene.py)
-core/            sync engine in the chosen technology
-adapters/        folder/, webdav/, gdrive/, github/
-bindings/        swift/, dotnet/, kotlin/
-samples/         cli/ (standalone sample consumer), desktop sample
-prototypes/      M0 throwaway experiments (never shipped)
-docs/            plans, research, decisions, guides
-```
+Each step lists what it depends on and when it is done. The order follows D2 and D3: "desktop #1" and "phone" below mean the owner's choices.
 
-## 5. Task list
+### B.1 Foundation
 
-### Phase 0 — Setup
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B0** | Cargo workspace with the crates from `ARCHITECTURE.md` §6 (empty but compiling); `rust-toolchain.toml`; lint configuration; `cargo-deny` configuration per D6; LICENSE; CI on Linux and desktop #1 running fmt, clippy, tests, deny and PR hygiene; an `AGENTS.md` note for crate boundaries | Design Freeze | CI green with empty crates |
+| **B1** | `psc-testkit`: scenario runner reading `fixtures/`, fake clock, in-memory fault-injecting adapter (`psc-adapter`) | B0 | The runner loads every scenario and reports "not implemented" cleanly |
+| **B2** | `psc-core` domain types and configuration module (from `spec/CONFIG.md`); JSON models for every file in architecture §3 with round-trip tests against `spec/schemas/`; error codes from `spec/ERRORS.md` | B0 | Schema round-trip tests pass |
+| **B3** | `psc-state`: SQLite device-local state (index, bases, checkpoints, lock, route, device ID) with migrations and crash-safety tests | B2 | Crash-at-every-step tests pass |
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| P0.1 | Owner passes G0 and creates the §3 resources | Owner | — | — | Resources exist; client IDs stored outside the repository |
-| P0.2 | Repository hygiene: `.gitignore` for secrets and local config, `local.config.example`, Markdown link-check CI job, `prototypes/README.md` labelling everything there as non-production | S | S | G0 | CI green; link check runs on docs PRs |
+### B.2 Sync engine
 
-### Phase 1 — M0: prove the routes (throwaway prototypes)
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B4** | Local scanner: change detection by size, modification time and hash; ignore list; allowed types; same-cycle rename detection | B3 | Scanner unit and property tests pass |
+| **B5** | Sync cycle (architecture §5.2) for create, update and download against the in-memory adapter, with conditional writes and checkpoint safety | B1, B4 | Basic scenarios pass |
+| **B6** | Conflicts and conflict copies (§5.3) | B5 | Conflict scenarios pass |
+| **B7** | Deletions, tombstones, retention, mass-deletion guard, stale-device reconcile (§5.4) | B5 | Deletion and stale-device scenarios pass |
+| **B8** | Format and version handling: unknown fields preserved, `update_required`, workspace creation race, registry and device files (§3, §4) | B5 | Version scenarios pass |
+| **B9** | Status, sync report, events and cancellation and time budget | B5 | Status scenarios pass; **the full scenario suite passes against the in-memory adapter** |
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S0.1 | **Drive E1 on desktop only:** client A creates a folder and a file; client B (a different OAuth client, same project) lists and reads it. Also E3 (a client from another project). Scripts under `prototypes/m0-drive/` | S | M | P0.1 | Report states per-client or per-project, with exact responses; repeatable script |
-| S0.2 | Drive E2, E4–E8: second app identity, folder picking, picking files created elsewhere, external edits, Drive for desktop files, revoke and re-authorize. Android parts as an owner-run checklist with a minimal test app | S | L | S0.1 | Each experiment marked passed, failed or not run, with evidence |
-| S0.3 | **GitHub route:** GitHub App device flow from a desktop script; contents API create, update with the correct SHA, rejection with a stale SHA; commit listing for change detection | S | M | P0.1 | Report with responses; token refresh tested |
-| S0.4 | **WebDAV probe tool** (`tools/webdav_probe.py`): checks If-Match and 412, ETag stability, folder ETag propagation, sync-collection support, 429/503 behaviour. Run against Nextcloud in Docker | S | M | P0.2 | Probe report for Nextcloud; the tool runs against any server URL |
-| S0.5 | **Folder route:** desktop scripts (atomic replace, rename detection, external edits while open); Android and iOS owner-run checklists (local folder, Syncthing, Nextcloud provider, Google Drive provider) | S | M | P0.2 | Results table per platform |
-| O0.6 | Analyse M0 results; recommend G1 decisions; update `DEVELOPMENT_PLAN.md` §2 certainty and `PROVIDER_AUTHORIZATION.md` | O | M | S0.1–S0.5 | Decision memo ready for G1 |
-| — | **Gate G1** | Owner | — | O0.6 | Routes and first API provider recorded in `DECISIONS.md` |
+### B.3 First route: local folder
 
-### Phase 2 — M1: contract specification
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B10** | `psc-folder` adapter: temporary file plus atomic rename, placeholder (online-only) files handled, platform file coordination where required | B9 | Full scenario suite passes against a real temporary folder |
+| **B11** | `psc-cli`: init, connect folder, sync, status, conflicts. A standalone sample with no Commonplace code | B10 | A scripted two-folder sync demo works on desktop #1 |
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| O1.1 | Contract v0 draft, `docs/specs/CONTRACT.md`: workspace layout and marker; file identity (Markdown frontmatter ID, JSON ID field, image path + hash); PSC metadata under `.psc/`; per-device journals; tombstones; conflict copies and their naming; version and compatibility rules; capability list; language-neutral adapter interface; sync state machine; error categories; status model; security notes | O | L | G1 | Covers every rule in `RULES.md` §5 and every case in `SYNC_SEMANTICS.md` §11 |
-| O1.2 | Fixture format spec, `docs/specs/FIXTURES.md`: how a scenario describes devices, initial states, operations, faults and expected outcomes | O | M | O1.1 | Can express all M2 scenarios |
-| O1.3 | Commonplace worked examples in the contract: a note with an image, workspace layout JSON, a deleted note, a conflict | O | S | O1.1 | Examples match `INTEGRATION_COMMONPLACE.md` |
-| — | **Gate G2** | Owner | — | O1.1–O1.3 | Contract v0 approved; Commonplace can build its mock adapter against it |
+**Checkpoint 1 (owner):** the owner runs the CLI demo by following a written guide. Sync works between two folders on the computer.
 
-### Phase 3 — M2: fixture suite and reference simulator
+### B.4 Network routes
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S2.1 | Fixture JSON schema and validator (`tools/fixtures/validate.py`), CI job | S | M | G2 | Invalid fixtures fail CI |
-| S2.2 | Reference simulator (`tools/fixtures/simulate.py`): an in-memory model of the contract used only to check that fixtures are consistent. Not shipped | S | L | S2.1 | Runs every fixture; disagreements are reported as spec questions |
-| S2.3 | Fixtures: basic create, update, rename, delete across two devices | S | M | S2.2 | Simulator passes |
-| S2.4 | Fixtures: concurrent edits and conflict copies for Markdown, images and JSON | S | M | S2.2 | Simulator passes |
-| S2.5 | Fixtures: faults (interrupted upload or download, duplicate delivery, lost cursor, 429, 5xx, out of storage, revoked access) | S | M | S2.2 | Simulator passes |
-| S2.6 | Fixtures: stale device after weeks offline, mixed app versions, unknown fields preserved, mass-deletion guard, restore from an old backup | S | M | S2.2 | Simulator passes |
-| O2.7 | Review fixtures against the contract; list gaps | O | S | S2.3–S2.6 | Gaps fixed or recorded as contract v0.x questions |
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B12** | `psc-transport`: HTTP client, retries and backoff with Retry-After, timeouts, offline detection, log redaction test | B9 | Transport tests pass; the redaction test proves no token is logged |
+| **B13** | OAuth flows in `psc-transport`: PKCE with loopback for desktop, external browser hand-off for phones, GitHub device flow; credential store interface | B12 | Flows tested against recorded responses |
+| **B14** | `psc-webdav` adapter (from A3 results) | B12 | Full scenario suite passes against Nextcloud in Docker in CI |
+| **B15** | `psc-github` adapter: one commit per cycle, private-repository check, change detection by commit comparison | B13 | Scenario suite passes on recorded responses; a manual live test passes on the test repository |
+| **B16** | `psc-gdrive` adapter (only if Drive is in v1 after A1 and D5) | B13 | Same as B15, on the test project |
+| **B17** | Route binding and mismatch guard (architecture §5.6); connect and disconnect for every route in the CLI | B14–B16 | Route-mismatch scenarios pass; the CLI connects to every route |
 
-### Phase 4 — M3: core technology decision
+**Checkpoint 2 (owner):** following a guide, the owner syncs two folders through GitHub, WebDAV and (if included) Google Drive with the CLI.
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S3.1 | Spike A: Kotlin Multiplatform core running a five-fixture slice; called from Swift, C# and Kotlin/JVM | S | L | S2.3 | Slice passes; binding effort, build steps and binary size recorded |
-| S3.2 | Spike B: Rust core with generated bindings, same slice and callers | S | L | S2.3 | Same as S3.1 |
-| S3.3 | Spike C: separate native implementations (one in Swift, one in C#) of the same slice, both tested against the fixtures | S | L | S2.3 | Same as S3.1 |
-| O3.4 | Comparison report and draft ADR: binding quality, maintenance, debugging, size, platform APIs, fit with Meridian's Kotlin Multiplatform baseline, dependency licenses | O | M | S3.1–S3.3 | Report covers `RESEARCH_PLAN.md` WP7 criteria |
-| O3.5 | License and clean-room recommendation for PSC, given a possibly paid Commonplace (WP11) | O | M | — (can run in parallel) | Options with obligations; dependency allow/deny list |
-| — | **Gate G3** | Owner | — | O3.4, O3.5 | Technology, license, clean-room policy and first desktop OS recorded in `DECISIONS.md` |
+### B.5 Apps and platforms
 
-### Phase 5 — M4: core sync engine and folder adapter
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B18** | `psc-ffi`: the public API from architecture §8.1, exported through UniFFI; async and callbacks; error codes | B17 | API tests pass through the Rust API |
+| **B19** | Desktop #1 binding and package (C#/NuGet for Windows or Swift/XCFramework for macOS), with the default credential store and browser hand-off; a minimal sample app | B18 | The sample app syncs through every route on desktop #1 |
+| **B20** | Phone binding and package (Android AAR with `cargo-ndk`, Keystore-backed credentials, Custom Tabs hand-off, WorkManager example), and a sample app; emulator tests in CI | B18 | The sample syncs on the emulator; the owner confirms on a real phone |
+| **B21** | Desktop #2 binding and package | B19 | Same as B19 |
+| **B22** | Integration guide for app developers (setup, routes, status, conflicts, errors, what the host must provide), and version and compatibility policy | B19 | Guide reviewed against the API |
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S4.1 | Project skeleton in the chosen technology; build; CI on Linux plus the first desktop OS; dependency locking; license audit job; LICENSE file per G3 | S | M | G3 | CI green; audit lists all dependencies |
-| S4.2 | Fixture runner in the core language: loads `fixtures/` and drives the engine through a fake adapter | S | M | S4.1 | Runs fixtures; reports pass/fail per scenario |
-| S4.3 | Domain model: workspace, file identity, metadata, versions, errors (per contract) | S | M | S4.2 | Unit tests; serialization round-trips |
-| S4.4 | Device-local state store: journal, checkpoints, cursors, kept outside the workspace | S | M | S4.3 | Survives crash at every write step (fault tests) |
-| S4.5 | Local change detection: scan, hash, rename detection, external-edit detection | S | M | S4.4 | S2.3 fixtures pass locally |
-| S4.6 | Adapter interface and an in-memory fake adapter with fault injection | S | M | S4.3 | Fake supports every fault in S2.5 |
-| S4.7 | Sync cycle: pull, apply, push with conditional writes; checkpoint advanced only after durable apply | S | L | S4.5, S4.6 | S2.3 and S2.5 fixtures pass against the fake |
-| S4.8 | Conflict handling and conflict copies | S | M | S4.7 | S2.4 fixtures pass |
-| S4.9 | Deletions, tombstones and mass-deletion guard; restore from backup | S | M | S4.7 | S2.6 deletion fixtures pass |
-| S4.10 | Version handling: unknown fields preserved, newer-version files never corrupted | S | M | S4.7 | S2.6 version fixtures pass |
-| S4.11 | Status and events API for host apps (last sync, pending changes, conflicts, errors, auth expired) | S | M | S4.7 | Contract status model covered by tests |
-| S4.12 | Folder adapter for desktop (atomic writes, file-provider placeholders handled, coordination where the OS needs it) | S | L | S4.7 | Full fixture suite passes against a real temp folder |
-| S4.13 | Standalone CLI sample (`samples/cli`): init workspace, sync, status, list conflicts. No dependency on Commonplace | S | M | S4.12 | Two-machine folder sync demo scripted and documented |
-| O4.14 | Opus review of the core: correctness of the state machine, crash safety, conflict paths | O | M | S4.7–S4.13 | Findings fixed (S) or accepted by the owner |
-| — | **Gate G4** | Owner | — | O4.14 | Core approved; Commonplace may integrate the folder route for desktop testing |
+**Checkpoint 3 (owner):** phone-to-PC sync with the sample apps through each route.
 
-### Phase 6 — M5/M6: provider adapters (first API provider from G1 first)
+### B.6 Commonplace and release
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S5.1 | Transport layer: HTTP client interface, retry and backoff (Retry-After), timeouts, offline handling | S | M | G4 | Fault fixtures pass against a fake HTTP layer |
-| S5.2 | Credential interface: host app supplies secure storage; tokens never logged; refresh flow abstraction | S | M | S5.1 | Log-scrubbing test; no token reaches logs |
-| S5.3 | **GitHub adapter:** device-flow sign-in, repository selection, contents API with SHA-conditional writes, change detection via commits, batched commits, private-repository check | S | L | S5.2 | Fixture suite passes on recorded responses; marked live test passes on the test repository |
-| S5.4 | **Google Drive adapter** (model from G1): desktop OAuth with PKCE via loopback, `drive.file`, change feed, revision-aware updates, resumable upload | S | L | S5.2 | Same as S5.3, on the test project |
-| S5.5 | **WebDAV adapter:** app-password sign-in, capability probe built in, If-Match writes, folder-ETag change detection with fallback scan | S | L | S5.2 | Fixture suite passes against Nextcloud in Docker in CI |
-| S5.6 | Live provider test suite: manual or scheduled, test accounts only, quota-safe | S | M | S5.3–S5.5 | Documented run; results recorded per provider |
-| S5.7 | Mixed-route guard: detect and refuse a workspace reached through different routes on different devices (for example Drive API on one device and Drive for desktop on another) | S | M | S5.4 | Clear error and status; covered by tests |
-| O5.8 | Security review: OAuth flows, redirect handling, PKCE/state checks, token storage, logging, threat model update | O | M | S5.3–S5.5 | Findings fixed or accepted |
-| — | **Gate G5** | Owner | — | O5.8 | First-release providers confirmed |
+| Step | What | Depends | Done when |
+|---|---|---|---|
+| **B23** | Commonplace-shaped acceptance test: a sample workspace with notes, images and layout JSON; two devices edit offline and converge without silently losing a note | B20, B21 | Passes on desktop and phone |
+| **B24** | Soak and crash tests (the process killed at random points), scale tests (large folders, many images), migration test from format 1 | B23 | No data loss across runs; limits documented |
+| **R2** | **Opus security and privacy review:** sign-in flows, token handling, logging, file safety, dependency licenses | Opus | Findings fixed (Sonnet) or accepted (owner) |
+| **B25** | Fix R2 findings | Sonnet | Re-checked |
+| **B26** | Release preparation: Google consent screen verification for "Personal Systems Coordinator" (owner submits; Sonnet prepares the material), public GitHub App, provider-terms check for a paid Commonplace, SBOM and notices, versioned packages, release notes | Owner and Sonnet | All items done or explicitly accepted |
+| **Release** | Owner approves PSC 1.0 | Owner | Commonplace switches from its mock adapter to PSC (in the Commonplace repository) |
 
-### Phase 7 — M7: platform bindings
+**Rough size (estimate):** about 10 Sonnet sessions in Phase A and about 30–40 in Phase B, plus 1–2 Opus sessions. Fix-up sessions after failed CI or review are extra.
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S7.1 | Binding and sample for desktop OS #1 (Swift for macOS or C# for Windows): secure storage (Keychain or Credential Manager), sign-in UI hand-off to the system browser, background hook | S | L | G5 | Sample app syncs with all three providers; per-platform report |
-| S7.2 | Binding and sample for desktop OS #2 | S | L | S7.1 | Same as S7.1 |
-| S7.3 | Android binding (Kotlin): Keystore-backed storage, WorkManager hook, SAF for local folders, sign-in hand-off; owner runs the device checklist | S | L | G5 | Phone-to-PC sync demo through each provider; device results recorded |
-| S7.4 | Linux feasibility check against the criteria in `RESEARCH_PLAN.md` WP8 | S | M | S7.1 | Go/no-go evidence for the owner |
-| — | iOS binding | — | — | — | **After the first release**, when Commonplace schedules iOS |
+## 4. What is needed from the owner, and when
 
-### Phase 8 — M8: Commonplace integration support
+| When | Need |
+|---|---|
+| Now | Answers to D1–D7 (`ARCHITECTURE.md` §1) |
+| A0b | Google test project with two OAuth clients, two Google test accounts, test GitHub App and test repository |
+| A3, B14 | Nothing: Nextcloud runs in Docker in CI |
+| Checkpoints 1–3 | Running the demos with the written guides |
+| B20 | A phone (or approval to rely on the emulator plus one manual check) |
+| B26 | Submitting Google verification; making the GitHub App public |
+| Always | Reviewing and merging PRs; nobody else merges |
 
-Commonplace's own adapter lives in the Commonplace repository; PSC supplies what it needs.
+## 5. Sonnet session prompt
 
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S8.1 | Integration guide: setup, provider connection, data categories, status and conflict handling, error states, what the host app must provide | S | M | S7.1 | Reviewed against the contract |
-| S8.2 | Versioned internal packages per platform, with changelog and compatibility range | S | M | S7.1 | Commonplace can depend on a fixed version |
-| S8.3 | Commonplace-shaped acceptance test: a sample workspace with notes, images and layout JSON; two devices edit offline and converge without silently losing a note | S | M | S8.2 | Passes on desktop and Android |
-| — | Commonplace swaps its mock adapter for PSC (in the Commonplace repository) | Commonplace session | — | S8.2 | Commonplace's Phase 2 exit criterion met |
-
-### Phase 9 — M9: hardening and first release
-
-| ID | Task | Tier | Size | Depends | Acceptance |
-|---|---|---|---|---|---|
-| S9.1 | Soak and crash tests: kill the process at random points during long sync runs | S | M | G5 | No data loss across many runs; results recorded |
-| S9.2 | Scale tests: large workspaces, many images, slow providers | S | M | G5 | Limits documented; no pathological polling |
-| S9.3 | Migration framework and a test from contract v0 to v0.x | S | M | G5 | Old workspaces open safely |
-| O9.4 | Final security and privacy review | O | M | S9.1–S9.3 | No critical findings open |
-| O9.5 | Licensing and provenance review: SBOM, notices, dependency licenses against the G3 policy | O | M | S9.1–S9.3 | Clean inventory |
-| O9.6 | Provider terms review for a paid Commonplace (Google, GitHub, WebDAV hosts) | O | S | — | Findings for the owner |
-| P9.7 | Production registrations: Google consent screen and verification for "Personal Systems Coordinator"; public GitHub App | Owner | — | O9.6 | Verified or in progress, with known user caps |
-| S9.8 | Release engineering: version 1.0.0 tags, packages per platform, release notes, integration guide final | S | M | O9.4, O9.5 | Reproducible release build |
-| — | **Gate G6** | Owner | — | All above | **First release** |
-
-## 6. Standard Sonnet session prompt
-
-Paste at the start of each session, filling in the task ID:
+Paste at the start of each Claude Code session, filling in the step:
 
 ```text
-You are working on INFORMATION89/Personal-Systems-Coordinator.
-Read AGENTS.md, then find task <TASK ID> in docs/IMPLEMENTATION_PLAN.md section 5.
-Do only that task. Check that its dependencies are merged and the gate before it is passed;
-if not, stop and say so.
+Repository: INFORMATION89/Personal-Systems-Coordinator.
+Read AGENTS.md. Then read step <STEP> in docs/IMPLEMENTATION_PLAN.md and only the sections of
+docs/ARCHITECTURE.md and spec/ that the step needs.
+
+Do only step <STEP>. First check that the steps it depends on are merged; if not, stop and say so.
 
 Rules:
-1. Work on one branch from the current main; open one PR with .github/pull_request_template.md.
-2. Follow the approved contract (docs/specs or spec/) exactly. If it is unclear or seems wrong,
-   stop and raise the question in the PR instead of guessing.
-3. Keep tests deterministic and offline, except tests marked live, which use test accounts only.
-4. Never commit secrets, tokens, client secrets or personal data.
-5. Do not change the contract, add a dependency outside the G3 policy, create cloud resources,
-   or merge. Those need the owner.
-6. Few commits (1-3 per PR). No CI-skip markers on code.
-7. If CI fails twice after attempted fixes, stop and report.
-8. Finish with a handoff: branch, commit, files changed, checks run and not run, open questions,
-   and the next task ID.
+- Follow ARCHITECTURE.md and spec/ exactly. If something is missing, unclear or seems wrong,
+  stop and ask in the PR; do not invent a new design.
+- Use the libraries in ARCHITECTURE.md section 9.1. Any other dependency needs a reason in the PR.
+- No hard-coded limits, names or user-facing text; use the configuration module.
+- Tests for everything you add. CI must be green. After two failed fixes, stop and report.
+- Never commit secrets or tokens. Live tests use test accounts only and are marked live.
+- One branch, one PR using .github/pull_request_template.md, 1-3 commits.
+- In the PR summary, explain in plain words for a non-programmer what changed and how to check it.
+- End with the handoff: branch, commit, files changed, checks run and not run, open questions,
+  next step.
 ```
 
-## 7. Handoff format
+## 6. Handoff format
 
-Every task ends with this in the PR description, so the next session starts from it instead of re-reading history:
+Every PR ends with:
+- **Step and result** (done, or partly done and why).
+- **What changed,** in plain words.
+- **How to check it,** for the owner, if anything is visible.
+- **Verified:** commands, scenarios, tests run.
+- **Not verified,** and why.
+- **Questions** for the owner.
+- **Next step.**
 
-- **Task and result:** ID, done or partly done.
-- **Branch and commit.**
-- **Changed:** files and behaviours.
-- **Verified:** commands, fixtures, live tests, platforms.
-- **Not verified:** and why.
-- **Questions for the owner or Opus.**
-- **Next task:** the next ID whose dependencies are now met.
+## 7. Keeping the plan current
 
-## 8. Critical path and parallel work
-
-**Critical path:** G0 → S0.1 (Drive E1) → G1 → O1.1 → G2 → S2.x → S3.x → G3 → S4.x → G4 → first API adapter → G5 → S7.1 → S8.3 → M9 → G6.
-
-**Can run in parallel**
-- S0.3–S0.5 alongside S0.1–S0.2.
-- O3.5 (license) any time before G3.
-- In M5, the adapters run in parallel once S5.2 is merged, with one session per adapter.
-- S7.2 and S7.3 after S7.1.
-
-Following `AI_COST_POLICY.md` §4, run parallel sessions only for genuinely independent tasks.
-
-## 9. Where Sonnet cannot do the work alone
-
-| Need | Why | Plan |
-|---|---|---|
-| Creating Google, GitHub or Nextcloud resources | Owner approval and owner accounts | P0.1, P9.7 |
-| Physical Android or iOS devices | Cloud sessions have no devices | Owner-run checklists in S0.2, S0.5, S7.3 |
-| Apple builds and signing | Needs macOS and an Apple developer account | macOS CI runner (cost decision at G0) or the owner's Mac |
-| Reading some official docs | Some documentation hosts are blocked in cloud sessions | Re-check primary pages from an environment with access before G2 |
-| Gate decisions | Owner-reserved | Opus prepares a memo per gate |
-
-## 10. Keeping the plan current
-
-- Mark tasks done in this file as their PRs merge (task ID, PR link, date).
-- When a gate changes scope (for example Google model B at G1), update the affected tasks before starting them.
-- New work goes in as a new task ID with tier, size, dependencies and acceptance criteria; never as unplanned scope inside another task's PR.
+- When a step's PR merges, mark it here with the PR link and date.
+- If an experiment or review changes the design, update `ARCHITECTURE.md` first (in its own PR), then continue.
+- New work becomes a new step with dependencies and a "done when". It is never added silently to another step.

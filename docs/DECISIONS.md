@@ -13,6 +13,10 @@ This register separates the direction already agreed in product discussions from
 | Sync scope | One person's own devices only (for example phone → user's cloud provider → PC). Multi-person sharing and collaboration are not PSC features. | Agreed (2026-11-28) |
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
+| Workspace layout | A root folder holding PSC's own folder plus one folder per app; each app owns its folder; PSC gives apps shared information (apps, devices, status). Details in ARCHITECTURE.md §3–§4. | Owner direction (2026-11-28) |
+| Core language | Owner leaning to Rust; confirm as D1 in ARCHITECTURE.md §1. | Pending owner confirmation |
+| Design Freeze | No product code until all decisions for the first viable product are made (IMPLEMENTATION_PLAN.md Phase A). | Agreed (2026-11-28) |
+| AI usage | Sonnet codes; Opus only for the named reviews or on request; owner on Claude Pro; no AI-generated art (icons, mockups and suggestions allowed); owner is non-technical, so structural choices come with pros and cons. | Agreed (2026-11-28) |
 | Provider registrations | One family-level registration per provider (Google Cloud project, Apple team, Entra app, Dropbox app, GitHub App), owned by the owner and registered as **Personal Systems Coordinator**. Google's shared workspace still depends on experiments E1/E2. | Agreed (2026-11-28) |
 | First-release providers | Google Drive, GitHub and self-hosted (WebDAV and the user-selected folder). Dropbox, OneDrive, iCloud and others are deferred, not rejected; the owner judged more options too much for average users. | Agreed (2026-11-28) |
 | Minimum providers | Google Drive and GitHub are the accepted minimum, alongside the always-available user-selected folder. Further providers are ordered in research/PROVIDER_CANDIDATES.md for owner review. | Agreed minimum (2026-11-28) |

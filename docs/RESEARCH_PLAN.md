@@ -176,7 +176,7 @@ See §6.
 
 ## 4. Sequencing
 
-The path from research to a first release is planned in [Development plan](DEVELOPMENT_PLAN.md) (milestones M0–M9). The phases below remain the research order.
+The path from here to a first release is in [Implementation plan](IMPLEMENTATION_PLAN.md), building the design in [Architecture](ARCHITECTURE.md). Research questions that the architecture now answers (WP3 contract, WP4 semantics, WP7 technology, much of WP6) are closed there; the phases below are kept as history.
 
 | Phase | Work | Why this order |
 |---|---|---|
@@ -216,7 +216,7 @@ Request cited official documentation, separation of facts from assumptions, iden
 
 ## 7. Task routing
 
-Implementation tasks from setup to first release are listed in [Implementation plan](IMPLEMENTATION_PLAN.md) §5. This section covers research tasks.
+Implementation steps from deciding to first release are listed in [Implementation plan](IMPLEMENTATION_PLAN.md) §2–§3, and supersede the tiers below where they overlap. This section covers remaining research tasks.
 
 Tiers follow `AI_COST_POLICY.md` §5: **O** Opus-class, **S** Sonnet or a balanced coding model, **H** Haiku-class, **F** ChatGPT Free. An agent whose tool does not match the tier stops and tells the owner (`AGENTS.md`). Owner decisions are never delegated, whatever the tier.
 

@@ -9,6 +9,14 @@
 
 Cost includes AI tokens and subscription allowance, paid tool credits, web and repository requests, CI minutes, provider API quotas (for example Google Drive), test accounts and devices, and human review time caused by oversized or duplicated changes. Do not invent a budget or assume a service is free. Label estimates as estimates.
 
+## 1a. This project's plan (2026-11-28)
+
+- The owner uses a **Claude Pro plan** (about US$20 a month). Its usage allowance is the main limit on progress.
+- **Sonnet does the coding,** in Claude Code sessions, one plan step per session. This maximizes progress per session.
+- **Opus is used only when necessary:** the two reviews in `docs/IMPLEMENTATION_PLAN.md` (R1, optional, at Design Freeze; R2, security, before release), or when the owner asks.
+- Keep sessions short and focused: read only what the step names, don't repeat research, stop and ask instead of exploring.
+- Never enable extra usage or paid fallbacks (§2).
+
 ## 2. Spending and authorization
 
 1. Use existing approved tools, local scripts and free CI capacity where they suffice.

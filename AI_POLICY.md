@@ -14,6 +14,8 @@ PSC must sync without calling a generative-AI model or requiring an AI provider,
 - Conflict resolution, deletion handling and data selection are deterministic and testable. An AI model must never decide which version of a user's file survives.
 - Users never incur AI costs or latency because they sync.
 
+**Art and design assets:** the owner's projects use real, human-made art. Do not generate artwork, illustrations or brand imagery. AI may create icons, and may help with mockups, layout ideas and suggestions, which a human then decides on.
+
 Apps that plug into PSC (for example Commonplace) may have their own, separately approved AI features. Those stay in the app and never become PSC dependencies or reasons to design AI-specific interfaces into PSC.
 
 ## 2. Permitted contributor use

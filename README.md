@@ -2,7 +2,7 @@
 
 A provider-neutral foundation for optional data synchronization and interoperability across a family of personal applications.
 
-**Status: research complete enough to plan; development plan drafted (milestone M0, proving the storage routes, is next). Not implementation-ready.**
+**Status: design drafted; waiting for the owner's decisions and the Phase A experiments. Coding starts at Design Freeze.**
 
 The project explores how applications such as Solstice, Commonplace (notes), Clock and Calendar can keep user-controlled data available across the user's devices without requiring us to operate a proprietary cloud or mandatory account system.
 
@@ -16,8 +16,8 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Commonplace integration](docs/INTEGRATION_COMMONPLACE.md) — the notes app and lead client: Markdown notes, images and workspace JSON.
 - [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — second client: small preference JSON.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
-- [Development plan](docs/DEVELOPMENT_PLAN.md) — first-release scope, how certain each route is, and milestones M0–M9 (draft).
-- [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — every task from setup to first release, with tiers, gates and the Sonnet session prompt (draft).
+- [Architecture and design decisions](docs/ARCHITECTURE.md) — how PSC is built, and the decisions waiting for the owner (draft).
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — every step from deciding to first release, with the Sonnet session prompt (draft).
 - [Future integrations](docs/FUTURE_INTEGRATIONS.md) — far-future context: Clock Pomodoro sync, the Solstice menubar app, Calendar ↔ Commonplace mentions.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 

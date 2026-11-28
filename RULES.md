@@ -28,6 +28,15 @@ These rules govern research, design, prototyping and (later) implementation of P
 3. Before asking for owner review, present the problem, evidence, a bounded proposal, alternatives, trade-offs, maintenance cost and privacy/licensing implications. Do not ask the owner to choose between unexplained options.
 4. Do not interrupt the owner for routine choices.
 
+## 3a. Maintainable products, not vibe coding
+
+1. `docs/ARCHITECTURE.md` is the design. Build what it says; do not add systems it doesn't describe.
+2. Prefer established libraries (`docs/ARCHITECTURE.md` §9.1) and platform standards over home-made code.
+3. Research before building anything new; propose it to the owner; then code.
+4. No hard-coded limits, intervals, names, file types or user-facing text. Use the configuration module and error codes.
+5. Follow each platform's guidelines (sign-in in the system browser, platform schedulers, platform pickers).
+6. Code must pass the guardrails in `docs/ARCHITECTURE.md` §9.3 before review.
+
 ## 4. Architecture boundaries (for design and prototypes)
 
 1. Provider-specific concepts (Drive file IDs, page tokens, Graph delta links, SAF URIs, security-scoped bookmarks) stay inside that provider's adapter. They must never leak into the portable contract or app-facing API.
