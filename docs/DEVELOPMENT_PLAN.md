@@ -60,6 +60,8 @@ A proposal to guide the milestones, not an approved design:
 
 ## 4. Milestones
 
+The task-by-task breakdown of these milestones, with gates, session prompts and handoffs, is in [Implementation plan](IMPLEMENTATION_PLAN.md).
+
 | # | Milestone | Deliverables | Exit gate | Tier | Owner decisions needed |
 |---|---|---|---|---|---|
 | **M0** | **Prove the routes** | Google E1–E9 results; GitHub App device-flow test; WebDAV capability probe against Nextcloud; folder tests on desktop, Android and iOS. Throwaway code under `prototypes/` | A go/no-go per route, recorded in `DECISIONS.md` | S (code), O (analysis) | Approve a Google test project and test accounts; approve a test GitHub App; provide or approve a test Nextcloud |

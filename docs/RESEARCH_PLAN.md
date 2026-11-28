@@ -216,6 +216,8 @@ Request cited official documentation, separation of facts from assumptions, iden
 
 ## 7. Task routing
 
+Implementation tasks from setup to first release are listed in [Implementation plan](IMPLEMENTATION_PLAN.md) §5. This section covers research tasks.
+
 Tiers follow `AI_COST_POLICY.md` §5: **O** Opus-class, **S** Sonnet or a balanced coding model, **H** Haiku-class, **F** ChatGPT Free. An agent whose tool does not match the tier stops and tells the owner (`AGENTS.md`). Owner decisions are never delegated, whatever the tier.
 
 **Current assignment (2026-11-28):** tier O does research only (reports, analysis, recommendations). It writes no code or prototypes for now; code tasks wait for an S-tier session.

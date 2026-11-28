@@ -16,7 +16,7 @@ If two documents disagree, do not silently pick one. Report the conflict. `docs/
 
 ## Task routing
 
-Find your task in `docs/RESEARCH_PLAN.md` §7 and check its tier: O (Opus), S (Sonnet or a balanced coding model), H (Haiku) or F (ChatGPT Free). If your tool does not match the tier, stop and tell the owner instead of doing the task. Open every PR with `.github/pull_request_template.md`; `.github/workflows/pr-hygiene.yml` checks it.
+Find your task in `docs/IMPLEMENTATION_PLAN.md` §5 (implementation, from setup to first release) or `docs/RESEARCH_PLAN.md` §7 (research), and check its tier: O (Opus), S (Sonnet or a balanced coding model), H (Haiku) or F (ChatGPT Free). If your tool does not match the tier, stop and tell the owner instead of doing the task. Open every PR with `.github/pull_request_template.md`; `.github/workflows/pr-hygiene.yml` checks it.
 
 ## Product boundaries
 

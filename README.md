@@ -17,6 +17,7 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Solstice integration](docs/INTEGRATION_SOLSTICE.md) — second client: small preference JSON.
 - [Decision register](docs/DECISIONS.md) — confirmed direction and unresolved choices.
 - [Development plan](docs/DEVELOPMENT_PLAN.md) — first-release scope, how certain each route is, and milestones M0–M9 (draft).
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — every task from setup to first release, with tiers, gates and the Sonnet session prompt (draft).
 - [Future integrations](docs/FUTURE_INTEGRATIONS.md) — far-future context: Clock Pomodoro sync, the Solstice menubar app, Calendar ↔ Commonplace mentions.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 
