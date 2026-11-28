@@ -29,7 +29,7 @@ The intended model is permanently decentralized, local-first and provider-neutra
 
 Initial provider and architecture research is documented:
 - [Provider comparison](docs/research/PROVIDER_COMPARISON.md)
-- [Provider authorization: Google Drive](docs/research/PROVIDER_AUTHORIZATION.md)
+- [Provider authorization](docs/research/PROVIDER_AUTHORIZATION.md) — Google Drive, Apple, Microsoft, Dropbox; registration recommendation
 - [Platform constraints](docs/research/PLATFORM_CONSTRAINTS.md)
 - [Sync semantics and architecture options](docs/research/SYNC_SEMANTICS.md)
 - [Security, authorization and consent](docs/research/SECURITY_AND_CONSENT.md)

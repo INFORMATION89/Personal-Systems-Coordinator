@@ -45,7 +45,7 @@ Each work package (WP) lists the question, the goals it serves, the deliverable 
 
 **Goals:** G1, G2, G5 · **Deliverable:** `research/PROVIDER_AUTHORIZATION.md` plus a proof-of-concept report
 
-**Progress (2026-11-28):** Google Drive desk research done; see [Provider authorization](research/PROVIDER_AUTHORIZATION.md). The deciding question is whether `drive.file` access is per OAuth client or per Cloud project (experiments E1–E2). Questions 5–6 (Apple, Microsoft, Dropbox) are still open.
+**Progress (2026-11-28):** desk research done for all six questions; see [Provider authorization](research/PROVIDER_AUTHORIZATION.md). Recommendation for owner review: one family-level registration per provider (§12). Blocked on owner approval for a Google test project, then experiments E1–E9 (tier S; tier O does no code for now).
 
 PSC is a library, not an app. Someone must own each provider registration (Google Cloud project and OAuth clients, Microsoft Entra app, Dropbox app). That choice decides verification burden, quota sharing, user caps for unverified apps, consent-screen branding and whether separate apps can share one workspace.
 
@@ -219,8 +219,8 @@ Tiers follow `AI_COST_POLICY.md` §5: **O** Opus-class, **S** Sonnet or a balanc
 |---|---|---|
 | WP1 Drive desk research | S | First pass done 2026-11-28 |
 | WP1 experiment code (E1–E9) | S | Test project and accounts need owner approval first |
-| WP1 registration-model recommendation | O | Owner decides |
-| WP1 Apple, Microsoft, Dropbox desk research | S | |
+| WP1 registration-model recommendation | O | Drafted 2026-11-28; owner decides |
+| WP1 Apple, Microsoft, Dropbox desk research | S | Done 2026-11-28 (by tier O, research only) |
 | WP2 folder prototype | S | |
 | WP3 workspace format and file contract | O | Public contract; "Opus review pending" if drafted by S |
 | WP4 sync fixtures | S | From the O-reviewed WP3 draft |

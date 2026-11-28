@@ -1,9 +1,9 @@
-# Provider Authorization: Google Drive (WP1, part 1)
+# Provider Authorization (WP1)
 
 **Research date:** 2026-11-28
-**Status:** desk research, first pass. No experiment has run yet. No registration model is approved.
+**Status:** desk research complete for Google Drive, Apple, Microsoft and Dropbox (2026-11-28). No experiment has run yet. No registration model is approved.
 **Prepared with:** Claude Code, tier O (research only); not yet reviewed by the owner.
-**Scope:** Google Drive only. iCloud, Microsoft Graph and Dropbox (WP1 questions 5–6) are still to do.
+**Scope:** §1–§8 Google Drive; §9 Apple; §10 Microsoft OneDrive; §11 Dropbox; §12 the cross-provider registration recommendation (WP1 questions 1–6).
 
 ## How to read this report
 
@@ -109,9 +109,85 @@ Run these in order. Stop and report as soon as a step fails, because later steps
 ## 8. Still open
 
 - Re-read the official pages in full, especially the native Picker guide, the scopes page, the app-data guide and the unverified-apps page, once those hosts are reachable from this environment.
-- iCloud Drive and CloudKit container sharing between apps from the same team (WP1 question 5).
-- Microsoft Graph and Dropbox scopes for an app folder versus a user-selected folder (WP1 question 6).
+- Apple, Microsoft and Dropbox findings are in §9–§11; each has its own items to verify.
 - Whether `drive.appdata` (hidden, deleted if the user removes the app) is useful for PSC metadata. It is not suitable for user-visible notes.
+
+## 9. Apple: iCloud Drive and CloudKit (WP1 question 5)
+
+**Findings**
+- **Containers can be shared within one developer team.** Each value in an app's iCloud container entitlement must be that app's bundle identifier, or that of another app submitted under the same team identifier. Wildcards are not allowed. [Official, Apple's archived entitlement reference; current key names should be re-checked, because sources name both `com.apple.developer.ubiquity-container-identifiers` and `com.apple.developer.icloud-container-identifiers`]
+- **CloudKit containers can likewise be shared across a team's apps** through entitlements. [Official, from the earlier provider comparison]
+- **The container stays with the app.** If an app moves to another developer team, its container goes with it. [Community]
+- **No API outside Apple platforms.** On Windows, iCloud Drive is only reachable as a folder through iCloud for Windows. There is no public iCloud Drive API for Android. [Official, from the platform constraints report]
+
+**What it means**
+- On Apple devices, all of the owner's apps under one Apple developer team can share one iCloud container. That is the Apple counterpart of Google model A, and it works by configuration, not by experiment. [Inference]
+- iCloud cannot be the phone-to-PC route for an Android phone. For an iPhone with a Windows PC, the PC would use iCloud for Windows as a plain folder. [Inference]
+- **No restricted-scope reviews, quotas or consent screens** comparable to Google's. The user's iCloud storage plan is the limit. [Inference]
+
+**To verify:** current entitlement key names in Xcode; whether a shared container can be exposed as a user-visible folder in iCloud Drive (so files are inspectable); behaviour under iCloud for Windows.
+
+## 10. Microsoft OneDrive (Graph) (WP1 question 6)
+
+**Findings**
+- **App folder scope:** `Files.ReadWrite.AppFolder` limits an app to its own folder, usually `/Apps/{Application Name}` in the user's OneDrive, reached through `special/approot`. It is created on first use. [Official]
+- **The folder is visible to the user,** who keeps full control and can add or remove files in it. [Official] So files the user adds through OneDrive should be visible to the app, unlike Google's `drive.file`. [Inference; confirm]
+- **Not for large files.** Microsoft positions the app folder for configuration, temporary storage and drafts, and suggests `Files.ReadWrite` when users need to choose save locations. [Official]
+- **Work and school accounts:** feedback reports that `Files.ReadWrite.AppFolder` alone is not usable on business accounts. [Community] PSC's audience is personal accounts, so this is likely a minor issue. [Inference]
+- **Registration:** an Entra app registration can accept personal Microsoft accounts, alone or alongside work and school accounts. [Official] One registration can carry several platform configurations (mobile and desktop redirect URIs). [Inference from standard Entra practice; confirm]
+- **Publisher verification** is free and needs no license. It adds a verified badge to the consent prompt and avoids admin-consent blocks in organizations. It requires a Microsoft Partner Center account. [Official]
+
+**What it means**
+- The app folder belongs to the registration. If every family app uses one Entra registration, they share `/Apps/{name}`. With one registration per app, each app gets its own folder. [Inference; confirm with a test]
+- **Good fit for Commonplace's user-visible files.** Files sit in a visible folder that the user can browse, and user-added files are probably visible to the app. The "large files" caution matters for images. [Inference]
+
+**To verify:** that user-added files appear through `approot` and the delta feed; size behaviour for images; one registration serving several apps and platforms.
+
+## 11. Dropbox (WP1 question 6)
+
+**Findings**
+- **Two access types:** App folder (read and write to one dedicated folder for the app) and Full Dropbox. Dropbox recommends App folder when the app only needs files it created, and asks apps to use the least privilege that works. [Official]
+- **App folders cannot be shared with other users.** Irrelevant here, since PSC syncs one person's devices. [Official]
+- **Development status:** a new app works like a production app but can link at most 500 Dropbox users. Once it has linked 50 users, it has two weeks to apply for and receive production approval, or linking new users is frozen. [Official] Approval is per app, not per access type. [Community]
+- **OAuth with PKCE** for mobile and desktop, with refresh tokens for background access. [Official, from the earlier security report]
+
+**What it means**
+- As with Microsoft, the app folder belongs to the Dropbox app (app key). A shared family app key gives a shared folder; separate app keys give separate folders. [Inference; confirm]
+- **Distributing to friends** stays well under 500 users, but crossing 50 linked users starts the two-week production-approval clock. Plan approval before a wider release. [Inference]
+
+**To verify:** whether user-added files in the app folder are visible to the app (likely, since it is a normal folder); whether one app key can serve several separately distributed apps under Dropbox's terms.
+
+## 12. Registration recommendation across providers (WP1 question 1)
+
+**The pattern.** For every provider, the least-privilege option is an area tied to the registration: Google `drive.file` (files the app created), Microsoft's app folder, Dropbox's app folder, Apple's team container. **Whoever owns the registration decides which apps share data.** [Inference from §2–§11]
+
+**Recommendation for owner review:** one family-level registration per provider, owned by the owner (model A), with PSC accepting client configuration from each host app rather than embedding any.
+
+| Provider | Family-level registration | Sharing across the owner's apps | Main open risk |
+|---|---|---|---|
+| Google Drive | One Cloud project, one OAuth client per app and platform | Only if `drive.file` access is per project | E1/E2 not yet run; external files invisible |
+| Apple | One developer team, shared container entitlement | Yes, by configuration | Apple devices only |
+| Microsoft | One Entra registration with multiple platform configurations | Probably, through one app folder | Confirm one registration can serve several apps |
+| Dropbox | One Dropbox app key | Probably, through one app folder | Terms for one key across several apps; production approval at 50 users |
+
+**Why family-level**
+- It keeps the future integrations possible (Solstice menubar app, Calendar ↔ Commonplace).
+- One consent screen, one verification and one privacy policy per provider instead of one per app.
+- The user connects their storage once per provider and app family, which suits "my phone syncs to my cloud, my PC syncs from it".
+
+**Costs and risks**
+- **Consent screens show the family name,** not "Commonplace". The family needs a brand name (still undecided).
+- **Revoking access** in the provider's account settings probably disconnects all of the owner's apps at once. Disconnecting inside one app should only remove that app's local token. [Inference]
+- **Shared quota** across all apps and users. Unlikely to bind at this scale, if sync avoids polling. [Inference]
+- **One misbehaving app affects the whole registration's standing** with the provider. [Inference]
+- **Paid Commonplace:** commercial distribution may change verification expectations and terms review for each provider. Check each provider's developer terms for commercial use before release. [Inference]
+
+**Fallback:** per-app registrations (model B), if family-level sharing is impossible (Google E1/E2 fail) or terms forbid one registration across several apps. Each app then syncs only its own data, and cross-app features need another mechanism.
+
+**Next steps (owner decisions first)**
+1. Approve creating one Google test project and test accounts, so an S-tier session can run E1–E9. Tier O does no code for now.
+2. Decide the family brand name for consent screens (it can be provisional for testing).
+3. After E1/E2, choose model A or B for Google; then confirm the Microsoft and Dropbox inferences with small tests.
 
 ## Sources
 
@@ -134,3 +210,12 @@ Community:
 - [Google Developer forum: drive.file on shared folders](https://discuss.google.dev/t/google-drive-sheets-api-with-drive-file-scope-on-shared-folder-files/402266)
 - [Google Developer forum: CASA for a client-only Android app](https://discuss.google.dev/t/does-a-client-only-android-app-with-no-server-need-the-casa-security-assessment-for-drive-readonly/393638)
 - [Apps Script community: CASA verification cost](https://groups.google.com/g/google-apps-script-community/c/XgsHT2Fr7u8)
+
+Apple, Microsoft and Dropbox (via search extracts; official unless marked):
+- [Apple: Enabling iCloud Storage (entitlement reference, archived)](https://developer.apple.com/library/content/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/EnablingiCloud.html)
+- [objc.io: Mastering the iCloud Document Store](https://www.objc.io/issues/10-syncing-data/icloud-document-store/) (community)
+- [Microsoft Graph: App folder](https://learn.microsoft.com/en-us/graph/onedrive-sharepoint-appfolder) and [OneDrive special folders: approot](https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/special-folders-appfolder)
+- [Microsoft Tech Community: AppFolder access for business accounts](https://techcommunity.microsoft.com/idea/microsoft365developerplatform/appfolder-api-access-for-business-accounts/3966638) (community)
+- [Microsoft Entra: Publisher verification](https://learn.microsoft.com/en-ca/entra/identity-platform/publisher-verification-overview) and [Microsoft account identity provider](https://learn.microsoft.com/entra/external-id/microsoft-account)
+- [Dropbox: DBX Platform developer guide](https://www.dropbox.com/developers/reference/developer-guide) and [Dropbox developer support](https://www.dropbox.com/en_GB/developers/support)
+- [Dropbox forum: development user limit](https://www.dropboxforum.com/discussions/101000014/does-a-dropbox-app-have-a-limit-on-development-users/846671) (community)
