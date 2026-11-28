@@ -101,4 +101,4 @@ Iterate in small steps and stop when the acceptance criteria are met. If a check
 
 ## 11. Reporting
 
-For non-trivial work, report: scope and acceptance criteria; checks chosen and why; what actually ran, with commit and environment; known external or paid usage; what was not run and why; quota or access limitations; remaining risks and the next gate. Never report estimated usage as measured, or unrun checks as passed.
+Attribute the tool and tier as `AI_POLICY.md` §5 requires. For non-trivial work, report: scope and acceptance criteria; checks chosen and why; what actually ran, with commit and environment; known external or paid usage; what was not run and why; quota or access limitations; remaining risks and the next gate. Never report estimated usage as measured, or unrun checks as passed.

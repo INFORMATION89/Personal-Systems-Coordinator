@@ -13,7 +13,9 @@ This register separates the direction already agreed in product discussions from
 | Sync scope | One person's own devices only (for example phone → user's cloud provider → PC). Multi-person sharing and collaboration are not PSC features. | Agreed (2026-11-28) |
 | Synced content | Simple files only: Markdown, images and JSON. Any other content type needs an explicit decision. | Agreed (2026-11-28) |
 | Role of PSC | The shared foundation that all of the owner's apps plug into for sync. Its code runs on the user's devices; it is never a hosted service. | Agreed (2026-11-28) |
-| Working rules | Agent instructions, rules, clean-room, AI and AI-cost policies, agent guides, PR template and PR hygiene check adopted from Meridian-Engine and adapted to PSC. | Adopted at owner request (2026-11-28) |
+| Model attribution | AI-assisted commits, PRs and reports name the tool and model tier (AI_POLICY.md §5). | Agreed (2026-11-28) |
+| Clean-room process | Undecided; interim no-copying and provenance rules apply until WP11 decides PSC's license, with Commonplace possibly being paid. | Undecided (2026-11-28) |
+| Working rules | Agent instructions, rules, interim clean-room rules, AI and AI-cost policies, agent guides, PR template and PR hygiene check adopted from Meridian-Engine and adapted to PSC. | Adopted at owner request (2026-11-28) |
 | Far-future integrations | Clock Pomodoro sync, a Solstice menubar app reading Solstice personalization data, and Calendar ↔ Commonplace mentions are recorded as context in FUTURE_INTEGRATIONS.md. Today's design must not rule them out, but none is scheduled. | Context only (2026-11-28) |
 | Quality bar | The apps are expected to be distributed to other people (for example friends), so PSC must meet a public-release standard for data safety and must cope with apps and devices being updated at different times. | Agreed (2026-11-28) |
 | Primary purpose | Optional cross-device synchronization of one person's app data; cross-app interoperability is secondary | Agreed direction |

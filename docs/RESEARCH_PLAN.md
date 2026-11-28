@@ -163,7 +163,7 @@ What PSC synchronizes is not yet defined. Every other work package depends on th
 
 **Goals:** G6 · **Deliverable:** `research/LICENSING_AND_DISTRIBUTION.md`
 
-Compare license options for PSC's own code (permissive, copyleft, dual, proprietary SDK) and distribution or support models, without adding any PSC-operated service. Estimate one-time and recurring costs. Start a provenance inventory and classify dependencies, SDKs, sample code, datasets, fonts, icons and media as allowed, allowed with conditions, or prohibited/unresolved, using current primary-source terms. Check the licenses of any project whose code or protocol PSC might reuse (see [Existing systems](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)) before borrowing anything.
+Commonplace, the lead client, may be a paid app; PSC's license must allow embedding in it, and this work package also decides whether PSC needs a formal clean-room process (see `CLEAN_ROOM.md`, currently undecided). Compare license options for PSC's own code (permissive, copyleft, dual, proprietary SDK) and distribution or support models, without adding any PSC-operated service. Estimate one-time and recurring costs. Start a provenance inventory and classify dependencies, SDKs, sample code, datasets, fonts, icons and media as allowed, allowed with conditions, or prohibited/unresolved, using current primary-source terms. Check the licenses of any project whose code or protocol PSC might reuse (see [Existing systems](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)) before borrowing anything.
 
 ### WP12 — Independent review
 
@@ -212,6 +212,8 @@ Request cited official documentation, separation of facts from assumptions, iden
 ## 7. Task routing
 
 Tiers follow `AI_COST_POLICY.md` §5: **O** Opus-class, **S** Sonnet or a balanced coding model, **H** Haiku-class, **F** ChatGPT Free. An agent whose tool does not match the tier stops and tells the owner (`AGENTS.md`). Owner decisions are never delegated, whatever the tier.
+
+**Current assignment (2026-11-28):** tier O does research only (reports, analysis, recommendations). It writes no code or prototypes for now; code tasks wait for an S-tier session.
 
 | Task | Tier | Notes |
 |---|---|---|

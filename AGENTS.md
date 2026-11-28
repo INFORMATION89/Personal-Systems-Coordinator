@@ -7,7 +7,7 @@ This repository contains Personal Systems Coordinator (PSC): shared, on-device s
 Before inspecting or changing anything:
 
 1. Read this file in full. Keep it concise; detailed procedures live in the documents below.
-2. Read the task-relevant sections of `RULES.md` and `CLEAN_ROOM.md`.
+2. Read the task-relevant sections of `RULES.md` and `CLEAN_ROOM.md` (interim rules; the formal policy is undecided).
 3. Read only the relevant sections of `docs/RESEARCH_PLAN.md` for the active work package, plus `docs/DECISIONS.md` for what is agreed. Do not load every research report for an ordinary task.
 4. Follow `AI_POLICY.md` and `AI_COST_POLICY.md`, especially context management, approval boundaries, data protection and cost-aware verification.
 5. If your tool has a guide under `docs/agent-guides/`, read it as supplementary advice. It never overrides the project documents.

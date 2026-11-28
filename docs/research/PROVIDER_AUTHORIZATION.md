@@ -2,6 +2,7 @@
 
 **Research date:** 2026-11-28
 **Status:** desk research, first pass. No experiment has run yet. No registration model is approved.
+**Prepared with:** Claude Code, tier O (research only); not yet reviewed by the owner.
 **Scope:** Google Drive only. iCloud, Microsoft Graph and Dropbox (WP1 questions 5–6) are still to do.
 
 ## How to read this report

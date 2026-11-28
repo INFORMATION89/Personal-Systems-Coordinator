@@ -45,7 +45,18 @@ All agents must:
 7. Report exact commands and results. Never claim a check or experiment ran when it did not.
 8. Never merge, release, publish, change protections, create cloud projects or OAuth clients, alter secrets, delete data or contact external parties without explicit owner approval.
 
-## 5. Approval checklist
+## 5. Model attribution
+
+AI-assisted work must say which tool and model tier produced it, so reviewers know how it was made and what still needs checking.
+
+1. **Commits:** keep the co-author trailer the AI tool adds (for example `Co-Authored-By: Claude …`). Do not remove or forge it, and do not add one for a tool that was not used.
+2. **Pull requests:** fill in "Tool and tier" in the PR template: the tool (for example Claude Code, ChatGPT Free), the model family or tier used (O, S, H or F, see `AI_COST_POLICY.md` §5), and the tier the task was assigned.
+3. **Research reports and specifications:** add a "Prepared with" line under the status line: tool, tier, and whether a human reviewed it. Add "Reviewed with" when a second model reviews it, and keep "Opus review pending" until that review actually happens.
+4. **Mixed work:** when several tools or a human and a tool contributed, name each and what it did.
+5. **Accuracy:** attribution states what was used, nothing more. It is not a claim that the output is correct. Never attribute work to a model or person who did not produce it.
+6. **Scope:** name the tool and model family or tier. Exact model version identifiers are optional and may be left out.
+
+## 6. Approval checklist
 
 Before accepting AI-assisted work, confirm:
 
@@ -53,3 +64,4 @@ Before accepting AI-assisted work, confirm:
 - [ ] No secrets, personal data or private test-account data were shared.
 - [ ] Claims are sourced and labelled; AI output was independently checked.
 - [ ] Owner-reserved decisions were escalated, not made.
+- [ ] Tool and tier are attributed in commits, the PR and any report (§5).
