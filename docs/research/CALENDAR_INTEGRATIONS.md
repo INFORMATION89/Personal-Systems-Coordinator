@@ -1,7 +1,7 @@
 # Calendar Integrations Are Separate From PSC Storage Sync
 
 **Research date:** 2026-11-27  
-**Status:** research boundary; no calendar provider selected.
+**Status:** out of PSC scope · handed to the future Calendar app (decision 2026-11-28). Kept as boundary notes only; PSC does no further calendar-service research.
 
 Calendar is a product in the application family, but connecting a calendar account is a different problem from synchronizing our own app-owned data through a storage folder.
 

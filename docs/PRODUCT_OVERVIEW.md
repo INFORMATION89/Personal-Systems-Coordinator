@@ -56,7 +56,7 @@ The same provider will not necessarily support every application, platform or da
 
 Some services are not storage backends for PSC. For example, connecting Google Calendar, Apple Calendar, Outlook or a CalDAV server is an integration with an existing calendar service.
 
-Calendar-provider integration and synchronization of our own application data must remain separate capabilities with separate authorization, scopes and failure handling.
+Calendar-provider integration and synchronization of our own application data must remain separate capabilities with separate authorization, scopes and failure handling. Calendar-service integration is the future Calendar app's responsibility and is outside PSC's scope.
 
 ## What PSC is not
 

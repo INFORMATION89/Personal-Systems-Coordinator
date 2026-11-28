@@ -27,7 +27,7 @@ A research question belongs in this plan only if answering it advances one of th
 | [Platform constraints](research/PLATFORM_CONSTRAINTS.md) | G3, G5 | Folder access and background limits on Android/iOS/macOS/Windows | Whether cloud DocumentsProviders/File Providers support directory selection; dot-folder visibility; Linux feasibility criteria |
 | [Sync semantics](research/SYNC_SEMANTICS.md) | G1, G3 | Layering, conflict policy by data class, tombstones, lifecycle | No portable data contract or workspace format yet; no fixtures |
 | [Security and consent](research/SECURITY_AND_CONSENT.md) | G4 | OAuth for native apps, consent purposes, encryption trade-offs | Shared-folder files as untrusted input; record authenticity; cross-ecosystem key transfer |
-| [Calendar integrations](research/CALENDAR_INTEGRATIONS.md) | G2 | Boundary between calendar services and PSC sync | Current permission models and sync-token expiry details |
+| [Calendar integrations](research/CALENDAR_INTEGRATIONS.md) | — | Boundary between calendar services and PSC sync | Out of PSC scope: belongs to the future Calendar app (see WP9) |
 | [Existing systems](research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md) | G1, G6 | Patterns from Joplin, Obsidian, any-sync, CRDT libraries | Licenses and maintenance activity; evaluation against a concrete PSC data flow |
 | *(none yet)* | G2 | — | Cross-app references, namespaces, ownership enforcement |
 | *(none yet)* | G6 | — | Shared-core technology and bindings; licensing and monetization |
@@ -131,11 +131,9 @@ Done when: a short spike implements the same small slice (read workspace marker,
 
 Linux synchronization is a conditional target. Before the Linux spike, write measurable go/no-go criteria for owner approval, for example: which WP2/WP4 fixtures must pass on which distributions and providers; an acceptable ongoing maintenance budget; and whether any Linux-only workaround would weaken the portable protocol (which disqualifies it). If Linux sync fails these criteria, drop it from the supported sync matrix; whether a local-only Linux app is still worthwhile is a separate product decision.
 
-### WP9 — Calendar service integrations (separate track)
+### WP9 — Calendar service integrations *(out of PSC scope)*
 
-**Goals:** G2 · **Deliverable:** update `research/CALENDAR_INTEGRATIONS.md`
-
-Compare Google Calendar API, Apple EventKit (including its current permission levels), Microsoft Graph and CalDAV: read-only versus read-write scopes, event ownership, recurrence and exceptions, incremental sync and token expiry, deletion, offline behavior. Define how Calendar shows PSC-synced Clock and Notes records as overlays. Calendar service authorization stays separate from PSC storage authorization.
+Connecting Google Calendar, Apple EventKit, Microsoft Graph or CalDAV is the responsibility of the future Calendar app, not PSC. PSC does no calendar-service research now. The only PSC concern is the boundary: PSC synchronizes app-owned records (for example Clock sessions or Notes tasks) that Calendar may later read, and PSC storage authorization stays separate from any calendar-service authorization. The earlier boundary notes remain in [Calendar integrations](research/CALENDAR_INTEGRATIONS.md) for the Calendar app to pick up.
 
 ### WP10 — Solstice first-integration data inventory
 
@@ -164,7 +162,7 @@ See §6.
 | **3. Choose how to build** | WP7, WP8, WP11 | Technology, platform matrix and license are chosen for a contract that already exists, not the other way round. |
 | **4. Review and decide** | WP12, then owner decisions recorded in [DECISIONS.md](DECISIONS.md) | Findings become decisions only through explicit owner approval. |
 
-WP9 (Calendar) can run in parallel at any phase.
+WP9 (calendar services) is handled by the future Calendar app and is not scheduled here.
 
 ## 5. Rules for all research
 

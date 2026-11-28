@@ -24,7 +24,7 @@ Initial provider and architecture research is documented:
 - [Platform constraints](docs/research/PLATFORM_CONSTRAINTS.md)
 - [Sync semantics and architecture options](docs/research/SYNC_SEMANTICS.md)
 - [Security, authorization and consent](docs/research/SECURITY_AND_CONSENT.md)
-- [Calendar integrations](docs/research/CALENDAR_INTEGRATIONS.md)
+- [Calendar integrations](docs/research/CALENDAR_INTEGRATIONS.md) — boundary notes only; calendar services are the future Calendar app's responsibility
 - [Existing synchronization systems and reusable technologies](docs/research/EXISTING_SYSTEMS_AND_TECHNOLOGIES.md)
 
 Key unresolved issues, tracked as work packages in the research plan:

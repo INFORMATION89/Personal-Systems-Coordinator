@@ -1,6 +1,6 @@
 # Decision Register
 
-**Last updated:** 2026-11-27
+**Last updated:** 2026-11-28
 
 This register separates the direction already agreed in product discussions from technical questions that remain open. A research finding is not automatically a decision.
 
@@ -16,6 +16,7 @@ This register separates the direction already agreed in product discussions from
 | Consuming-app UI | Each application chooses its own UI framework and architecture; PSC does not prescribe or provide a UI | Outside PSC scope |
 | Host-platform integration | OS-specific APIs/adapters are used where necessary; background execution limits must be respected | Research requirement |
 | Linux synchronization | Linux is a conditional sync target. If reliable, maintainable sync proves disproportionately difficult or costly, drop Linux from the supported sync matrix rather than compromising other platforms. A local-only Linux app remains a separate product decision. | Agreed scope constraint |
+| Calendar service integrations | Connecting Google Calendar, EventKit, Microsoft Graph or CalDAV belongs to the future Calendar app, not PSC. PSC focuses on synchronization of app-owned data. | Agreed scope (2026-11-28) |
 | Application ownership | Each app retains its domain model and local functionality | Agreed constraint |
 | User consent | Sync is explicit and separate from telemetry or weather-data contribution | Agreed constraint |
 | Current phase | Documentation and research before implementation | Agreed |
