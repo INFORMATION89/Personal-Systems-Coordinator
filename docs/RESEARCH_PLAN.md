@@ -176,6 +176,8 @@ See §6.
 
 ## 4. Sequencing
 
+The path from research to a first release is planned in [Development plan](DEVELOPMENT_PLAN.md) (milestones M0–M9). The phases below remain the research order.
+
 | Phase | Work | Why this order |
 |---|---|---|
 | **1. Unblock** | WP10 inventories, WP1 desk research, WP2 prototype, WP3 draft | WP10 defines what syncs; WP1 can invalidate the shared-workspace model; WP3 defines how it moves; WP2 establishes the universal baseline. |

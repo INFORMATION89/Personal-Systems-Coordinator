@@ -68,7 +68,9 @@ Derived from `DECISIONS.md`, `RULES.md` §5 and the Commonplace sync review:
 5. **Not suitable now:** Gist, MEGA and Filen. Filen is excluded specifically because its AGPL SDK conflicts with a possibly paid Commonplace.
 6. **Commercial terms are unchecked for every provider.** Before release, review each provider's developer terms for a paid app (R8).
 
-## 5. Suggested provider order (for owner review)
+## 5. Suggested provider order
+
+**Update 2026-11-28:** the owner limited the first release to Google Drive, GitHub and self-hosted (WebDAV and the folder). The rows below after "Self-hosting" are deferred. See [Development plan](../DEVELOPMENT_PLAN.md) for certainty and milestones.
 
 | Stage | Providers |
 |---|---|
