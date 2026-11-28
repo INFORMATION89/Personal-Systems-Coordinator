@@ -135,6 +135,8 @@ The contract is defined language-neutrally first. Only then are implementation o
 
 Criteria: binding quality and cost for the app family's planned host languages, namely Swift (SwiftUI on macOS and iOS), C#/.NET (WinUI 3 on Windows) and Kotlin/JVM (Jetpack Compose on Android), plus any others the family adopts; ABI/API stability; binary size; debugging and crash diagnostics; secure-storage and file-coordination interop; testability against the WP4 fixtures; build and distribution; maintenance and contributor pool; license of the toolchain and runtime.
 
+Family context: Meridian, Solstice's weather engine, has an owner-approved baseline of Kotlin Multiplatform with a JVM-first desktop and a Swift-friendly iOS facade; Rust/UniFFI was deferred there (Meridian-Engine `PLAN.md` §5, ADR-0003). That is evidence about tooling the family already maintains, and a reason to include Kotlin Multiplatform in the comparison. It is not a decision for PSC, whose host languages include C#/WinUI 3 on Windows.
+
 Done when: a short spike implements the same small slice (read workspace marker, apply one fixture) in two or three candidates, is called from at least two host languages, and the comparison is written up. No technology is selected without owner approval.
 
 ### WP8 — Host-platform matrix and Linux feasibility
@@ -206,6 +208,28 @@ Ask for an independent architecture and security review of:
 - the smallest experiment that could falsify the proposed layered architecture.
 
 Request cited official documentation, separation of facts from assumptions, identified risks and recommended experiments. Do not ask the reviewer to implement the system, and do not turn its recommendations into decisions without owner review.
+
+## 7. Task routing
+
+Tiers follow `AI_COST_POLICY.md` §5: **O** Opus-class, **S** Sonnet or a balanced coding model, **H** Haiku-class, **F** ChatGPT Free. An agent whose tool does not match the tier stops and tells the owner (`AGENTS.md`). Owner decisions are never delegated, whatever the tier.
+
+| Task | Tier | Notes |
+|---|---|---|
+| WP1 Drive desk research | S | First pass done 2026-11-28 |
+| WP1 experiment code (E1–E9) | S | Test project and accounts need owner approval first |
+| WP1 registration-model recommendation | O | Owner decides |
+| WP1 Apple, Microsoft, Dropbox desk research | S | |
+| WP2 folder prototype | S | |
+| WP3 workspace format and file contract | O | Public contract; "Opus review pending" if drafted by S |
+| WP4 sync fixtures | S | From the O-reviewed WP3 draft |
+| WP5 capability model and second provider | S | |
+| WP6 security, encryption and consent | O | |
+| WP7 shared-core technology comparison | O | Owner decides |
+| WP8 platform matrix and Linux criteria | S | Go/no-go is the owner's |
+| WP10 sync inventories | S | Needs owner and app input |
+| WP11 licensing and distribution analysis | O | Owner decides |
+| WP12 independent review | O | |
+| Link checks, formatting, PR descriptions, doc tidy-ups | H or F | |
 
 ## Appendix: initial findings (2026-11-27)
 

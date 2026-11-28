@@ -19,6 +19,12 @@ The intended model is permanently decentralized, local-first and provider-neutra
 - [Future integrations](docs/FUTURE_INTEGRATIONS.md) — far-future context: Clock Pomodoro sync, the Solstice menubar app, Calendar ↔ Commonplace mentions.
 - [Glossary](docs/GLOSSARY.md) — working vocabulary (PSC, Meridian, adapter, workspace, namespace...).
 
+## Working rules
+
+- [Agent instructions](AGENTS.md) — mandatory reading for any AI agent (loaded by Claude Code through `CLAUDE.md`).
+- [Rules](RULES.md), [Clean-room policy](CLEAN_ROOM.md), [AI policy](AI_POLICY.md) and [AI cost policy](AI_COST_POLICY.md).
+- Optional tool guides in [docs/agent-guides](docs/agent-guides/).
+
 ## Research findings
 
 Initial provider and architecture research is documented:
